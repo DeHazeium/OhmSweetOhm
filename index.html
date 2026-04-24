@@ -443,37 +443,75 @@ footer strong{color:var(--accent);font-weight:500}
   <strong>OhmSweetOhm</strong> &nbsp;·&nbsp; Fresh homemade batik cakes &nbsp;·&nbsp; WhatsApp: 013-337 4124
 </footer>
 
-<script>
+<script type="module">
+// ── FIREBASE SETUP ──
+// Replace the values below with YOUR Firebase project config after setup
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, set, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyBSaESooS8G72KIeCEDqumCI1D3ED9__QQ",
+  authDomain:        "ohmsweetohm-467c4.firebaseapp.com",
+  databaseURL:       "https://ohmsweetohm-467c4-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:         "ohmsweetohm-467c4",
+  storageBucket:     "ohmsweetohm-467c4.firebasestorage.app",
+  messagingSenderId: "491868898823",
+  appId:             "1:491868898823:web:918e00bd42a5f57bf3cca2"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+const stockRef = ref(db, "stock");
+
+// ── CAKES ──
 const CAKES = [
   { id: "classic",  name: "Classic Batik",  price: 15, img: "images/classic.png"  },
   { id: "horlicks", name: "Horlick Batik",  price: 15, img: "images/horlicks.png" },
   { id: "matcha",   name: "Matcha Batik",   price: 15, img: "images/matcha.png"   },
 ];
 
-// ── STOCK (stored in localStorage so it persists per-device) ──
-// For a shared store you'd use a backend; localStorage is per-browser
-const STOCK_KEY = "ohm_stock_v1";
-let stock = {};   // { classic: { qty: 10, soldOut: false }, ... }
+let stock = {};
 let isAdmin = false;
 let cart = {}, delMode = "pickup", selectedKolej = "";
 
-function defaultStock() {
-  const s = {};
-  CAKES.forEach(c => { s[c.id] = { qty: 10, soldOut: false }; });
-  return s;
-}
-
-function loadStock() {
-  try {
-    const raw = localStorage.getItem(STOCK_KEY);
-    stock = raw ? JSON.parse(raw) : defaultStock();
-  } catch(e) { stock = defaultStock(); }
-  // ensure all cakes exist
+// ── FIREBASE REAL-TIME LISTENER ──
+// This fires instantly whenever stock changes in Firebase — on ANY device
+onValue(stockRef, (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    stock = data;
+  } else {
+    // First time: seed default stock into Firebase
+    const seed = {};
+    CAKES.forEach(c => { seed[c.id] = { qty: 10, soldOut: false }; });
+    set(stockRef, seed);
+    stock = seed;
+  }
+  // Ensure all cakes exist
   CAKES.forEach(c => { if (!stock[c.id]) stock[c.id] = { qty: 10, soldOut: false }; });
+  renderStockUI();
+  if (isAdmin) renderStockPanel();
+  // Remove items from cart if they became unavailable
+  let cartChanged = false;
+  Object.keys(cart).forEach(id => {
+    if (!isAvailable(id)) { delete cart[id]; cartChanged = true; }
+  });
+  if (cartChanged) { renderCart(); updateCount(); }
+});
+
+// ── SAVE STOCK TO FIREBASE ──
+function saveStockFirebase(updatedStock) {
+  set(stockRef, updatedStock);
 }
 
-function saveStockLocal() {
-  localStorage.setItem(STOCK_KEY, JSON.stringify(stock));
+// Deduct stock after order — uses atomic update
+function deductStock(cartObj) {
+  const updates = {};
+  Object.keys(cartObj).forEach(id => {
+    const newQty = Math.max(0, (stock[id]?.qty || 0) - cartObj[id]);
+    updates[id + "/qty"] = newQty;
+  });
+  update(stockRef, updates);
 }
 
 function isAvailable(id) {
@@ -483,53 +521,47 @@ function isAvailable(id) {
 
 function renderStockUI() {
   CAKES.forEach(c => {
-    const s = stock[c.id];
+    const s = stock[c.id] || { qty: 0, soldOut: false };
     const available = isAvailable(c.id);
     const inCart = cart[c.id] || 0;
     const remaining = s.qty - inCart;
 
     // Menu card
     const mc = document.getElementById("mc-" + c.id);
-    const ms = document.getElementById("ms-" + c.id);
-    const ma = document.getElementById("ma-" + c.id);
-    if (mc) mc.classList.toggle("is-soldout", !available);
-
-    // Remove old sold-out overlay
-    const oldOv = mc ? mc.querySelector(".sold-out-overlay") : null;
-    if (oldOv) oldOv.remove();
-
-    if (ms) {
-      if (s.soldOut) {
-        ms.innerHTML = '<span class="stock-badge out">Sold out</span>';
-      } else if (s.qty === 0) {
-        ms.innerHTML = '<span class="stock-badge out">Out of stock</span>';
-      } else if (s.qty <= 3) {
-        ms.innerHTML = `<span class="stock-badge low">Only ${s.qty} left</span>`;
-      } else {
-        ms.innerHTML = `<span style="font-size:11px;color:#5a5a52">${s.qty} available</span>`;
+    if (mc) {
+      mc.classList.toggle("is-soldout", !available);
+      const oldOv = mc.querySelector(".sold-out-overlay");
+      if (oldOv) oldOv.remove();
+      if (!available) {
+        const ov = document.createElement("div");
+        ov.className = "sold-out-overlay";
+        ov.innerHTML = '<span class="sold-out-label">Sold Out</span>';
+        mc.appendChild(ov);
       }
     }
-    if (ma) {
-      ma.disabled = !available || remaining <= 0;
-    }
-    if (mc && !available) {
-      const ov = document.createElement("div");
-      ov.className = "sold-out-overlay";
-      ov.innerHTML = '<span class="sold-out-label">Sold Out</span>';
-      mc.appendChild(ov);
+
+    const ms = document.getElementById("ms-" + c.id);
+    if (ms) {
+      if (s.soldOut)      ms.innerHTML = '<span class="stock-badge out">Sold out</span>';
+      else if (s.qty === 0) ms.innerHTML = '<span class="stock-badge out">Out of stock</span>';
+      else if (s.qty <= 3) ms.innerHTML = `<span class="stock-badge low">Only ${s.qty} left</span>`;
+      else                 ms.innerHTML = `<span style="font-size:11px;color:#5a5a52">${s.qty} available</span>`;
     }
 
-    // Mini add row
+    const ma = document.getElementById("ma-" + c.id);
+    if (ma) ma.disabled = !available || remaining <= 0;
+
+    // Mini list
     const mini = document.getElementById("mini-" + c.id);
-    const mab = document.getElementById("mab-" + c.id);
-    const mst = document.getElementById("mini-stock-" + c.id);
+    const mab  = document.getElementById("mab-" + c.id);
+    const mst  = document.getElementById("mini-stock-" + c.id);
     if (mini) mini.classList.toggle("soldout", !available);
-    if (mab) mab.disabled = !available || remaining <= 0;
+    if (mab)  mab.disabled = !available || remaining <= 0;
     if (mst) {
-      if (s.soldOut) mst.textContent = "Sold out";
+      if (s.soldOut)        mst.textContent = "Sold out";
       else if (s.qty === 0) mst.textContent = "Out of stock";
-      else if (s.qty <= 3) mst.textContent = `Only ${s.qty} left`;
-      else mst.textContent = `${s.qty} available`;
+      else if (s.qty <= 3)  mst.textContent = `Only ${s.qty} left`;
+      else                  mst.textContent = `${s.qty} available`;
     }
 
     // Home badge
@@ -553,6 +585,7 @@ function onLockClick() {
     setTimeout(() => document.getElementById("loginId").focus(), 100);
   }
 }
+window.onLockClick = onLockClick;
 
 function closeLogin() {
   document.getElementById("loginModal").classList.remove("show");
@@ -560,9 +593,10 @@ function closeLogin() {
   document.getElementById("loginId").value = "";
   document.getElementById("loginPass").value = "";
 }
+window.closeLogin = closeLogin;
 
 function doLogin() {
-  const id = document.getElementById("loginId").value.trim();
+  const id   = document.getElementById("loginId").value.trim();
   const pass = document.getElementById("loginPass").value;
   if (id === "2024804824" && pass === "mis02032005") {
     isAdmin = true;
@@ -577,6 +611,7 @@ function doLogin() {
     document.getElementById("loginPass").value = "";
   }
 }
+window.doLogin = doLogin;
 
 function doLogout() {
   isAdmin = false;
@@ -584,25 +619,26 @@ function doLogout() {
   document.getElementById("lockBtn").textContent = "🔒";
   document.getElementById("stockPanel").style.display = "none";
 }
+window.doLogout = doLogout;
 
-// Enter key on login
 document.addEventListener("keydown", e => {
-  if (e.key === "Enter" && document.getElementById("loginModal").classList.contains("show")) doLogin();
+  if (e.key === "Enter"  && document.getElementById("loginModal").classList.contains("show")) doLogin();
   if (e.key === "Escape" && document.getElementById("loginModal").classList.contains("show")) closeLogin();
 });
 
 function renderStockPanel() {
   const container = document.getElementById("stockRows");
+  if (!container) return;
   container.innerHTML = "";
   CAKES.forEach(c => {
-    const s = stock[c.id];
+    const s = stock[c.id] || { qty: 0, soldOut: false };
     const row = document.createElement("div");
     row.className = "stock-row";
     row.innerHTML = `
       <img class="stock-thumb" src="${c.img}" alt="${c.name}">
       <div class="stock-info">
         <div class="stock-name">${c.name}</div>
-        <div class="stock-sub">Current: ${s.soldOut ? "Sold out (manual)" : s.qty + " units"}</div>
+        <div class="stock-sub" id="ssub-${c.id}">${s.soldOut ? "Sold out (manual)" : s.qty + " units"}</div>
       </div>
       <div class="stock-controls">
         <input class="stock-num" type="number" min="0" max="999" value="${s.qty}" id="sinput-${c.id}">
@@ -617,22 +653,23 @@ function renderStockPanel() {
 function toggleSoldOut(id) {
   stock[id].soldOut = !stock[id].soldOut;
   const btn = document.getElementById("sotoggle-" + id);
-  btn.classList.toggle("active", stock[id].soldOut);
-  btn.textContent = stock[id].soldOut ? "Unmark" : "Sold out";
+  if (btn) { btn.classList.toggle("active", stock[id].soldOut); btn.textContent = stock[id].soldOut ? "Unmark" : "Sold out"; }
+  const sub = document.getElementById("ssub-" + id);
+  if (sub) sub.textContent = stock[id].soldOut ? "Sold out (manual)" : stock[id].qty + " units";
 }
+window.toggleSoldOut = toggleSoldOut;
 
 function saveStock() {
   CAKES.forEach(c => {
     const inp = document.getElementById("sinput-" + c.id);
     if (inp) stock[c.id].qty = Math.max(0, parseInt(inp.value) || 0);
   });
-  saveStockLocal();
-  renderStockPanel();
+  saveStockFirebase(stock);  // ← saves to Firebase, syncs to ALL devices instantly
   renderStockUI();
   const saved = document.getElementById("stockSaved");
-  saved.style.display = "block";
-  setTimeout(() => { saved.style.display = "none"; }, 2500);
+  if (saved) { saved.style.display = "block"; setTimeout(() => { saved.style.display = "none"; }, 2500); }
 }
+window.saveStock = saveStock;
 
 // ── ROUTING ──
 function goPage(p) {
@@ -644,17 +681,16 @@ function goPage(p) {
   window.location.hash = p;
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
+window.goPage = goPage;
 
 window.addEventListener("load", () => {
-  loadStock();
-  renderStockUI();
-  const hash = window.location.hash.replace("#", "") || "home";
+  const hash  = window.location.hash.replace("#", "") || "home";
   const valid = ["home", "menu", "order"];
   goPage(valid.includes(hash) ? hash : "home");
 });
 
 window.addEventListener("hashchange", () => {
-  const hash = window.location.hash.replace("#", "") || "home";
+  const hash  = window.location.hash.replace("#", "") || "home";
   const valid = ["home", "menu", "order"];
   const p = valid.includes(hash) ? hash : "home";
   document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
@@ -665,32 +701,26 @@ window.addEventListener("hashchange", () => {
 });
 
 // ── CART ──
-function addFromCard(id) {
-  if (!isAvailable(id)) return;
-  addToCart(id);
-  goPage("order");
-}
+function addFromCard(id) { if (!isAvailable(id)) return; addToCart(id); goPage("order"); }
+window.addFromCard = addFromCard;
 
 function addToCart(id) {
   if (!isAvailable(id)) return;
   const inCart = (cart[id] || 0) + 1;
-  if (inCart > stock[id].qty) return; // can't exceed stock
+  if (inCart > stock[id].qty) return;
   cart[id] = inCart;
-  renderCart();
-  renderStockUI();
+  renderCart(); renderStockUI();
   const pill = document.getElementById("cartCount");
-  pill.classList.remove("bump");
-  void pill.offsetWidth;
-  pill.classList.add("bump");
+  pill.classList.remove("bump"); void pill.offsetWidth; pill.classList.add("bump");
   updateCount();
 }
+window.addToCart = addToCart;
 
 function removeFromCart(id) {
   if (cart[id] > 1) cart[id]--; else delete cart[id];
-  renderCart();
-  renderStockUI();
-  updateCount();
+  renderCart(); renderStockUI(); updateCount();
 }
+window.removeFromCart = removeFromCart;
 
 function renderCart() {
   const el = document.getElementById("cartItems");
@@ -698,8 +728,7 @@ function renderCart() {
   const ids = Object.keys(cart);
   if (!ids.length) {
     el.innerHTML = '<div class="cart-empty">Nothing added yet</div>';
-    sb.style.display = "none";
-    return;
+    sb.style.display = "none"; return;
   }
   sb.style.display = "block";
   let subtotal = 0, count = 0, html = "";
@@ -737,52 +766,38 @@ function setKolej(name) {
   document.getElementById(map[name]).classList.add("active");
   document.getElementById("errKolej").classList.remove("show");
 }
+window.setKolej = setKolej;
 
 function setDel(m) {
   delMode = m;
   document.getElementById("rPickup").classList.toggle("active", m === "pickup");
   document.getElementById("rDelivery").classList.toggle("active", m === "delivery");
   const addr = document.getElementById("addrSection");
-  if (m === "delivery") {
-    addr.style.display = "block";
-    addr.style.animation = "fadeSlideIn 0.3s ease";
-  } else {
-    addr.style.display = "none";
-    selectedKolej = "";
-    document.querySelectorAll(".ropt-block").forEach(x => x.classList.remove("active"));
-  }
+  if (m === "delivery") { addr.style.display = "block"; addr.style.animation = "fadeSlideIn 0.3s ease"; }
+  else { addr.style.display = "none"; selectedKolej = ""; document.querySelectorAll(".ropt-block").forEach(x => x.classList.remove("active")); }
   renderCart();
 }
+window.setDel = setDel;
 
 function validPhone(p) { return /^(\+?60|0)[0-9]{8,10}$/.test(p.replace(/[-\s]/g, "")); }
 
 function submitOrder() {
   let ok = true;
-  const name = document.getElementById("oName").value.trim();
+  const name  = document.getElementById("oName").value.trim();
   const phone = document.getElementById("oPhone").value.trim();
-  if (!name) { document.getElementById("errName").classList.add("show"); ok = false; }
-  else document.getElementById("errName").classList.remove("show");
-  if (!validPhone(phone)) { document.getElementById("errPhone").classList.add("show"); ok = false; }
-  else document.getElementById("errPhone").classList.remove("show");
-  if (!Object.keys(cart).length) { document.getElementById("errCart").classList.add("show"); ok = false; }
-  else document.getElementById("errCart").classList.remove("show");
+  if (!name)            { document.getElementById("errName").classList.add("show");  ok = false; } else document.getElementById("errName").classList.remove("show");
+  if (!validPhone(phone)){ document.getElementById("errPhone").classList.add("show"); ok = false; } else document.getElementById("errPhone").classList.remove("show");
+  if (!Object.keys(cart).length) { document.getElementById("errCart").classList.add("show"); ok = false; } else document.getElementById("errCart").classList.remove("show");
   if (delMode === "delivery") {
-    if (!selectedKolej) { document.getElementById("errKolej").classList.add("show"); ok = false; }
-    else document.getElementById("errKolej").classList.remove("show");
+    if (!selectedKolej) { document.getElementById("errKolej").classList.add("show"); ok = false; } else document.getElementById("errKolej").classList.remove("show");
     const b = document.getElementById("oBlock").value.trim();
     const r = document.getElementById("oRoom").value.trim();
-    if (!b || !r) { document.getElementById("errAddr").classList.add("show"); ok = false; }
-    else document.getElementById("errAddr").classList.remove("show");
+    if (!b || !r) { document.getElementById("errAddr").classList.add("show"); ok = false; } else document.getElementById("errAddr").classList.remove("show");
   }
   if (!ok) return;
 
-  // Deduct stock
-  Object.keys(cart).forEach(id => {
-    stock[id].qty = Math.max(0, stock[id].qty - cart[id]);
-    if (stock[id].qty === 0) stock[id].soldOut = false; // let qty=0 handle it naturally
-  });
-  saveStockLocal();
-  renderStockUI();
+  // ── Deduct stock in Firebase (syncs to all devices) ──
+  deductStock(cart);
 
   let lines = "", subtotal = 0;
   Object.keys(cart).forEach(id => {
@@ -802,16 +817,14 @@ function submitOrder() {
   document.getElementById("successBar").classList.add("show");
   document.getElementById("waLink").href = waUrl;
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if (isIOS) {
-    window.location.href = waUrl;
-  } else {
+  if (isIOS) { window.location.href = waUrl; }
+  else {
     const newWin = window.open(waUrl, "_blank");
-    if (!newWin || newWin.closed || typeof newWin.closed === "undefined") {
-      document.getElementById("waManual").style.display = "block";
-    }
+    if (!newWin || newWin.closed || typeof newWin.closed === "undefined") document.getElementById("waManual").style.display = "block";
   }
   setTimeout(() => { document.getElementById("waManual").style.display = "block"; }, 2000);
 }
+window.submitOrder = submitOrder;
 </script>
 </body>
 </html>
