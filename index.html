@@ -103,7 +103,46 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .radio-row{display:flex;gap:8px}
 .ropt{flex:1;padding:9px 8px;border:1px solid rgba(255,255,255,0.1);border-radius:9px;font-size:12px;color:#9a9a8e;cursor:pointer;text-align:center;background:#0d0d0b;transition:all 0.15s;font-family:"DM Sans",sans-serif}
 .ropt.active{border:1.5px solid var(--accent);color:var(--accent);background:rgba(196,135,74,0.08);font-weight:500}
-.addr-grid{display:grid;grid-template-columns:1fr 68px 78px;gap:8px;margin-top:8px}
+.delivery-fee-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(196,135,74,0.12);border:1px solid rgba(196,135,74,0.3);color:var(--accent);font-size:11px;font-weight:500;padding:5px 10px;border-radius:99px;letter-spacing:0.03em;animation:fadeSlideIn 0.35s ease}
+.radio-col{display:flex;flex-direction:column;gap:7px;margin-top:6px}
+.ropt-block{padding:11px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-size:13px;color:#9a9a8e;cursor:pointer;background:#0d0d0b;transition:all 0.2s;font-family:"DM Sans",sans-serif;position:relative;overflow:hidden}
+.ropt-block::after{content:"";position:absolute;left:0;top:0;height:100%;width:0;background:rgba(196,135,74,0.08);transition:width 0.3s ease}
+.ropt-block:hover::after{width:100%}
+.ropt-block:hover{border-color:rgba(196,135,74,0.3);color:#f5f2ed}
+.ropt-block.active{border:1.5px solid var(--accent);color:var(--accent);background:rgba(196,135,74,0.08);font-weight:500}
+.addr-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+
+/* ANIMATIONS */
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+
+.page.active .panel{animation:fadeSlideUp 0.4s ease both}
+.page.active .panel:nth-child(2){animation-delay:0.08s}
+.page.active .panel:nth-child(3){animation-delay:0.16s}
+
+.cart-item{animation:fadeSlideIn 0.25s ease both}
+.menu-card{animation:fadeSlideUp 0.4s ease both}
+.menu-card:nth-child(2){animation-delay:0.07s}
+.menu-card:nth-child(3){animation-delay:0.14s}
+
+.stack-item{animation:popIn 0.5s ease both}
+.stack-item.s-left{animation-delay:0.1s}
+.stack-item.s-center{animation-delay:0.2s}
+.stack-item.s-right{animation-delay:0.3s}
+
+.send-btn{position:relative;overflow:hidden}
+.send-btn::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);background-size:200% 100%;opacity:0;transition:opacity 0.2s}
+.send-btn:hover::after{opacity:1;animation:shimmer 1.2s linear infinite}
+
+.nav-cart{position:relative;overflow:hidden}
+.nav-cart::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);background-size:200% 100%;opacity:0;transition:opacity 0.2s}
+.nav-cart:hover::after{opacity:1;animation:shimmer 1s linear infinite}
+
+.cart-pill{transition:transform 0.2s,background 0.2s}
+.cart-pill.bump{animation:bump 0.3s ease}
+@keyframes bump{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
 .err{font-size:11px;color:#e05252;margin-top:4px;display:none}
 .err.show{display:block}
 .qr-box{background:#0d0d0b;border-radius:10px;padding:16px;text-align:center;margin-top:10px;border:1px dashed rgba(196,135,74,0.35)}
@@ -277,12 +316,21 @@ footer strong{color:var(--accent);font-weight:500}
             </div>
           </div>
           <div id="addrSection" style="display:none">
+            <div class="delivery-fee-badge" id="deliveryBadge">+ RM1 delivery fee applied</div>
+            <div class="fgroup" style="margin-top:10px">
+              <label class="flabel">Kolej / Residential College</label>
+              <div class="radio-col" id="kolej-opts">
+                <div class="ropt-block" id="k-mulu" onclick="setKolej('Seri Mulu')">Seri Mulu</div>
+                <div class="ropt-block" id="k-gading" onclick="setKolej('Seri Gading')">Seri Gading</div>
+                <div class="ropt-block" id="k-serapi" onclick="setKolej('Seri Serapi')">Seri Serapi</div>
+              </div>
+              <div class="err" id="errKolej">Please select your kolej.</div>
+            </div>
             <div class="addr-grid">
-              <div><label class="flabel">Dorm / Kolej</label><input class="finput" id="oDorm" placeholder="e.g. Kolej 10"></div>
               <div><label class="flabel">Block</label><input class="finput" id="oBlock" placeholder="A"></div>
               <div><label class="flabel">Room</label><input class="finput" id="oRoom" placeholder="205"></div>
             </div>
-            <div class="err" id="errAddr">Please fill in all address fields.</div>
+            <div class="err" id="errAddr">Please fill in block and room.</div>
           </div>
           <div class="fgroup" style="margin-top:14px">
             <label class="flabel">Payment</label>
@@ -300,6 +348,7 @@ footer strong{color:var(--accent);font-weight:500}
           <div id="cartSumBlock" style="display:none">
             <div class="cart-sum">
               <div class="cs-row"><span>Items</span><span id="csItems">0</span></div>
+              <div class="cs-row" id="csFeeRow" style="display:none;color:var(--accent)"><span>Delivery fee</span><span>RM1</span></div>
               <div class="cs-total"><span>Total</span><span id="csTotal">RM0</span></div>
             </div>
           </div>
@@ -328,7 +377,7 @@ const CAKES = [
   { id: "matcha",   name: "Matcha Batik",   price: 15, img: "images/matcha.png"   },
 ];
 
-let cart = {}, delMode = "pickup";
+let cart = {}, delMode = "pickup", selectedKolej = "";
 
 // ── Hash-based routing so GitHub Pages doesn't break on page switch ──
 function goPage(p) {
@@ -360,8 +409,22 @@ window.addEventListener("hashchange", () => {
 });
 
 function addFromCard(id) { addToCart(id); goPage("order"); }
-function addToCart(id) { cart[id] = (cart[id] || 0) + 1; renderCart(); updateCount(); }
-function removeFromCart(id) { if (cart[id] > 1) cart[id]--; else delete cart[id]; renderCart(); updateCount(); }
+
+function addToCart(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  renderCart();
+  // bump animation on cart pill
+  const pill = document.getElementById("cartCount");
+  pill.classList.remove("bump");
+  void pill.offsetWidth;
+  pill.classList.add("bump");
+  updateCount();
+}
+
+function removeFromCart(id) {
+  if (cart[id] > 1) cart[id]--; else delete cart[id];
+  renderCart(); updateCount();
+}
 
 function renderCart() {
   const el = document.getElementById("cartItems");
@@ -373,10 +436,10 @@ function renderCart() {
     return;
   }
   sb.style.display = "block";
-  let total = 0, count = 0, html = "";
+  let subtotal = 0, count = 0, html = "";
   ids.forEach(id => {
     const c = CAKES.find(x => x.id === id), qty = cart[id];
-    total += c.price * qty; count += qty;
+    subtotal += c.price * qty; count += qty;
     html += `<div class="cart-item">
       <img class="cart-thumb" src="${c.img}" alt="${c.name}">
       <span class="ci-name">${c.name}</span>
@@ -389,7 +452,12 @@ function renderCart() {
     </div>`;
   });
   el.innerHTML = html;
+  const deliveryFee = delMode === "delivery" ? 1 : 0;
+  const total = subtotal + deliveryFee;
   document.getElementById("csItems").textContent = count + " item" + (count > 1 ? "s" : "");
+  // show delivery fee row
+  const feeRow = document.getElementById("csFeeRow");
+  if (feeRow) feeRow.style.display = deliveryFee ? "flex" : "none";
   document.getElementById("csTotal").textContent = "RM" + total;
 }
 
@@ -397,11 +465,28 @@ function updateCount() {
   document.getElementById("cartCount").textContent = Object.values(cart).reduce((a, b) => a + b, 0);
 }
 
+function setKolej(name) {
+  selectedKolej = name;
+  document.querySelectorAll(".ropt-block").forEach(x => x.classList.remove("active"));
+  const map = { "Seri Mulu": "k-mulu", "Seri Gading": "k-gading", "Seri Serapi": "k-serapi" };
+  document.getElementById(map[name]).classList.add("active");
+  document.getElementById("errKolej").classList.remove("show");
+}
+
 function setDel(m) {
   delMode = m;
   document.getElementById("rPickup").classList.toggle("active", m === "pickup");
   document.getElementById("rDelivery").classList.toggle("active", m === "delivery");
-  document.getElementById("addrSection").style.display = m === "delivery" ? "block" : "none";
+  const addr = document.getElementById("addrSection");
+  if (m === "delivery") {
+    addr.style.display = "block";
+    addr.style.animation = "fadeSlideIn 0.3s ease";
+  } else {
+    addr.style.display = "none";
+    selectedKolej = "";
+    document.querySelectorAll(".ropt-block").forEach(x => x.classList.remove("active"));
+  }
+  renderCart(); // refresh to show/hide delivery fee
 }
 
 function validPhone(p) { return /^(\+?60|0)[0-9]{8,10}$/.test(p.replace(/[-\s]/g, "")); }
@@ -417,46 +502,41 @@ function submitOrder() {
   if (!Object.keys(cart).length) { document.getElementById("errCart").classList.add("show"); ok = false; }
   else document.getElementById("errCart").classList.remove("show");
   if (delMode === "delivery") {
-    const d = document.getElementById("oDorm").value.trim();
+    if (!selectedKolej) { document.getElementById("errKolej").classList.add("show"); ok = false; }
+    else document.getElementById("errKolej").classList.remove("show");
     const b = document.getElementById("oBlock").value.trim();
     const r = document.getElementById("oRoom").value.trim();
-    if (!d || !b || !r) { document.getElementById("errAddr").classList.add("show"); ok = false; }
+    if (!b || !r) { document.getElementById("errAddr").classList.add("show"); ok = false; }
     else document.getElementById("errAddr").classList.remove("show");
   }
   if (!ok) return;
-  let lines = "", total = 0;
+  let lines = "", subtotal = 0;
   Object.keys(cart).forEach(id => {
     const c = CAKES.find(x => x.id === id), qty = cart[id];
     lines += `  • ${c.name} x${qty} = RM${c.price * qty}\n`;
-    total += c.price * qty;
+    subtotal += c.price * qty;
   });
+  const deliveryFee = delMode === "delivery" ? 1 : 0;
+  const total = subtotal + deliveryFee;
   let addr = "";
-  if (delMode === "delivery") addr = `\n📍 Address: ${document.getElementById("oDorm").value.trim()}, Block ${document.getElementById("oBlock").value.trim()}, Room ${document.getElementById("oRoom").value.trim()}`;
+  if (delMode === "delivery") {
+    addr = `\n📍 Kolej: ${selectedKolej}\n🚪 Block ${document.getElementById("oBlock").value.trim()}, Room ${document.getElementById("oRoom").value.trim()}`;
+    lines += `  • Delivery fee = RM1\n`;
+  }
   const msg = `🍰 *NEW CAKE ORDER*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n\n🚚 Delivery: ${delMode === "pickup" ? "Pickup" : "Delivery"}${addr}\n\n🛒 Items:\n${lines}\n💰 Total: RM${total}\n\n💳 Payment: QR Payment\n\n———————————\nThank you! ❤️`;
   const waUrl = "https://wa.me/60133374124?text=" + encodeURIComponent(msg);
-
-  // Show success bar always
   document.getElementById("successBar").classList.add("show");
-
-  // Set fallback manual link
   document.getElementById("waLink").href = waUrl;
-
-  // iOS Safari: use window.location for reliable redirect
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   if (isIOS) {
     window.location.href = waUrl;
   } else {
     const newWin = window.open(waUrl, "_blank");
-    // If popup was blocked, show manual link
     if (!newWin || newWin.closed || typeof newWin.closed === "undefined") {
       document.getElementById("waManual").style.display = "block";
     }
   }
-
-  // Always show manual fallback after 2s in case nothing opened
-  setTimeout(() => {
-    document.getElementById("waManual").style.display = "block";
-  }, 2000);
+  setTimeout(() => { document.getElementById("waManual").style.display = "block"; }, 2000);
 }
 </script>
 </body>
