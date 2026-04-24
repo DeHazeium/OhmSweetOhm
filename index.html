@@ -43,26 +43,31 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .modal-btn.ghost{background:none;border:1px solid rgba(255,255,255,0.1);color:#9a9a8e}
 .modal-btn.ghost:hover{border-color:rgba(255,255,255,0.3);color:#f5f2ed}
 
-/* STOCK PANEL */
-.stock-panel{background:#161612;border:1px solid rgba(196,135,74,0.2);border-radius:20px;padding:24px;max-width:480px;margin:20px auto 0;animation:fadeSlideUp 0.3s ease}
-.stock-panel h3{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;margin-bottom:4px}
-.stock-panel p{font-size:12px;color:#9a9a8e;margin-bottom:20px}
-.stock-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
-.stock-row:last-child{border-bottom:none}
-.stock-thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;background:#2a2a24}
-.stock-info{flex:1}
-.stock-name{font-size:13px;font-weight:500;color:#f5f2ed}
-.stock-sub{font-size:11px;color:#9a9a8e;margin-top:2px}
-.stock-controls{display:flex;align-items:center;gap:7px}
-.stock-num{width:52px;padding:7px 8px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:#0d0d0b;color:#f5f2ed;font-size:13px;font-family:"DM Sans",sans-serif;text-align:center}
-.stock-num:focus{outline:none;border-color:var(--accent)}
-.sold-out-toggle{padding:7px 12px;border-radius:8px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:#0d0d0b;color:#9a9a8e;font-family:"DM Sans",sans-serif;transition:all 0.2s;white-space:nowrap}
-.sold-out-toggle.active{background:rgba(224,82,82,0.12);border-color:rgba(224,82,82,0.4);color:#e05252}
-.stock-save-btn{width:100%;margin-top:16px;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:"DM Sans",sans-serif;transition:background 0.2s}
-.stock-save-btn:hover{background:#b07840}
-.stock-saved{font-size:12px;color:#7ec850;text-align:center;margin-top:8px;display:none;animation:fadeSlideIn 0.3s ease}
-.stock-logout{display:block;margin:12px auto 0;background:none;border:none;font-size:11px;color:#5a5a52;cursor:pointer;font-family:"DM Sans",sans-serif;letter-spacing:0.03em;transition:color 0.2s}
-.stock-logout:hover{color:#9a9a8e}
+/* ── ADMIN PAGE ── */
+.admin-wrap{max-width:700px;margin:0 auto;padding:48px 40px 80px}
+.admin-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:36px}
+.admin-title{font-family:"Cormorant Garamond",serif;font-size:42px;font-weight:300;line-height:1}
+.admin-logout-btn{padding:9px 18px;background:none;border:1px solid rgba(255,255,255,0.1);border-radius:8px;font-size:12px;color:#9a9a8e;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s;white-space:nowrap;margin-top:8px}
+.admin-logout-btn:hover{border-color:rgba(224,82,82,0.4);color:#e05252}
+.admin-grid{display:flex;flex-direction:column;gap:14px}
+.admin-card{background:#161612;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:20px 22px;transition:border-color 0.2s}
+.admin-card:hover{border-color:rgba(196,135,74,0.2)}
+.admin-card-top{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.admin-cake-img{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#2a2a24}
+.admin-cake-name{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:#f5f2ed}
+.admin-cake-status{font-size:11px;margin-top:4px}
+.admin-fields{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end}
+.admin-field label{font-size:11px;font-weight:500;color:#9a9a8e;display:block;margin-bottom:5px;letter-spacing:0.04em;text-transform:uppercase}
+.admin-input{width:100%;padding:10px 12px;border:1px solid rgba(255,255,255,0.1);border-radius:9px;background:#0d0d0b;color:#f5f2ed;font-size:14px;font-family:"DM Sans",sans-serif;transition:border-color 0.2s}
+.admin-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(196,135,74,0.1)}
+.soldout-btn{padding:10px 16px;border-radius:9px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:#0d0d0b;color:#9a9a8e;font-family:"DM Sans",sans-serif;transition:all 0.2s;white-space:nowrap;height:40px;align-self:end}
+.soldout-btn:hover{border-color:rgba(224,82,82,0.4);color:#e05252}
+.soldout-btn.active{background:rgba(224,82,82,0.1);border-color:rgba(224,82,82,0.4);color:#e05252}
+.admin-save-row{margin-top:24px;display:flex;align-items:center;gap:16px}
+.admin-save-btn{flex:1;padding:14px;background:#f5f2ed;color:#0d0d0b;border:none;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;font-family:"DM Sans",sans-serif;transition:background 0.2s;letter-spacing:0.02em}
+.admin-save-btn:hover{background:var(--accent);color:#fff}
+.admin-saved{font-size:12px;color:#7ec850;display:none;animation:fadeSlideIn 0.3s ease}
+.admin-saved.show{display:block}
 
 /* STOCK BADGES */
 .stock-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:99px;letter-spacing:0.04em}
@@ -70,8 +75,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .stock-badge.out{background:rgba(224,82,82,0.12);color:#e05252;border:1px solid rgba(224,82,82,0.3)}
 .sold-out-overlay{position:absolute;inset:0;background:rgba(13,13,11,0.65);display:flex;align-items:center;justify-content:center;border-radius:inherit;z-index:2}
 .sold-out-label{font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#e05252;border:1px solid rgba(224,82,82,0.4);padding:6px 14px;border-radius:6px;background:rgba(13,13,11,0.8)}
-.menu-card-wrap{position:relative}
 .mini-cake.soldout{opacity:0.4;pointer-events:none}
+
+@media(max-width:520px){
+  .admin-fields{grid-template-columns:1fr 1fr;}.soldout-btn{grid-column:span 2}
+  .admin-wrap{padding:32px 20px 60px}
+}
 
 .page{display:none;padding-top:72px}
 .page.active{display:block}
@@ -329,17 +338,7 @@ footer strong{color:var(--accent);font-weight:500}
       </div>
     </div>
   </div>
-  <!-- STOCK PANEL (admin only) -->
-  <div id="stockPanel" style="display:none;padding:0 60px 60px;max-width:1200px;margin:0 auto">
-    <div class="stock-panel">
-      <h3>Stock management</h3>
-      <p>Update stock levels or mark items as sold out.</p>
-      <div id="stockRows"></div>
-      <button class="stock-save-btn" onclick="saveStock()">Save changes</button>
-      <div class="stock-saved" id="stockSaved">✓ Stock updated successfully</div>
-      <button class="stock-logout" onclick="doLogout()">Log out of admin</button>
-    </div>
-  </div>
+  <!-- STOCK PANEL removed — now its own page -->
 </div>
 
 <!-- ORDER -->
@@ -443,6 +442,29 @@ footer strong{color:var(--accent);font-weight:500}
   <strong>OhmSweetOhm</strong> &nbsp;·&nbsp; Fresh homemade batik cakes &nbsp;·&nbsp; WhatsApp: 013-337 4124
 </footer>
 
+<!-- ADMIN PAGE (hidden, no nav link) -->
+<div id="pg-admin" class="page">
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <div>
+        <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;font-weight:500">Admin Dashboard</div>
+        <h2 class="admin-title">Stock &amp; Pricing</h2>
+        <p style="font-size:13px;color:#9a9a8e;margin-top:6px;font-weight:300">Changes sync instantly to all customers</p>
+      </div>
+      <button class="admin-logout-btn" onclick="doLogout()">Log out</button>
+    </div>
+
+    <div class="admin-grid" id="adminCards"></div>
+
+    <div class="admin-save-row">
+      <button class="admin-save-btn" onclick="saveStock()">
+        <span id="saveBtnText">Save all changes</span>
+      </button>
+      <div class="admin-saved" id="stockSaved">✓ Synced to Firebase</div>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 // ── FIREBASE SETUP ──
 // Replace the values below with YOUR Firebase project config after setup
@@ -480,22 +502,21 @@ onValue(stockRef, (snapshot) => {
   const data = snapshot.val();
   if (data) {
     stock = data;
+    // Restore prices saved in Firebase
+    CAKES.forEach(c => {
+      if (stock[c.id]?.price) c.price = stock[c.id].price;
+    });
   } else {
-    // First time: seed default stock into Firebase
     const seed = {};
-    CAKES.forEach(c => { seed[c.id] = { qty: 10, soldOut: false }; });
+    CAKES.forEach(c => { seed[c.id] = { qty: 10, soldOut: false, price: c.price }; });
     set(stockRef, seed);
     stock = seed;
   }
-  // Ensure all cakes exist
-  CAKES.forEach(c => { if (!stock[c.id]) stock[c.id] = { qty: 10, soldOut: false }; });
+  CAKES.forEach(c => { if (!stock[c.id]) stock[c.id] = { qty: 10, soldOut: false, price: c.price }; });
   renderStockUI();
-  if (isAdmin) renderStockPanel();
-  // Remove items from cart if they became unavailable
+  if (isAdmin) renderAdminCards();
   let cartChanged = false;
-  Object.keys(cart).forEach(id => {
-    if (!isAvailable(id)) { delete cart[id]; cartChanged = true; }
-  });
+  Object.keys(cart).forEach(id => { if (!isAvailable(id)) { delete cart[id]; cartChanged = true; } });
   if (cartChanged) { renderCart(); updateCount(); }
 });
 
@@ -577,9 +598,8 @@ function renderStockUI() {
 // ── ADMIN ──
 function onLockClick() {
   if (isAdmin) {
-    goPage("menu");
-    document.getElementById("stockPanel").style.display = "block";
-    renderStockPanel();
+    renderAdminCards();
+    goPage("admin");
   } else {
     document.getElementById("loginModal").classList.add("show");
     setTimeout(() => document.getElementById("loginId").focus(), 100);
@@ -603,9 +623,8 @@ function doLogin() {
     closeLogin();
     document.getElementById("lockBtn").classList.add("unlocked");
     document.getElementById("lockBtn").textContent = "🔓";
-    goPage("menu");
-    document.getElementById("stockPanel").style.display = "block";
-    renderStockPanel();
+    renderAdminCards();
+    goPage("admin");
   } else {
     document.getElementById("loginErr").classList.add("show");
     document.getElementById("loginPass").value = "";
@@ -617,7 +636,7 @@ function doLogout() {
   isAdmin = false;
   document.getElementById("lockBtn").classList.remove("unlocked");
   document.getElementById("lockBtn").textContent = "🔒";
-  document.getElementById("stockPanel").style.display = "none";
+  goPage("home");
 }
 window.doLogout = doLogout;
 
@@ -626,59 +645,79 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape" && document.getElementById("loginModal").classList.contains("show")) closeLogin();
 });
 
-function renderStockPanel() {
-  const container = document.getElementById("stockRows");
+function renderAdminCards() {
+  const container = document.getElementById("adminCards");
   if (!container) return;
   container.innerHTML = "";
-  CAKES.forEach(c => {
-    const s = stock[c.id] || { qty: 0, soldOut: false };
-    const row = document.createElement("div");
-    row.className = "stock-row";
-    row.innerHTML = `
-      <img class="stock-thumb" src="${c.img}" alt="${c.name}">
-      <div class="stock-info">
-        <div class="stock-name">${c.name}</div>
-        <div class="stock-sub" id="ssub-${c.id}">${s.soldOut ? "Sold out (manual)" : s.qty + " units"}</div>
+  CAKES.forEach((c, i) => {
+    const s = stock[c.id] || { qty: 10, soldOut: false };
+    const statusText  = s.soldOut ? "Manually marked sold out" : s.qty === 0 ? "Out of stock" : s.qty <= 3 ? `Only ${s.qty} left` : `${s.qty} in stock`;
+    const statusColor = (s.soldOut || s.qty === 0) ? "#e05252" : s.qty <= 3 ? "var(--accent)" : "#7ec850";
+    const card = document.createElement("div");
+    card.className = "admin-card";
+    card.style.animation = `fadeSlideUp 0.3s ease ${i * 0.07}s both`;
+    card.innerHTML = `
+      <div class="admin-card-top">
+        <img class="admin-cake-img" src="${c.img}" alt="${c.name}">
+        <div>
+          <div class="admin-cake-name">${c.name}</div>
+          <div class="admin-cake-status" style="color:${statusColor}">${statusText}</div>
+        </div>
       </div>
-      <div class="stock-controls">
-        <input class="stock-num" type="number" min="0" max="999" value="${s.qty}" id="sinput-${c.id}">
-        <button class="sold-out-toggle ${s.soldOut ? "active" : ""}" id="sotoggle-${c.id}" onclick="toggleSoldOut('${c.id}')">
-          ${s.soldOut ? "Unmark" : "Sold out"}
+      <div class="admin-fields">
+        <div class="admin-field">
+          <label>Stock (units)</label>
+          <input class="admin-input" type="number" min="0" max="999" value="${s.qty}" id="sinput-${c.id}">
+        </div>
+        <div class="admin-field">
+          <label>Price (RM)</label>
+          <input class="admin-input" type="number" min="1" max="999" value="${c.price}" id="pinput-${c.id}">
+        </div>
+        <button class="soldout-btn ${s.soldOut ? "active" : ""}" id="sotoggle-${c.id}" onclick="toggleSoldOut('${c.id}')">
+          ${s.soldOut ? "✕ Unmark" : "Sold out"}
         </button>
       </div>`;
-    container.appendChild(row);
+    container.appendChild(card);
   });
 }
 
 function toggleSoldOut(id) {
   stock[id].soldOut = !stock[id].soldOut;
   const btn = document.getElementById("sotoggle-" + id);
-  if (btn) { btn.classList.toggle("active", stock[id].soldOut); btn.textContent = stock[id].soldOut ? "Unmark" : "Sold out"; }
-  const sub = document.getElementById("ssub-" + id);
-  if (sub) sub.textContent = stock[id].soldOut ? "Sold out (manual)" : stock[id].qty + " units";
+  if (btn) { btn.classList.toggle("active", stock[id].soldOut); btn.textContent = stock[id].soldOut ? "✕ Unmark" : "Sold out"; }
 }
 window.toggleSoldOut = toggleSoldOut;
 
 function saveStock() {
   CAKES.forEach(c => {
-    const inp = document.getElementById("sinput-" + c.id);
-    if (inp) stock[c.id].qty = Math.max(0, parseInt(inp.value) || 0);
+    const qInp = document.getElementById("sinput-" + c.id);
+    const pInp = document.getElementById("pinput-" + c.id);
+    if (qInp) stock[c.id].qty = Math.max(0, parseInt(qInp.value) || 0);
+    if (pInp) c.price = Math.max(1, parseInt(pInp.value) || c.price);
   });
-  saveStockFirebase(stock);  // ← saves to Firebase, syncs to ALL devices instantly
+  // Save stock + prices to Firebase
+  const payload = {};
+  CAKES.forEach(c => { payload[c.id] = { qty: stock[c.id].qty, soldOut: stock[c.id].soldOut, price: c.price }; });
+  saveStockFirebase(payload);
   renderStockUI();
+  renderCart();
+  renderAdminCards();
   const saved = document.getElementById("stockSaved");
-  if (saved) { saved.style.display = "block"; setTimeout(() => { saved.style.display = "none"; }, 2500); }
+  if (saved) { saved.classList.add("show"); setTimeout(() => saved.classList.remove("show"), 2500); }
 }
 window.saveStock = saveStock;
 
 // ── ROUTING ──
 function goPage(p) {
+  // Block direct access to admin page without login
+  if (p === "admin" && !isAdmin) { p = "home"; }
   document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
   document.getElementById("pg-" + p).classList.add("active");
   document.querySelectorAll(".nav-btn").forEach(x => x.classList.remove("active"));
   const nb = document.getElementById("nb-" + p);
   if (nb) nb.classList.add("active");
-  window.location.hash = p;
+  // Don't expose admin in URL hash
+  if (p !== "admin") window.location.hash = p;
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 window.goPage = goPage;
