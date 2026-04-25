@@ -198,34 +198,70 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 footer{border-top:1px solid rgba(255,255,255,0.07);text-align:center;padding:28px 24px;font-size:12px;color:#5a5a52;font-weight:300;margin-top:20px}
 footer strong{color:var(--accent);font-weight:500}
 
-/* PREORDER BANNER */
-.preorder-banner{background:rgba(196,135,74,0.08);border:1px solid rgba(196,135,74,0.2);border-radius:12px;padding:16px 20px;margin-bottom:28px;display:flex;align-items:center;gap:14px;animation:fadeSlideUp 0.4s ease both}
-.preorder-banner.hidden{display:none}
-.preorder-icon{font-size:22px;flex-shrink:0}
-.preorder-text{flex:1}
-.preorder-label{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:3px}
-.preorder-date{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:#f5f2ed;line-height:1.1}
-.preorder-sub{font-size:12px;color:#9a9a8e;margin-top:3px}
 
-/* HOME BANNER (compact) */
-.home-preorder{display:inline-flex;align-items:center;gap:8px;background:rgba(196,135,74,0.08);border:1px solid rgba(196,135,74,0.2);border-radius:99px;padding:6px 14px;margin-bottom:20px;animation:fadeSlideIn 0.5s ease both}
-.home-preorder-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse-dot 2s ease infinite}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.4)}}
-.home-preorder-text{font-size:11px;color:var(--accent);letter-spacing:0.06em;font-weight:500}
+/* ═══════════════════════════════════════
+   PREORDER WINDOW SYSTEM
+═══════════════════════════════════════ */
+.preorder-bar{margin-bottom:28px;animation:fadeSlideUp 0.6s ease both;animation-delay:0.1s}
+.preorder-upcoming{background:linear-gradient(135deg,rgba(196,135,74,0.07),rgba(196,135,74,0.02));border:1px solid rgba(196,135,74,0.2);border-radius:16px;padding:18px 22px;position:relative;overflow:hidden}
+.preorder-upcoming::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,135,74,0.5),transparent)}
+.pu-eyebrow{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.pu-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulse-dot 2s ease infinite;flex-shrink:0}
+.pu-title{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:300;color:#f5f2ed;margin-bottom:12px;line-height:1.1}
+.countdown{display:flex;gap:8px;margin-bottom:10px}
+.cd-unit{text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:8px 10px;min-width:50px}
+.cd-num{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:300;color:#f5f2ed;line-height:1;display:block}
+.cd-label{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#5a5a52;margin-top:3px;display:block}
+.pu-sub{font-size:11px;color:#9a9a8e}
+.preorder-open{background:linear-gradient(135deg,rgba(120,195,80,0.07),rgba(120,195,80,0.02));border:1px solid rgba(120,195,80,0.2);border-radius:16px;padding:18px 22px;position:relative;overflow:hidden}
+.preorder-open::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(120,195,80,0.4),transparent)}
+.po-eyebrow{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#7ec850;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.po-live-dot{width:7px;height:7px;border-radius:50%;background:#7ec850;box-shadow:0 0 8px rgba(126,200,80,0.6);animation:live-pulse 1.5s ease infinite;flex-shrink:0}
+@keyframes live-pulse{0%,100%{box-shadow:0 0 6px rgba(126,200,80,0.5)}50%{box-shadow:0 0 14px rgba(126,200,80,0.9)}}
+.po-title{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:300;color:#f5f2ed;margin-bottom:10px}
+.po-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.po-closes{font-size:11px;color:#9a9a8e}
+.po-closes span{color:#f5f2ed;font-weight:500}
+.po-order-btn{padding:8px 20px;background:#7ec850;color:#0d0d0b;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;transition:background 0.2s}
+.po-order-btn:hover{background:#97d96a}
+.preorder-closed{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:18px 22px;display:flex;align-items:center;gap:14px}
+.pc-icon{font-size:20px;opacity:0.4}
+.pc-title{font-size:14px;color:#9a9a8e;margin-bottom:2px}
+.pc-sub{font-size:12px;color:#5a5a52}
 
-/* ADMIN PREORDER SECTION */
+/* ORDER PAGE locked overlay */
+.order-form-wrap{position:relative}
+.order-locked{position:absolute;inset:0;background:rgba(13,13,11,0.9);backdrop-filter:blur(8px);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;padding:32px;text-align:center;animation:fadeSlideUp 0.3s ease}
+.order-locked-icon{font-size:36px;margin-bottom:14px}
+.order-locked-title{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:300;margin-bottom:8px}
+.order-locked-sub{font-size:12px;color:#9a9a8e;line-height:1.7;max-width:240px}
+.order-locked-countdown{margin-top:16px;display:flex;gap:8px;justify-content:center}
+.olcd-unit{text-align:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:6px 10px;min-width:44px}
+.olcd-num{font-family:"Cormorant Garamond",serif;font-size:22px;color:#f5f2ed;display:block;line-height:1}
+.olcd-label{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#5a5a52;display:block;margin-top:2px}
+
+/* ADMIN preorder */
 .admin-section-title{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9a9a8e;font-weight:500;margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
-.preorder-admin-card{background:#161612;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:20px 22px;margin-bottom:14px}
+.preorder-admin-card{background:#161612;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:20px 22px;margin-bottom:14px;transition:border-color 0.2s}
 .preorder-admin-card:hover{border-color:rgba(196,135,74,0.2)}
+.preorder-status-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:500;margin-bottom:16px}
+.psb-upcoming{background:rgba(196,135,74,0.1);border:1px solid rgba(196,135,74,0.25);color:var(--accent)}
+.psb-open{background:rgba(126,200,80,0.1);border:1px solid rgba(126,200,80,0.25);color:#7ec850}
+.psb-closed{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#9a9a8e}
+.psb-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.preorder-date-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .preorder-toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.preorder-toggle-label{font-size:13px;color:#f5f2ed;font-weight:400}
+.preorder-toggle-label{font-size:13px;color:#f5f2ed}
 .preorder-toggle-sub{font-size:11px;color:#9a9a8e;margin-top:2px}
-.toggle-switch{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0}
-.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-switch{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0;display:inline-block}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
 .toggle-track{position:absolute;inset:0;background:#2a2a24;border-radius:99px;transition:background 0.25s;border:1px solid rgba(255,255,255,0.08)}
-.toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#9a9a8e;border-radius:50%;transition:transform 0.25s,background 0.25s}
-.toggle-switch input:checked+.toggle-track{background:rgba(196,135,74,0.2);border-color:rgba(196,135,74,0.4)}
-.toggle-switch input:checked+.toggle-track+.toggle-thumb,.toggle-switch input:checked~.toggle-thumb{transform:translateX(20px);background:var(--accent)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#9a9a8e;border-radius:50%;transition:transform 0.25s,background 0.25s;z-index:1}
+.toggle-switch input:checked~.toggle-track{background:rgba(196,135,74,0.2);border-color:rgba(196,135,74,0.4)}
+.toggle-switch input:checked~.toggle-thumb{transform:translateX(20px);background:var(--accent)}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.5)}}
+
+
 
 /* FLOATING PARTICLES */
 .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
@@ -320,10 +356,7 @@ footer strong{color:var(--accent);font-weight:500}
 <div id="pg-home" class="page active">
   <div class="home-hero">
     <div class="hero-left">
-      <div class="home-preorder" id="homePreorderPill" style="display:none">
-        <div class="home-preorder-dot"></div>
-        <span class="home-preorder-text" id="homePreorderText">Next preorder open —</span>
-      </div>
+      <div class="preorder-bar" id="preorderBar" style="display:none"></div>
       <div class="hero-eyebrow">Homemade &nbsp;·&nbsp; Fresh daily</div>
       <h1 class="hero-title">Batik<br>Cakes<br><em>made<br>with love</em></h1>
       <p class="hero-desc">Three signature batik cakes, baked fresh to order. Delivered right to your dorm — no preservatives, just real ingredients.</p>
@@ -412,7 +445,14 @@ footer strong{color:var(--accent);font-weight:500}
       <h2>Place your order</h2>
       <p>Add items, fill in your details, and send via WhatsApp</p>
     </div>
-    <div class="order-layout">
+    <div class="order-form-wrap">
+      <div id="orderLockedOverlay" style="display:none" class="order-locked">
+        <div class="order-locked-icon">🔒</div>
+        <div class="order-locked-title">Preorder not open yet</div>
+        <div class="order-locked-sub" id="orderLockedSub">Check back when the preorder window opens.</div>
+        <div class="order-locked-countdown" id="orderLockedCountdown"></div>
+      </div>
+      <div class="order-layout">
       <div>
         <div class="panel">
           <div class="panel-title">Add items</div>
@@ -498,7 +538,8 @@ footer strong{color:var(--accent);font-weight:500}
           </div>
         </div>
       </div>
-    </div>
+    </div><!-- end order-layout -->
+    </div><!-- end order-form-wrap -->
   </div>
 </div>
 
@@ -520,14 +561,15 @@ footer strong{color:var(--accent);font-weight:500}
 
     <div class="admin-grid" id="adminCards"></div>
 
-    <div class="admin-grid" id="adminCards"></div>
-
-    <div class="admin-section-title">Preorder settings</div>
-    <div class="preorder-admin-card" id="preorderAdminCard">
+    <div class="admin-section-title">Preorder window</div>
+    <div class="preorder-admin-card">
+      <div id="adminPreorderBadge" class="preorder-status-badge psb-closed">
+        <span class="psb-dot"></span><span id="adminPreorderBadgeText">No window set</span>
+      </div>
       <div class="preorder-toggle-row">
         <div>
-          <div class="preorder-toggle-label">Show preorder date</div>
-          <div class="preorder-toggle-sub">Display next open date on the homepage</div>
+          <div class="preorder-toggle-label">Enable preorder window</div>
+          <div class="preorder-toggle-sub">Customers can only order within the open window</div>
         </div>
         <label class="toggle-switch">
           <input type="checkbox" id="preorderEnabled" onchange="onPreorderToggle()">
@@ -536,13 +578,19 @@ footer strong{color:var(--accent);font-weight:500}
         </label>
       </div>
       <div id="preorderDateWrap" style="display:none">
-        <div class="admin-field" style="margin-bottom:10px">
-          <label>Date & time</label>
-          <input class="admin-input" type="datetime-local" id="preorderDateInput">
+        <div class="preorder-date-grid">
+          <div class="admin-field">
+            <label>Opens on</label>
+            <input class="admin-input" type="datetime-local" id="preorderOpenInput">
+          </div>
+          <div class="admin-field">
+            <label>Closes on</label>
+            <input class="admin-input" type="datetime-local" id="preorderCloseInput">
+          </div>
         </div>
         <div class="admin-field">
-          <label>Custom message (optional)</label>
-          <input class="admin-input" type="text" id="preorderMsg" placeholder="e.g. DM to reserve your slot!" maxlength="60">
+          <label>Note for customers (optional)</label>
+          <input class="admin-input" type="text" id="preorderMsg" placeholder="e.g. Limited slots — order early!" maxlength="70">
         </div>
       </div>
     </div>
@@ -600,9 +648,8 @@ onValue(stockRef, (snapshot) => {
   const data = snapshot.val();
   if (data) {
     stock = data;
-    // Restore prices saved in Firebase
     CAKES.forEach(c => {
-      if (stock[c.id]?.price) c.price = stock[c.id].price;
+      if (stock[c.id]?.price != null) c.price = parseFloat(stock[c.id].price);
     });
   } else {
     const seed = {};
@@ -617,6 +664,44 @@ onValue(stockRef, (snapshot) => {
   Object.keys(cart).forEach(id => { if (!isAvailable(id)) { delete cart[id]; cartChanged = true; } });
   if (cartChanged) { renderCart(); updateCount(); }
 });
+
+// ── PREORDER LISTENER ──
+onValue(preorderRef, (snapshot) => {
+  const data = snapshot.val();
+  renderPreorderBar(data);
+  if (isAdmin) populatePreorderAdmin(data);
+});
+
+// ── PARTICLES ──
+(function initParticles() {
+  const container = document.getElementById("particles");
+  if (!container) return;
+  const colors = ["rgba(196,135,74,0.35)", "rgba(245,242,237,0.15)", "rgba(196,135,74,0.2)"];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement("div");
+    p.className = "particle";
+    const size = Math.random() * 4 + 2;
+    p.style.cssText = `
+      width:${size}px;height:${size}px;
+      left:${Math.random()*100}%;
+      bottom:${Math.random()*-20}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${Math.random()*18+10}s;
+      animation-delay:${Math.random()*10}s;
+    `;
+    container.appendChild(p);
+  }
+})();
+
+// ── CURSOR GLOW ──
+(function initCursor() {
+  const glow = document.getElementById("cursorGlow");
+  if (!glow) return;
+  document.addEventListener("mousemove", e => {
+    glow.style.left = e.clientX + "px";
+    glow.style.top  = e.clientY + "px";
+  });
+})();
 
 // ── SAVE STOCK TO FIREBASE ──
 function saveStockFirebase(updatedStock) {
@@ -646,7 +731,7 @@ function renderStockUI() {
     const remaining = s.qty - inCart;
 
     // ── Update all price labels ──
-    const priceStr = "RM" + c.price;
+    const priceStr = fmtRM(c.price);
     const sp  = document.getElementById("sp-"  + c.id); if (sp)  sp.textContent  = priceStr;
     const mp  = document.getElementById("mp-"  + c.id); if (mp)  mp.textContent  = priceStr;
     const mip = document.getElementById("mip-" + c.id); if (mip) mip.textContent = priceStr;
@@ -730,6 +815,7 @@ function doLogin() {
     document.getElementById("lockBtn").classList.add("unlocked");
     document.getElementById("lockBtn").textContent = "🔓";
     renderAdminCards();
+    if (preorderData) populatePreorderAdmin(preorderData);
     goPage("admin");
   } else {
     document.getElementById("loginErr").classList.add("show");
@@ -777,7 +863,7 @@ function renderAdminCards() {
         </div>
         <div class="admin-field">
           <label>Price (RM)</label>
-          <input class="admin-input" type="number" min="1" max="999" value="${c.price}" id="pinput-${c.id}">
+          <input class="admin-input" type="number" min="0.50" max="999" step="0.50" value="${fmt(c.price)}" id="pinput-${c.id}">
         </div>
         <button class="soldout-btn ${s.soldOut ? "active" : ""}" id="sotoggle-${c.id}" onclick="toggleSoldOut('${c.id}')">
           ${s.soldOut ? "✕ Unmark" : "Sold out"}
@@ -799,12 +885,22 @@ function saveStock() {
     const qInp = document.getElementById("sinput-" + c.id);
     const pInp = document.getElementById("pinput-" + c.id);
     if (qInp) stock[c.id].qty = Math.max(0, parseInt(qInp.value) || 0);
-    if (pInp) c.price = Math.max(1, parseInt(pInp.value) || c.price);
+    if (pInp) c.price = Math.max(0.10, parseFloat(pInp.value) || c.price);
   });
-  // Save stock + prices to Firebase
   const payload = {};
   CAKES.forEach(c => { payload[c.id] = { qty: stock[c.id].qty, soldOut: stock[c.id].soldOut, price: c.price }; });
   saveStockFirebase(payload);
+
+  // Save preorder window settings
+  const enabled  = document.getElementById("preorderEnabled")?.checked;
+  const openVal  = document.getElementById("preorderOpenInput")?.value  || "";
+  const closeVal = document.getElementById("preorderCloseInput")?.value || "";
+  const msgVal   = document.getElementById("preorderMsg")?.value || "";
+  const preorderPayload = { enabled: !!enabled, openDate: openVal, closeDate: closeVal, msg: msgVal };
+  set(preorderRef, preorderPayload);
+  renderPreorderBar(preorderPayload);
+  updateAdminPreorderBadge(preorderPayload);
+
   renderStockUI();
   renderCart();
   renderAdminCards();
@@ -812,6 +908,174 @@ function saveStock() {
   if (saved) { saved.classList.add("show"); setTimeout(() => saved.classList.remove("show"), 2500); }
 }
 window.saveStock = saveStock;
+
+// ── PREORDER WINDOW SYSTEM ──
+let preorderData = null;
+let countdownInterval = null;
+
+function getPreorderState(data) {
+  if (!data || !data.enabled) return "none";
+  const now  = Date.now();
+  const open  = data.openDate  ? new Date(data.openDate).getTime()  : 0;
+  const close = data.closeDate ? new Date(data.closeDate).getTime() : Infinity;
+  if (now < open)  return "upcoming";
+  if (now >= open && now < close) return "open";
+  return "closed";
+}
+
+function isOrderingAllowed() {
+  if (!preorderData || !preorderData.enabled) return true; // no window set = always open
+  return getPreorderState(preorderData) === "open";
+}
+
+function renderPreorderBar(data) {
+  preorderData = data;
+  const bar = document.getElementById("preorderBar");
+  if (!bar) return;
+  if (!data || !data.enabled) { bar.style.display = "none"; clearInterval(countdownInterval); return; }
+
+  bar.style.display = "block";
+  const state = getPreorderState(data);
+
+  if (state === "upcoming") {
+    const openDate = new Date(data.openDate);
+    const dateStr  = openDate.toLocaleDateString("en-MY", { weekday:"long", day:"numeric", month:"long" });
+    const timeStr  = openDate.toLocaleTimeString("en-MY", { hour:"2-digit", minute:"2-digit" });
+    bar.innerHTML = `<div class="preorder-upcoming">
+      <div class="pu-eyebrow"><span class="pu-dot"></span>Preorder opening soon</div>
+      <div class="pu-title">Opens ${dateStr} at ${timeStr}</div>
+      <div class="countdown" id="homeCd"></div>
+      <div class="pu-sub">${data.msg || "Get ready — slots are limited."}</div>
+    </div>`;
+    startCountdown("homeCd", data.openDate, () => renderPreorderBar(data));
+  } else if (state === "open") {
+    const closeDate = new Date(data.closeDate);
+    const closeStr  = closeDate.toLocaleDateString("en-MY", { weekday:"short", day:"numeric", month:"short" });
+    const closeTime = closeDate.toLocaleTimeString("en-MY", { hour:"2-digit", minute:"2-digit" });
+    bar.innerHTML = `<div class="preorder-open">
+      <div class="po-eyebrow"><span class="po-live-dot"></span>Preorder is open</div>
+      <div class="po-title">${data.msg || "Order now — limited slots available."}</div>
+      <div class="po-row">
+        <div class="po-closes">Closes <span>${closeStr}, ${closeTime}</span></div>
+        <button class="po-order-btn" onclick="goPage('order')">Order now →</button>
+      </div>
+    </div>`;
+  } else {
+    bar.innerHTML = `<div class="preorder-closed">
+      <div class="pc-icon">🔒</div>
+      <div>
+        <div class="pc-title">Preorder is currently closed</div>
+        <div class="pc-sub">Follow us for updates on the next opening.</div>
+      </div>
+    </div>`;
+  }
+
+  // Update order page lock
+  updateOrderLock(data);
+}
+
+function updateOrderLock(data) {
+  const overlay   = document.getElementById("orderLockedOverlay");
+  const sub       = document.getElementById("orderLockedSub");
+  const cdWrap    = document.getElementById("orderLockedCountdown");
+  if (!overlay) return;
+
+  const allowed = isOrderingAllowed();
+  overlay.style.display = allowed ? "none" : "flex";
+
+  if (!allowed && data) {
+    const state = getPreorderState(data);
+    if (state === "upcoming") {
+      const openDate = new Date(data.openDate);
+      const dateStr  = openDate.toLocaleDateString("en-MY", { weekday:"short", day:"numeric", month:"short" });
+      const timeStr  = openDate.toLocaleTimeString("en-MY", { hour:"2-digit", minute:"2-digit" });
+      sub.textContent = `Ordering opens ${dateStr} at ${timeStr}`;
+      cdWrap.innerHTML = buildCdHtml(data.openDate, "olcd");
+      startCountdown("orderLockedCountdown", data.openDate, () => updateOrderLock(data), "olcd");
+    } else {
+      sub.textContent = "Preorder window has closed. Check back for the next opening.";
+      cdWrap.innerHTML = "";
+    }
+  }
+}
+
+function buildCdHtml(targetDate, cls) {
+  return `<div class="${cls}-unit"><span class="${cls}-num" id="${cls}D">--</span><span class="${cls}-label">Days</span></div>
+          <div class="${cls}-unit"><span class="${cls}-num" id="${cls}H">--</span><span class="${cls}-label">Hours</span></div>
+          <div class="${cls}-unit"><span class="${cls}-num" id="${cls}M">--</span><span class="${cls}-label">Mins</span></div>
+          <div class="${cls}-unit"><span class="${cls}-num" id="${cls}S">--</span><span class="${cls}-label">Secs</span></div>`;
+}
+
+function startCountdown(containerId, targetDateStr, onComplete, cls) {
+  clearInterval(countdownInterval);
+  cls = cls || "cd";
+  const target = new Date(targetDateStr).getTime();
+  function tick() {
+    const diff = target - Date.now();
+    if (diff <= 0) { clearInterval(countdownInterval); if (onComplete) onComplete(); return; }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    const pad = n => String(n).padStart(2,"0");
+    const el = (id) => document.getElementById(id);
+    if (el(cls+"D")) el(cls+"D").textContent = pad(d);
+    if (el(cls+"H")) el(cls+"H").textContent = pad(h);
+    if (el(cls+"M")) el(cls+"M").textContent = pad(m);
+    if (el(cls+"S")) el(cls+"S").textContent = pad(s);
+  }
+  tick();
+  countdownInterval = setInterval(tick, 1000);
+}
+
+// Tick every second to auto-transition states
+setInterval(() => {
+  if (preorderData?.enabled) {
+    renderPreorderBar(preorderData);
+  }
+  // Auto-close if all stock is 0
+  if (preorderData?.enabled && getPreorderState(preorderData) === "open") {
+    const allOut = CAKES.every(c => !isAvailable(c.id));
+    if (allOut) {
+      const now = new Date().toISOString().slice(0,16);
+      preorderData.closeDate = now;
+      set(preorderRef, preorderData);
+    }
+  }
+}, 1000);
+
+function populatePreorderAdmin(data) {
+  const cb    = document.getElementById("preorderEnabled");
+  const wrap  = document.getElementById("preorderDateWrap");
+  const openI = document.getElementById("preorderOpenInput");
+  const clsI  = document.getElementById("preorderCloseInput");
+  const msgI  = document.getElementById("preorderMsg");
+  if (!cb) return;
+  cb.checked = !!(data?.enabled);
+  wrap.style.display = cb.checked ? "block" : "none";
+  if (openI && data?.openDate)  openI.value = data.openDate;
+  if (clsI  && data?.closeDate) clsI.value  = data.closeDate;
+  if (msgI  && data?.msg)       msgI.value   = data.msg;
+  updateAdminPreorderBadge(data);
+}
+
+function updateAdminPreorderBadge(data) {
+  const badge = document.getElementById("adminPreorderBadge");
+  const text  = document.getElementById("adminPreorderBadgeText");
+  if (!badge || !text) return;
+  if (!data || !data.enabled) { badge.className="preorder-status-badge psb-closed"; text.textContent="Disabled"; return; }
+  const state = getPreorderState(data);
+  if (state === "upcoming") { badge.className="preorder-status-badge psb-upcoming"; text.textContent="Upcoming"; }
+  else if (state === "open") { badge.className="preorder-status-badge psb-open"; text.textContent="Live now"; }
+  else { badge.className="preorder-status-badge psb-closed"; text.textContent="Closed"; }
+}
+
+function onPreorderToggle() {
+  const cb   = document.getElementById("preorderEnabled");
+  const wrap = document.getElementById("preorderDateWrap");
+  if (wrap) wrap.style.display = cb.checked ? "block" : "none";
+}
+window.onPreorderToggle = onPreorderToggle;
 
 // ── ROUTING ──
 function goPage(p) {
@@ -888,7 +1152,7 @@ function renderCart() {
         <span style="font-size:13px;min-width:18px;text-align:center;font-weight:500">${qty}</span>
         <button class="qb" onclick="addToCart('${id}')">+</button>
       </div>
-      <span class="ci-total">RM${c.price * qty}</span>
+      <span class="ci-total">${fmtRM(c.price * qty)}</span>
     </div>`;
   });
   el.innerHTML = html;
@@ -897,7 +1161,7 @@ function renderCart() {
   document.getElementById("csItems").textContent = count + " item" + (count > 1 ? "s" : "");
   const feeRow = document.getElementById("csFeeRow");
   if (feeRow) feeRow.style.display = deliveryFee ? "flex" : "none";
-  document.getElementById("csTotal").textContent = "RM" + total;
+  document.getElementById("csTotal").textContent = fmtRM(total);
 }
 
 function updateCount() {
@@ -927,6 +1191,7 @@ window.setDel = setDel;
 function validPhone(p) { return /^(\+?60|0)[0-9]{8,10}$/.test(p.replace(/[-\s]/g, "")); }
 
 function submitOrder() {
+  if (!isOrderingAllowed()) { updateOrderLock(preorderData); return; }
   let ok = true;
   const name  = document.getElementById("oName").value.trim();
   const phone = document.getElementById("oPhone").value.trim();
@@ -947,7 +1212,7 @@ function submitOrder() {
   let lines = "", subtotal = 0;
   Object.keys(cart).forEach(id => {
     const c = CAKES.find(x => x.id === id), qty = cart[id];
-    lines += `  • ${c.name} x${qty} = RM${c.price * qty}\n`;
+    lines += `  • ${c.name} x${qty} = ${fmtRM(c.price * qty)}\n`;
     subtotal += c.price * qty;
   });
   const deliveryFee = delMode === "delivery" ? 1 : 0;
@@ -957,7 +1222,7 @@ function submitOrder() {
     addr = `\n📍 Kolej: ${selectedKolej}\n🚪 Block ${document.getElementById("oBlock").value.trim()}, Room ${document.getElementById("oRoom").value.trim()}`;
     lines += `  • Delivery fee = RM1\n`;
   }
-  const msg = `🍰 *NEW CAKE ORDER*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n\n🚚 Delivery: ${delMode === "pickup" ? "Pickup" : "Delivery"}${addr}\n\n🛒 Items:\n${lines}\n💰 Total: RM${total}\n\n💳 Payment: QR Payment\n\n———————————\nThank you! ❤️`;
+  const msg = `🍰 *NEW CAKE ORDER*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n\n🚚 Delivery: ${delMode === "pickup" ? "Pickup" : "Delivery"}${addr}\n\n🛒 Items:\n${lines}\n💰 Total: ${fmtRM(total)}\n\n💳 Payment: QR Payment\n\n———————————\nThank you! ❤️`;
   const waUrl = "https://wa.me/60133374124?text=" + encodeURIComponent(msg);
   document.getElementById("successBar").classList.add("show");
   document.getElementById("waLink").href = waUrl;
