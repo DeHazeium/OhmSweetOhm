@@ -198,10 +198,65 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 footer{border-top:1px solid rgba(255,255,255,0.07);text-align:center;padding:28px 24px;font-size:12px;color:#5a5a52;font-weight:300;margin-top:20px}
 footer strong{color:var(--accent);font-weight:500}
 
+/* PREORDER BANNER */
+.preorder-banner{background:rgba(196,135,74,0.08);border:1px solid rgba(196,135,74,0.2);border-radius:12px;padding:16px 20px;margin-bottom:28px;display:flex;align-items:center;gap:14px;animation:fadeSlideUp 0.4s ease both}
+.preorder-banner.hidden{display:none}
+.preorder-icon{font-size:22px;flex-shrink:0}
+.preorder-text{flex:1}
+.preorder-label{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:3px}
+.preorder-date{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:#f5f2ed;line-height:1.1}
+.preorder-sub{font-size:12px;color:#9a9a8e;margin-top:3px}
+
+/* HOME BANNER (compact) */
+.home-preorder{display:inline-flex;align-items:center;gap:8px;background:rgba(196,135,74,0.08);border:1px solid rgba(196,135,74,0.2);border-radius:99px;padding:6px 14px;margin-bottom:20px;animation:fadeSlideIn 0.5s ease both}
+.home-preorder-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse-dot 2s ease infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.4)}}
+.home-preorder-text{font-size:11px;color:var(--accent);letter-spacing:0.06em;font-weight:500}
+
+/* ADMIN PREORDER SECTION */
+.admin-section-title{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9a9a8e;font-weight:500;margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.preorder-admin-card{background:#161612;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:20px 22px;margin-bottom:14px}
+.preorder-admin-card:hover{border-color:rgba(196,135,74,0.2)}
+.preorder-toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.preorder-toggle-label{font-size:13px;color:#f5f2ed;font-weight:400}
+.preorder-toggle-sub{font-size:11px;color:#9a9a8e;margin-top:2px}
+.toggle-switch{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-track{position:absolute;inset:0;background:#2a2a24;border-radius:99px;transition:background 0.25s;border:1px solid rgba(255,255,255,0.08)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#9a9a8e;border-radius:50%;transition:transform 0.25s,background 0.25s}
+.toggle-switch input:checked+.toggle-track{background:rgba(196,135,74,0.2);border-color:rgba(196,135,74,0.4)}
+.toggle-switch input:checked+.toggle-track+.toggle-thumb,.toggle-switch input:checked~.toggle-thumb{transform:translateX(20px);background:var(--accent)}
+
+/* FLOATING PARTICLES */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;border-radius:50%;opacity:0;animation:float-up linear infinite}
+@keyframes float-up{0%{opacity:0;transform:translateY(0) scale(0)}10%{opacity:0.6}90%{opacity:0.1}100%{opacity:0;transform:translateY(-100vh) scale(0.5)}}
+
+/* GLOW CURSOR TRAIL */
+.cursor-glow{position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(196,135,74,0.04) 0%,transparent 70%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);transition:left 0.15s ease,top 0.15s ease}
+
+/* ENHANCED HOVER ANIMATIONS */
+.menu-card{transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease,border-color 0.3s ease}
+.menu-card:hover{transform:translateY(-10px) scale(1.01);box-shadow:0 28px 60px rgba(0,0,0,0.7),0 0 40px rgba(196,135,74,0.06);border-color:rgba(196,135,74,0.15)}
+.stack-item{transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease}
+.stack-item:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 20px 50px rgba(0,0,0,0.8),0 0 30px rgba(196,135,74,0.08)}
+
+/* PAGE TRANSITION */
+.page{opacity:0;transition:opacity 0.3s ease}
+.page.active{opacity:1}
+
+/* SHIMMER LOADING on images */
+.menu-img,.mini-img,.admin-cake-img,.cart-thumb{background:#1e1e1a}
+
+/* GLINT on nav brand */
+.nav-brand::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);animation:brand-glint 4s ease infinite}
+.nav-brand{position:relative;overflow:hidden}
+@keyframes brand-glint{0%,80%,100%{left:-100%}40%{left:120%}}
+
 @keyframes fadeSlideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes popIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
-@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+@keyframes shimmer{0%,100%{background-position:200% center}}
 @keyframes bump{0%{transform:scale(1)}50%{transform:scale(1.45)}100%{transform:scale(1)}}
 
 @media(max-width:750px){
@@ -223,6 +278,9 @@ footer strong{color:var(--accent);font-weight:500}
 </style>
 </head>
 <body>
+
+<div class="particles" id="particles"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
 
 <nav>
   <button class="nav-brand" onclick="goPage('home')">
@@ -262,6 +320,10 @@ footer strong{color:var(--accent);font-weight:500}
 <div id="pg-home" class="page active">
   <div class="home-hero">
     <div class="hero-left">
+      <div class="home-preorder" id="homePreorderPill" style="display:none">
+        <div class="home-preorder-dot"></div>
+        <span class="home-preorder-text" id="homePreorderText">Next preorder open —</span>
+      </div>
       <div class="hero-eyebrow">Homemade &nbsp;·&nbsp; Fresh daily</div>
       <h1 class="hero-title">Batik<br>Cakes<br><em>made<br>with love</em></h1>
       <p class="hero-desc">Three signature batik cakes, baked fresh to order. Delivered right to your dorm — no preservatives, just real ingredients.</p>
@@ -458,6 +520,33 @@ footer strong{color:var(--accent);font-weight:500}
 
     <div class="admin-grid" id="adminCards"></div>
 
+    <div class="admin-grid" id="adminCards"></div>
+
+    <div class="admin-section-title">Preorder settings</div>
+    <div class="preorder-admin-card" id="preorderAdminCard">
+      <div class="preorder-toggle-row">
+        <div>
+          <div class="preorder-toggle-label">Show preorder date</div>
+          <div class="preorder-toggle-sub">Display next open date on the homepage</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="preorderEnabled" onchange="onPreorderToggle()">
+          <div class="toggle-track"></div>
+          <div class="toggle-thumb"></div>
+        </label>
+      </div>
+      <div id="preorderDateWrap" style="display:none">
+        <div class="admin-field" style="margin-bottom:10px">
+          <label>Date & time</label>
+          <input class="admin-input" type="datetime-local" id="preorderDateInput">
+        </div>
+        <div class="admin-field">
+          <label>Custom message (optional)</label>
+          <input class="admin-input" type="text" id="preorderMsg" placeholder="e.g. DM to reserve your slot!" maxlength="60">
+        </div>
+      </div>
+    </div>
+
     <div class="admin-save-row">
       <button class="admin-save-btn" onclick="saveStock()">
         <span id="saveBtnText">Save all changes</span>
@@ -485,14 +574,19 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
-const stockRef = ref(db, "stock");
+const stockRef    = ref(db, "stock");
+const preorderRef = ref(db, "preorder");
 
 // ── CAKES ──
 const CAKES = [
-  { id: "classic",  name: "Classic Batik",  price: 15, img: "images/classic.png"  },
-  { id: "horlicks", name: "Horlick Batik",  price: 15, img: "images/horlicks.png" },
-  { id: "matcha",   name: "Matcha Batik",   price: 15, img: "images/matcha.png"   },
+  { id: "classic",  name: "Classic Batik",  price: 15.00, img: "images/classic.png"  },
+  { id: "horlicks", name: "Horlick Batik",  price: 15.00, img: "images/horlicks.png" },
+  { id: "matcha",   name: "Matcha Batik",   price: 15.00, img: "images/matcha.png"   },
 ];
+
+// Helper: format price with cents only if needed
+function fmt(n) { return Number(n).toFixed(2).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1"); }
+function fmtRM(n) { return "RM" + fmt(n); }
 
 // isAdmin is LOCAL to this browser tab only — customers on other devices
 // are completely unaffected. No shared session state in Firebase.
