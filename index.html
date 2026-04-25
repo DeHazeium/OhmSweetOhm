@@ -98,18 +98,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .btn-ghost{padding:13px 28px;background:transparent;color:#f5f2ed;border:1px solid rgba(255,255,255,0.15);border-radius:7px;font-size:13px;font-family:"DM Sans",sans-serif;cursor:pointer;letter-spacing:0.03em;transition:all 0.2s}
 .btn-ghost:hover{border-color:rgba(255,255,255,0.5)}
 
-.hero-right{position:relative;height:600px}
-.cake-stack{position:relative;width:100%;height:100%}
-.stack-item{position:absolute;cursor:pointer;transition:transform 0.35s ease;animation:popIn 0.5s ease both}
-.stack-item.s-left{left:0;top:50%;transform:translateY(-50%) rotate(-5deg);width:43%;z-index:2;animation-delay:0.1s}
-.stack-item.s-left:hover{transform:translateY(-55%) rotate(-2deg) scale(1.05);z-index:10}
-.stack-item.s-center{left:50%;top:44%;transform:translate(-50%,-50%);width:52%;z-index:5;animation-delay:0.2s}
-.stack-item.s-center:hover{transform:translate(-50%,-56%) scale(1.05);z-index:10}
-.stack-item.s-right{right:0;bottom:8%;transform:rotate(5deg);width:43%;z-index:3;animation-delay:0.3s}
-.stack-item.s-right:hover{transform:rotate(2deg) scale(1.05) translateY(-10px);z-index:10}
-.stack-card{background:#161612;border-radius:20px;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,0.7);position:relative}
-.stack-card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
-.stack-label{padding:13px 16px;background:#161612;display:flex;align-items:center;justify-content:space-between}
+.hero-right{display:flex;flex-direction:column;gap:16px;justify-content:center;padding:40px 0}
+.cake-stack{display:flex;flex-direction:column;gap:14px;width:100%}
+
+/* Staggered card row layout - 3 cards in a column with offset feel */
+.stack-item{cursor:pointer;transition:transform 0.3s ease,box-shadow 0.3s ease;animation:popIn 0.5s ease both;border-radius:20px}
+.stack-item.s-left{align-self:flex-start;width:82%;animation-delay:0.1s;margin-left:0}
+.stack-item.s-center{align-self:center;width:90%;animation-delay:0.2s}
+.stack-item.s-right{align-self:flex-end;width:82%;animation-delay:0.3s;margin-right:0}
+.stack-item:hover{transform:translateY(-6px) scale(1.02);z-index:10}
+.stack-card{background:#161612;border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.6)}
+.stack-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.stack-label{padding:12px 16px;background:#161612;display:flex;align-items:center;justify-content:space-between}
 .stack-name{font-family:"Cormorant Garamond",serif;font-size:17px;font-weight:400;color:#f5f2ed;letter-spacing:0.02em}
 .stack-price{font-size:12px;color:var(--accent);font-weight:500;margin-top:3px}
 
@@ -207,7 +207,9 @@ footer strong{color:var(--accent);font-weight:500}
 @media(max-width:750px){
   nav{padding:14px 18px}
   .home-hero{grid-template-columns:1fr;padding:28px 20px;gap:16px;min-height:auto}
-  .hero-right{height:320px}
+  .hero-right{padding:0 0 20px}
+  .stack-item.s-left,.stack-item.s-right{width:78%}
+  .stack-item.s-center{width:86%}
   .menu-grid,.menu-header,.order-wrap{padding-left:20px;padding-right:20px}
   .menu-grid{grid-template-columns:1fr 1fr}
   .order-layout{grid-template-columns:1fr}
@@ -274,7 +276,7 @@ footer strong{color:var(--accent);font-weight:500}
           <div class="stack-card">
             <img src="images/classic.png" alt="Classic Batik">
             <div class="stack-label">
-              <div><div class="stack-name">Classic Batik</div><div class="stack-price">RM15</div></div>
+              <div><div class="stack-name">Classic Batik</div><div class="stack-price" id="sp-classic">RM15</div></div>
               <span id="home-badge-classic"></span>
             </div>
           </div>
@@ -283,7 +285,7 @@ footer strong{color:var(--accent);font-weight:500}
           <div class="stack-card">
             <img src="images/horlicks.png" alt="Horlick Batik">
             <div class="stack-label">
-              <div><div class="stack-name">Horlick Batik</div><div class="stack-price">RM15</div></div>
+              <div><div class="stack-name">Horlick Batik</div><div class="stack-price" id="sp-horlicks">RM15</div></div>
               <span id="home-badge-horlicks"></span>
             </div>
           </div>
@@ -292,7 +294,7 @@ footer strong{color:var(--accent);font-weight:500}
           <div class="stack-card">
             <img src="images/matcha.png" alt="Matcha Batik">
             <div class="stack-label">
-              <div><div class="stack-name">Matcha Batik</div><div class="stack-price">RM15</div></div>
+              <div><div class="stack-name">Matcha Batik</div><div class="stack-price" id="sp-matcha">RM15</div></div>
               <span id="home-badge-matcha"></span>
             </div>
           </div>
@@ -316,7 +318,7 @@ footer strong{color:var(--accent);font-weight:500}
         <div class="menu-name">Classic Batik</div>
         <div class="menu-desc">The original. Rich chocolate Marie biscuit layers with smooth butter cream — timeless and indulgent.</div>
         <div class="menu-stock-line" id="ms-classic"></div>
-        <div class="menu-footer"><span class="menu-price">RM15</span><button class="menu-add" id="ma-classic" onclick="addFromCard('classic')">+</button></div>
+        <div class="menu-footer"><span class="menu-price" id="mp-classic">RM15</span><button class="menu-add" id="ma-classic" onclick="addFromCard('classic')">+</button></div>
       </div>
     </div>
     <div class="menu-card" id="mc-horlicks">
@@ -325,7 +327,7 @@ footer strong{color:var(--accent);font-weight:500}
         <div class="menu-name">Horlick Batik</div>
         <div class="menu-desc">Nostalgic malted milk flavour layered between soft biscuits. A cosy childhood favourite, reimagined.</div>
         <div class="menu-stock-line" id="ms-horlicks"></div>
-        <div class="menu-footer"><span class="menu-price">RM15</span><button class="menu-add" id="ma-horlicks" onclick="addFromCard('horlicks')">+</button></div>
+        <div class="menu-footer"><span class="menu-price" id="mp-horlicks">RM15</span><button class="menu-add" id="ma-horlicks" onclick="addFromCard('horlicks')">+</button></div>
       </div>
     </div>
     <div class="menu-card" id="mc-matcha">
@@ -334,7 +336,7 @@ footer strong{color:var(--accent);font-weight:500}
         <div class="menu-name">Matcha Batik</div>
         <div class="menu-desc">Earthy Japanese matcha cream meets buttery biscuit layers. Subtle, fragrant and perfectly balanced.</div>
         <div class="menu-stock-line" id="ms-matcha"></div>
-        <div class="menu-footer"><span class="menu-price">RM15</span><button class="menu-add" id="ma-matcha" onclick="addFromCard('matcha')">+</button></div>
+        <div class="menu-footer"><span class="menu-price" id="mp-matcha">RM15</span><button class="menu-add" id="ma-matcha" onclick="addFromCard('matcha')">+</button></div>
       </div>
     </div>
   </div>
@@ -354,17 +356,17 @@ footer strong{color:var(--accent);font-weight:500}
           <div class="panel-title">Add items</div>
           <div class="mini-cake" id="mini-classic">
             <img class="mini-img" src="images/classic.png" alt="Classic Batik">
-            <div class="mini-info"><div class="mini-name">Classic Batik</div><div class="mini-price">RM15</div><div class="mini-stock" id="mini-stock-classic"></div></div>
+            <div class="mini-info"><div class="mini-name">Classic Batik</div><div class="mini-price" id="mip-classic">RM15</div><div class="mini-stock" id="mini-stock-classic"></div></div>
             <button class="mini-add-btn" id="mab-classic" onclick="addToCart('classic')">+</button>
           </div>
           <div class="mini-cake" id="mini-horlicks">
             <img class="mini-img" src="images/horlicks.png" alt="Horlick Batik">
-            <div class="mini-info"><div class="mini-name">Horlick Batik</div><div class="mini-price">RM15</div><div class="mini-stock" id="mini-stock-horlicks"></div></div>
+            <div class="mini-info"><div class="mini-name">Horlick Batik</div><div class="mini-price" id="mip-horlicks">RM15</div><div class="mini-stock" id="mini-stock-horlicks"></div></div>
             <button class="mini-add-btn" id="mab-horlicks" onclick="addToCart('horlicks')">+</button>
           </div>
           <div class="mini-cake" id="mini-matcha">
             <img class="mini-img" src="images/matcha.png" alt="Matcha Batik">
-            <div class="mini-info"><div class="mini-name">Matcha Batik</div><div class="mini-price">RM15</div><div class="mini-stock" id="mini-stock-matcha"></div></div>
+            <div class="mini-info"><div class="mini-name">Matcha Batik</div><div class="mini-price" id="mip-matcha">RM15</div><div class="mini-stock" id="mini-stock-matcha"></div></div>
             <button class="mini-add-btn" id="mab-matcha" onclick="addToCart('matcha')">+</button>
           </div>
         </div>
@@ -492,8 +494,10 @@ const CAKES = [
   { id: "matcha",   name: "Matcha Batik",   price: 15, img: "images/matcha.png"   },
 ];
 
+// isAdmin is LOCAL to this browser tab only — customers on other devices
+// are completely unaffected. No shared session state in Firebase.
 let stock = {};
-let isAdmin = false;
+let isAdmin = false;  // ← only true in YOUR tab after you log in
 let cart = {}, delMode = "pickup", selectedKolej = "";
 
 // ── FIREBASE REAL-TIME LISTENER ──
@@ -547,7 +551,13 @@ function renderStockUI() {
     const inCart = cart[c.id] || 0;
     const remaining = s.qty - inCart;
 
-    // Menu card
+    // ── Update all price labels ──
+    const priceStr = "RM" + c.price;
+    const sp  = document.getElementById("sp-"  + c.id); if (sp)  sp.textContent  = priceStr;
+    const mp  = document.getElementById("mp-"  + c.id); if (mp)  mp.textContent  = priceStr;
+    const mip = document.getElementById("mip-" + c.id); if (mip) mip.textContent = priceStr;
+
+    // ── Menu card overlay ──
     const mc = document.getElementById("mc-" + c.id);
     if (mc) {
       mc.classList.toggle("is-soldout", !available);
@@ -561,18 +571,20 @@ function renderStockUI() {
       }
     }
 
+    // ── Menu stock badge ──
     const ms = document.getElementById("ms-" + c.id);
     if (ms) {
-      if (s.soldOut)      ms.innerHTML = '<span class="stock-badge out">Sold out</span>';
+      if (s.soldOut)        ms.innerHTML = '<span class="stock-badge out">Sold out</span>';
       else if (s.qty === 0) ms.innerHTML = '<span class="stock-badge out">Out of stock</span>';
-      else if (s.qty <= 3) ms.innerHTML = `<span class="stock-badge low">Only ${s.qty} left</span>`;
-      else                 ms.innerHTML = `<span style="font-size:11px;color:#5a5a52">${s.qty} available</span>`;
+      else if (s.qty <= 3)  ms.innerHTML = `<span class="stock-badge low">Only ${s.qty} left</span>`;
+      else                  ms.innerHTML = `<span style="font-size:11px;color:#5a5a52">${s.qty} available</span>`;
     }
 
+    // ── Menu add button ──
     const ma = document.getElementById("ma-" + c.id);
     if (ma) ma.disabled = !available || remaining <= 0;
 
-    // Mini list
+    // ── Order page mini list ──
     const mini = document.getElementById("mini-" + c.id);
     const mab  = document.getElementById("mab-" + c.id);
     const mst  = document.getElementById("mini-stock-" + c.id);
@@ -585,7 +597,7 @@ function renderStockUI() {
       else                  mst.textContent = `${s.qty} available`;
     }
 
-    // Home badge
+    // ── Home badge ──
     const hb = document.getElementById("home-badge-" + c.id);
     if (hb) {
       if (s.soldOut || s.qty === 0) hb.innerHTML = '<span class="stock-badge out" style="font-size:9px">Sold out</span>';
