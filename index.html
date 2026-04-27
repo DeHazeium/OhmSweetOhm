@@ -610,18 +610,6 @@ footer strong{color:var(--accent);font-weight:500}
       </div>
     </div>
 
-    <div class="admin-section-title">Danger zone</div>
-    <div class="preorder-admin-card" style="border-color:rgba(224,82,82,0.15)">
-      <div class="preorder-toggle-row" style="margin-bottom:0">
-        <div>
-          <div class="preorder-toggle-label">Clear all reservations</div>
-          <div class="preorder-toggle-sub">Releases all carts held by customers right now</div>
-        </div>
-        <button class="soldout-btn" onclick="clearAllReservations()" style="white-space:nowrap">Clear all</button>
-      </div>
-      <div class="admin-saved" id="reserveCleared" style="margin-top:10px">✓ All reservations cleared</div>
-    </div>
-
     <div class="admin-save-row">
       <button class="admin-save-btn" onclick="saveStock()">
         <span id="saveBtnText">Save all changes</span>
@@ -1101,12 +1089,7 @@ function updateAdminPreorderBadge(data) {
   else { badge.className="preorder-status-badge psb-closed"; text.textContent="Closed"; }
 }
 
-function clearAllReservations() {
-  dbSet(dbRef("reservations"), null);
-  const msg = document.getElementById("reserveCleared");
-  if (msg) { msg.classList.add("show"); setTimeout(() => msg.classList.remove("show"), 2500); }
-}
-window.clearAllReservations = clearAllReservations;
+function onPreorderToggle() {
   const cb   = document.getElementById("preorderEnabled");
   const wrap = document.getElementById("preorderDateWrap");
   if (wrap) wrap.style.display = cb.checked ? "block" : "none";
