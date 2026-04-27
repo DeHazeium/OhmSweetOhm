@@ -618,12 +618,9 @@ footer strong{color:var(--accent);font-weight:500}
   </div>
 </div>
 
-<script type="module">
-// ── FIREBASE SETUP ──
-// Replace the values below with YOUR Firebase project config after setup
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, set, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
 const firebaseConfig = {
   apiKey:            "AIzaSyBSaESooS8G72KIeCEDqumCI1D3ED9__QQ",
   authDomain:        "ohmsweetohm-467c4.firebaseapp.com",
@@ -634,10 +631,17 @@ const firebaseConfig = {
   appId:             "1:491868898823:web:918e00bd42a5f57bf3cca2"
 };
 
-const app = initializeApp(firebaseConfig);
-const db  = getDatabase(app);
-const stockRef    = ref(db, "stock");
-const preorderRef = ref(db, "preorder");
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+function dbRef(path)        { return db.ref(path); }
+function dbSet(ref, val)    { return ref.set(val); }
+function dbUpdate(ref, val) { return ref.update(val); }
+function dbOn(ref, cb)      { ref.on("value", snap => cb(snap)); }
+
+const stockRef        = dbRef("stock");
+const preorderRef     = dbRef("preorder");
+const allReservRef    = dbRef("reservations");
 
 // ── CAKES ──
 const CAKES = [
@@ -658,7 +662,7 @@ let cart = {}, delMode = "pickup", selectedKolej = "";
 
 // ── FIREBASE REAL-TIME LISTENER ──
 // This fires instantly whenever stock changes in Firebase — on ANY device
-onValue(stockRef, (snapshot) => {
+dbOn(stockRef, (snapshot) => {
   const data = snapshot.val();
   if (data) {
     stock = data;
@@ -668,7 +672,7 @@ onValue(stockRef, (snapshot) => {
   } else {
     const seed = {};
     CAKES.forEach(c => { seed[c.id] = { qty: 10, soldOut: false, price: c.price }; });
-    set(stockRef, seed);
+    dbSet(stockRef, seed);
     stock = seed;
   }
   CAKES.forEach(c => { if (!stock[c.id]) stock[c.id] = { qty: 10, soldOut: false, price: c.price }; });
@@ -679,8 +683,7 @@ onValue(stockRef, (snapshot) => {
   if (cartChanged) { renderCart(); updateCount(); }
 });
 
-// ── PREORDER LISTENER ──
-onValue(preorderRef, (snapshot) => {
+dbOn(preorderRef, (snapshot) => {
   const data = snapshot.val();
   renderPreorderBar(data);
   if (isAdmin) populatePreorderAdmin(data);
@@ -719,7 +722,7 @@ onValue(preorderRef, (snapshot) => {
 
 // ── SAVE STOCK TO FIREBASE ──
 function saveStockFirebase(updatedStock) {
-  set(stockRef, updatedStock);
+  dbSet(stockRef, updatedStock);
 }
 
 // Deduct stock after order — uses atomic update
@@ -729,7 +732,7 @@ function deductStock(cartObj) {
     const newQty = Math.max(0, (stock[id]?.qty || 0) - cartObj[id]);
     updates[id + "/qty"] = newQty;
   });
-  update(stockRef, updates);
+  dbRef("stock").update(updates);
 }
 
 function isAvailable(id) {
@@ -912,7 +915,7 @@ function saveStock() {
   const closeVal = document.getElementById("preorderCloseInput")?.value || "";
   const msgVal   = document.getElementById("preorderMsg")?.value || "";
   const preorderPayload = { enabled: !!enabled, openDate: openVal, closeDate: closeVal, msg: msgVal };
-  set(preorderRef, preorderPayload);
+  dbSet(preorderRef, preorderPayload);
   renderPreorderBar(preorderPayload);
   updateAdminPreorderBadge(preorderPayload);
 
@@ -1054,7 +1057,7 @@ setInterval(() => {
     if (allOut) {
       const now = new Date().toISOString().slice(0,16);
       preorderData.closeDate = now;
-      set(preorderRef, preorderData);
+      dbSet(preorderRef, preorderData);
     }
   }
 }, 1000);
@@ -1132,18 +1135,15 @@ window.addEventListener("hashchange", () => {
 // On timeout / clear: release reservation from Firebase
 
 const SESSION_ID = Math.random().toString(36).slice(2);
-const reserveRef = ref(db, "reservations/" + SESSION_ID);
-const CART_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
+const reserveRef = dbRef("reservations/" + SESSION_ID);
+const CART_TIMEOUT_MS = 5 * 60 * 1000;
 let cartExpireTimer = null;
-let cartExpiresAt = null; // timestamp
+let cartExpiresAt = null;
 
-// Read ALL reservations from Firebase to know how many are "taken" by other users
-let allReservations = {}; // { sessionId: { cakeId: {qty, expiresAt} } }
-const allReservationsRef = ref(db, "reservations");
-onValue(allReservationsRef, (snap) => {
+let allReservations = {};
+dbOn(dbRef("reservations"), (snap) => {
   const now = Date.now();
   allReservations = snap.val() || {};
-  // Prune expired sessions (client-side, safe since we only read for display)
   Object.keys(allReservations).forEach(sid => {
     Object.keys(allReservations[sid] || {}).forEach(cid => {
       if (allReservations[sid][cid]?.expiresAt < now) delete allReservations[sid][cid];
@@ -1181,18 +1181,12 @@ function pushReservation() {
   const expiresAt = Date.now() + CART_TIMEOUT_MS;
   cartExpiresAt = expiresAt;
   const payload = {};
-  Object.keys(cart).forEach(id => {
-    payload[id] = { qty: cart[id], expiresAt };
-  });
-  if (Object.keys(payload).length) {
-    set(reserveRef, payload);
-  } else {
-    set(reserveRef, null);
-  }
+  Object.keys(cart).forEach(id => { payload[id] = { qty: cart[id], expiresAt }; });
+  dbSet(reserveRef, Object.keys(payload).length ? payload : null);
 }
 
 function releaseReservation() {
-  set(reserveRef, null);
+  dbSet(reserveRef, null);
   cartExpiresAt = null;
 }
 
@@ -1269,7 +1263,7 @@ function removeFromCart(id) {
 window.removeFromCart = removeFromCart;
 
 // Clean up reservation on page close
-window.addEventListener("beforeunload", () => { set(reserveRef, null); });
+window.addEventListener("beforeunload", () => { dbSet(reserveRef, null); });
 
 function renderCart() {
   const el = document.getElementById("cartItems");
