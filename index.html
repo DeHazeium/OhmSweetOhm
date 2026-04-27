@@ -291,10 +291,8 @@ footer strong{color:var(--accent);font-weight:500}
 .page{opacity:0;transition:opacity 0.3s ease}
 .page.active{opacity:1}
 
-/* 3D TILT — preserve existing transitions when idle */
-.menu-card,.stack-item{transform-style:preserve-3d;will-change:transform}
-.menu-card .card-shine,.stack-item .card-shine{position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0.07) 0%,transparent 65%);opacity:0;transition:opacity 0.3s ease;z-index:3}
-.menu-card:hover .card-shine,.stack-item:hover .card-shine{opacity:1}
+/* SHIMMER LOADING on images */
+.menu-img,.mini-img,.admin-cake-img,.cart-thumb{background:#1e1e1a}
 
 /* GLINT on nav brand */
 .nav-brand::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);animation:brand-glint 4s ease infinite}
@@ -1406,46 +1404,7 @@ function submitOrder() {
   }
   setTimeout(() => { document.getElementById("waManual").style.display = "block"; }, 2000);
 }
-window.submitOrder = submitOrder;// ── 3D CARD TILT + GLASSMORPHISM SHINE ──
-(function initTilt() {
-  function applyTilt(card) {
-    if (card.dataset.tilt) return; // never attach twice
-    card.dataset.tilt = "1";
-
-    const shine = document.createElement("div");
-    shine.className = "card-shine";
-    card.appendChild(shine);
-
-    card.addEventListener("mouseenter", () => {
-      card.style.transition = "none";
-    }, { passive: true });
-
-    card.addEventListener("mousemove", e => {
-      const rect = card.getBoundingClientRect();
-      const rotX = (((e.clientY - rect.top)  / rect.height) - 0.5) * -14;
-      const rotY = (((e.clientX - rect.left) / rect.width)  - 0.5) *  14;
-      card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.03,1.03,1.03)`;
-      const px = ((e.clientX - rect.left) / rect.width)  * 100;
-      const py = ((e.clientY - rect.top)  / rect.height) * 100;
-      shine.style.background = `radial-gradient(circle at ${px}% ${py}%, rgba(255,255,255,0.09) 0%, transparent 60%)`;
-      shine.style.opacity = "1";
-    }, { passive: true });
-
-    card.addEventListener("mouseleave", () => {
-      card.style.transition = "transform 0.6s cubic-bezier(0.23,1,0.32,1)";
-      card.style.transform  = "";
-      shine.style.opacity   = "0";
-    }, { passive: true });
-  }
-
-  function scanAndApply() {
-    document.querySelectorAll(".menu-card, .stack-item").forEach(applyTilt);
-  }
-
-  scanAndApply();
-  // Re-scan when new cards appear (page switches, stock re-renders)
-  new MutationObserver(scanAndApply).observe(document.body, { childList: true, subtree: true });
-})();
-
+window.submitOrder = submitOrder;
+</script>
 </body>
 </html>
