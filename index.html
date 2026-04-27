@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>OhmSweetOhm</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--accent:#c4874a}
 *{box-sizing:border-box;margin:0;padding:0}
+button,a,[onclick]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{font-family:"DM Sans",sans-serif;background:#0d0d0b;color:#f5f2ed;min-height:100vh}
 
@@ -1139,6 +1140,12 @@ const reserveRef = dbRef("reservations/" + SESSION_ID);
 const CART_TIMEOUT_MS = 5 * 60 * 1000;
 let cartExpireTimer = null;
 let cartExpiresAt = null;
+
+// Clear any leftover reservation from a previous session load immediately
+dbSet(reserveRef, null);
+
+// Auto-remove reservation if browser crashes, closes, or loses connection
+reserveRef.onDisconnect().remove();
 
 let allReservations = {};
 dbOn(dbRef("reservations"), (snap) => {
