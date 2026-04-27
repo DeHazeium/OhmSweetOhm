@@ -69,10 +69,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .admin-saved{font-size:12px;color:#7ec850;display:none;animation:fadeSlideIn 0.3s ease}
 .admin-saved.show{display:block}
 
-/* STOCK BADGES */
-.stock-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:99px;letter-spacing:0.04em}
+.stock-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:99px;letter-spacing:0.04em;display:inline-block}
 .stock-badge.low{background:rgba(196,135,74,0.15);color:var(--accent);border:1px solid rgba(196,135,74,0.3)}
 .stock-badge.out{background:rgba(224,82,82,0.12);color:#e05252;border:1px solid rgba(224,82,82,0.3)}
+.stock-badge.res{background:rgba(90,90,82,0.2);color:#9a9a8e;border:1px solid rgba(255,255,255,0.08)}
+.stock-badge.mine{background:rgba(126,200,80,0.1);color:#7ec850;border:1px solid rgba(126,200,80,0.25)}
+.stock-badge.avail{background:rgba(126,200,80,0.08);color:#7ec850;border:1px solid rgba(126,200,80,0.2)}
+
+/* CART TIMER */
+.cart-timer{display:none;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;border:1px solid rgba(196,135,74,0.3);margin-bottom:12px;transition:border-color 0.3s ease}
+.cart-timer-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:pulse-dot 1.5s ease infinite}
+.cart-timer-text{font-size:11px;font-weight:500;letter-spacing:0.02em;transition:color 0.3s ease}
+.cart-timer-clear{background:none;border:none;font-size:11px;color:#5a5a52;cursor:pointer;font-family:"DM Sans",sans-serif;margin-left:auto;padding:0;transition:color 0.2s}
+.cart-timer-clear:hover{color:#e05252}
 .sold-out-overlay{position:absolute;inset:0;background:rgba(13,13,11,0.65);display:flex;align-items:center;justify-content:center;border-radius:inherit;z-index:2}
 .sold-out-label{font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#e05252;border:1px solid rgba(224,82,82,0.4);padding:6px 14px;border-radius:6px;background:rgba(13,13,11,0.8)}
 .mini-cake.soldout{opacity:0.4;pointer-events:none}
@@ -520,6 +529,11 @@ footer strong{color:var(--accent);font-weight:500}
       <div>
         <div class="panel" style="position:sticky;top:82px">
           <div class="panel-title">Summary</div>
+          <div class="cart-timer" id="cartTimer">
+            <span class="cart-timer-dot"></span>
+            <span class="cart-timer-text" id="timerText"></span>
+            <button class="cart-timer-clear" onclick="clearCart()">Clear</button>
+          </div>
           <div id="cartItems"><div class="cart-empty">Nothing added yet</div></div>
           <div id="cartSumBlock" style="display:none">
             <div class="cart-sum">
@@ -727,16 +741,17 @@ function renderStockUI() {
   CAKES.forEach(c => {
     const s = stock[c.id] || { qty: 0, soldOut: false };
     const available = isAvailable(c.id);
-    const inCart = cart[c.id] || 0;
-    const remaining = s.qty - inCart;
+    const reserved  = reservedByOthers(c.id);
+    const myCart    = cart[c.id] || 0;
+    const remaining = s.qty - reserved - myCart; // truly free units
 
-    // ── Update all price labels ──
+    // Price labels
     const priceStr = fmtRM(c.price);
     const sp  = document.getElementById("sp-"  + c.id); if (sp)  sp.textContent  = priceStr;
     const mp  = document.getElementById("mp-"  + c.id); if (mp)  mp.textContent  = priceStr;
     const mip = document.getElementById("mip-" + c.id); if (mip) mip.textContent = priceStr;
 
-    // ── Menu card overlay ──
+    // Menu card overlay
     const mc = document.getElementById("mc-" + c.id);
     if (mc) {
       mc.classList.toggle("is-soldout", !available);
@@ -750,37 +765,37 @@ function renderStockUI() {
       }
     }
 
-    // ── Menu stock badge ──
-    const ms = document.getElementById("ms-" + c.id);
-    if (ms) {
-      if (s.soldOut)        ms.innerHTML = '<span class="stock-badge out">Sold out</span>';
-      else if (s.qty === 0) ms.innerHTML = '<span class="stock-badge out">Out of stock</span>';
-      else if (s.qty <= 3)  ms.innerHTML = `<span class="stock-badge low">Only ${s.qty} left</span>`;
-      else                  ms.innerHTML = `<span style="font-size:11px;color:#5a5a52">${s.qty} available</span>`;
+    // Stock line — shows available + reserved breakdown
+    function stockLabel(forMenu) {
+      if (s.soldOut)        return '<span class="stock-badge out">Sold out</span>';
+      if (s.qty === 0)      return '<span class="stock-badge out">Out of stock</span>';
+      let parts = [];
+      if (remaining > 0)   parts.push(`<span class="stock-badge ${remaining <= 2 ? "low" : "avail"}">${remaining} left</span>`);
+      else                  parts.push(`<span class="stock-badge out">None left</span>`);
+      if (reserved > 0)     parts.push(`<span class="stock-badge res">${reserved} reserved</span>`);
+      if (myCart > 0 && forMenu) parts.push(`<span class="stock-badge mine">${myCart} in your cart</span>`);
+      return parts.join(" ");
     }
 
-    // ── Menu add button ──
+    const ms = document.getElementById("ms-" + c.id);
+    if (ms) ms.innerHTML = stockLabel(true);
+
     const ma = document.getElementById("ma-" + c.id);
     if (ma) ma.disabled = !available || remaining <= 0;
 
-    // ── Order page mini list ──
+    // Mini list
     const mini = document.getElementById("mini-" + c.id);
     const mab  = document.getElementById("mab-" + c.id);
     const mst  = document.getElementById("mini-stock-" + c.id);
-    if (mini) mini.classList.toggle("soldout", !available);
+    if (mini) mini.classList.toggle("soldout", !available && myCart === 0);
     if (mab)  mab.disabled = !available || remaining <= 0;
-    if (mst) {
-      if (s.soldOut)        mst.textContent = "Sold out";
-      else if (s.qty === 0) mst.textContent = "Out of stock";
-      else if (s.qty <= 3)  mst.textContent = `Only ${s.qty} left`;
-      else                  mst.textContent = `${s.qty} available`;
-    }
+    if (mst)  mst.innerHTML = stockLabel(false);
 
-    // ── Home badge ──
+    // Home badge
     const hb = document.getElementById("home-badge-" + c.id);
     if (hb) {
       if (s.soldOut || s.qty === 0) hb.innerHTML = '<span class="stock-badge out" style="font-size:9px">Sold out</span>';
-      else if (s.qty <= 3) hb.innerHTML = `<span class="stock-badge low" style="font-size:9px">Only ${s.qty} left</span>`;
+      else if (remaining <= 2)      hb.innerHTML = `<span class="stock-badge low" style="font-size:9px">${remaining} left</span>`;
       else hb.innerHTML = "";
     }
   });
@@ -1109,16 +1124,136 @@ window.addEventListener("hashchange", () => {
   if (nb) nb.classList.add("active");
 });
 
-// ── CART ──
+// ── RESERVED STOCK SYSTEM ──
+// reservations[id] = qty held in THIS browser's cart against live stock
+// Firebase path: reservations/<sessionId>/<id> = {qty, expiresAt}
+// On add: write reservation to Firebase immediately → deducted from displayed stock
+// On order: deductStock (permanent) then release reservation
+// On timeout / clear: release reservation from Firebase
+
+const SESSION_ID = Math.random().toString(36).slice(2);
+const reserveRef = ref(db, "reservations/" + SESSION_ID);
+const CART_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
+let cartExpireTimer = null;
+let cartExpiresAt = null; // timestamp
+
+// Read ALL reservations from Firebase to know how many are "taken" by other users
+let allReservations = {}; // { sessionId: { cakeId: {qty, expiresAt} } }
+const allReservationsRef = ref(db, "reservations");
+onValue(allReservationsRef, (snap) => {
+  const now = Date.now();
+  allReservations = snap.val() || {};
+  // Prune expired sessions (client-side, safe since we only read for display)
+  Object.keys(allReservations).forEach(sid => {
+    Object.keys(allReservations[sid] || {}).forEach(cid => {
+      if (allReservations[sid][cid]?.expiresAt < now) delete allReservations[sid][cid];
+    });
+  });
+  renderStockUI();
+});
+
+// How many units are reserved by OTHER sessions (not this one)
+function reservedByOthers(id) {
+  let n = 0;
+  const now = Date.now();
+  Object.entries(allReservations).forEach(([sid, items]) => {
+    if (sid === SESSION_ID) return;
+    const item = items?.[id];
+    if (item && item.expiresAt > now) n += (item.qty || 0);
+  });
+  return n;
+}
+
+// Available for THIS user to add = stock.qty - reservedByOthers - already in MY cart
+function availableToAdd(id) {
+  const s = stock[id];
+  if (!s || s.soldOut) return 0;
+  return Math.max(0, s.qty - reservedByOthers(id) - (cart[id] || 0));
+}
+
+function isAvailable(id) {
+  const s = stock[id];
+  return s && !s.soldOut && s.qty > 0;
+}
+
+// Write THIS session's cart to Firebase as reservations
+function pushReservation() {
+  const expiresAt = Date.now() + CART_TIMEOUT_MS;
+  cartExpiresAt = expiresAt;
+  const payload = {};
+  Object.keys(cart).forEach(id => {
+    payload[id] = { qty: cart[id], expiresAt };
+  });
+  if (Object.keys(payload).length) {
+    set(reserveRef, payload);
+  } else {
+    set(reserveRef, null);
+  }
+}
+
+function releaseReservation() {
+  set(reserveRef, null);
+  cartExpiresAt = null;
+}
+
+// ── CART EXPIRY TIMER ──
+function resetCartTimer() {
+  if (cartExpireTimer) clearTimeout(cartExpireTimer);
+  if (!Object.keys(cart).length) return;
+  cartExpireTimer = setTimeout(() => {
+    clearCart(true); // expired = show toast
+  }, CART_TIMEOUT_MS);
+  cartExpiresAt = Date.now() + CART_TIMEOUT_MS;
+  renderCartTimer();
+}
+
+function clearCart(expired = false) {
+  cart = {};
+  releaseReservation();
+  if (cartExpireTimer) { clearTimeout(cartExpireTimer); cartExpireTimer = null; }
+  cartExpiresAt = null;
+  renderCart();
+  renderStockUI();
+  updateCount();
+  if (expired) showToast("Your cart expired and stock was released.");
+}
+window.clearCart = clearCart;
+
+let timerInterval = setInterval(renderCartTimer, 1000);
+function renderCartTimer() {
+  const el = document.getElementById("cartTimer");
+  if (!el) return;
+  if (!cartExpiresAt || !Object.keys(cart).length) { el.style.display = "none"; return; }
+  const left = cartExpiresAt - Date.now();
+  if (left <= 0) { el.style.display = "none"; return; }
+  const m = Math.floor(left / 60000);
+  const s = Math.floor((left % 60000) / 1000);
+  el.style.display = "flex";
+  el.querySelector("#timerText").textContent = `Cart reserved — expires in ${m}:${String(s).padStart(2,"0")}`;
+  el.style.borderColor = left < 60000 ? "rgba(224,82,82,0.4)" : "rgba(196,135,74,0.3)";
+  el.querySelector("#timerText").style.color = left < 60000 ? "#e05252" : "var(--accent)";
+}
+
+function showToast(msg) {
+  let t = document.getElementById("toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; t.style.cssText = "position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#161612;border:1px solid rgba(255,255,255,0.1);color:#f5f2ed;font-size:13px;padding:10px 20px;border-radius:99px;z-index:999;opacity:0;transition:opacity 0.3s ease;pointer-events:none"; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.style.opacity = "1";
+  setTimeout(() => { t.style.opacity = "0"; }, 3000);
+}
+
+// ── CART FUNCTIONS ──
 function addFromCard(id) { if (!isAvailable(id)) return; addToCart(id); goPage("order"); }
 window.addFromCard = addFromCard;
 
 function addToCart(id) {
   if (!isAvailable(id)) return;
-  const inCart = (cart[id] || 0) + 1;
-  if (inCart > stock[id].qty) return;
-  cart[id] = inCart;
-  renderCart(); renderStockUI();
+  if (availableToAdd(id) <= 0) { showToast("No more units available — others may have reserved them."); return; }
+  cart[id] = (cart[id] || 0) + 1;
+  pushReservation();
+  resetCartTimer();
+  renderCart();
+  renderStockUI();
   const pill = document.getElementById("cartCount");
   pill.classList.remove("bump"); void pill.offsetWidth; pill.classList.add("bump");
   updateCount();
@@ -1127,9 +1262,14 @@ window.addToCart = addToCart;
 
 function removeFromCart(id) {
   if (cart[id] > 1) cart[id]--; else delete cart[id];
+  if (!Object.keys(cart).length) { clearCart(); }
+  else { pushReservation(); resetCartTimer(); }
   renderCart(); renderStockUI(); updateCount();
 }
 window.removeFromCart = removeFromCart;
+
+// Clean up reservation on page close
+window.addEventListener("beforeunload", () => { set(reserveRef, null); });
 
 function renderCart() {
   const el = document.getElementById("cartItems");
@@ -1137,7 +1277,9 @@ function renderCart() {
   const ids = Object.keys(cart);
   if (!ids.length) {
     el.innerHTML = '<div class="cart-empty">Nothing added yet</div>';
-    sb.style.display = "none"; return;
+    sb.style.display = "none";
+    renderCartTimer();
+    return;
   }
   sb.style.display = "block";
   let subtotal = 0, count = 0, html = "";
@@ -1162,6 +1304,7 @@ function renderCart() {
   const feeRow = document.getElementById("csFeeRow");
   if (feeRow) feeRow.style.display = deliveryFee ? "flex" : "none";
   document.getElementById("csTotal").textContent = fmtRM(total);
+  renderCartTimer();
 }
 
 function updateCount() {
@@ -1206,8 +1349,12 @@ function submitOrder() {
   }
   if (!ok) return;
 
-  // ── Deduct stock in Firebase (syncs to all devices) ──
+  // 1. Permanently deduct from Firebase stock
   deductStock(cart);
+  // 2. Release our reservation (stock already deducted permanently)
+  releaseReservation();
+  // 3. Clear cart timer
+  if (cartExpireTimer) { clearTimeout(cartExpireTimer); cartExpireTimer = null; }
 
   let lines = "", subtotal = 0;
   Object.keys(cart).forEach(id => {
@@ -1224,6 +1371,11 @@ function submitOrder() {
   }
   const msg = `🍰 *NEW CAKE ORDER*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n\n🚚 Delivery: ${delMode === "pickup" ? "Pickup" : "Delivery"}${addr}\n\n🛒 Items:\n${lines}\n💰 Total: ${fmtRM(total)}\n\n💳 Payment: QR Payment\n\n———————————\nThank you! ❤️`;
   const waUrl = "https://wa.me/60133374124?text=" + encodeURIComponent(msg);
+
+  // 4. Clear cart AFTER building message
+  cart = {};
+  renderCart(); updateCount(); renderStockUI();
+
   document.getElementById("successBar").classList.add("show");
   document.getElementById("waLink").href = waUrl;
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
