@@ -291,8 +291,10 @@ footer strong{color:var(--accent);font-weight:500}
 .page{opacity:0;transition:opacity 0.3s ease}
 .page.active{opacity:1}
 
-/* SHIMMER LOADING on images */
-.menu-img,.mini-img,.admin-cake-img,.cart-thumb{background:#1e1e1a}
+/* 3D TILT — preserve existing transitions when idle */
+.menu-card,.stack-item{transform-style:preserve-3d;will-change:transform}
+.menu-card .card-shine,.stack-item .card-shine{position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,0.07) 0%,transparent 65%);opacity:0;transition:opacity 0.3s ease;z-index:3}
+.menu-card:hover .card-shine,.stack-item:hover .card-shine{opacity:1}
 
 /* GLINT on nav brand */
 .nav-brand::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);animation:brand-glint 4s ease infinite}
@@ -1404,7 +1406,59 @@ function submitOrder() {
   }
   setTimeout(() => { document.getElementById("waManual").style.display = "block"; }, 2000);
 }
-window.submitOrder = submitOrder;
-</script>
+window.submitOrder = submitOrder;// ── 3D CARD TILT + GLASSMORPHISM SHINE ──
+(function initTilt() {
+  function applyTilt(card) {
+    // Inject shine layer if not already there
+    if (!card.querySelector(".card-shine")) {
+      const shine = document.createElement("div");
+      shine.className = "card-shine";
+      card.appendChild(shine);
+    }
+    const shine = card.querySelector(".card-shine");
+
+    card.addEventListener("mouseenter", () => {
+      card.style.transition = "none";
+    });
+
+    card.addEventListener("mousemove", e => {
+      const rect  = card.getBoundingClientRect();
+      const x     = e.clientX - rect.left;
+      const y     = e.clientY - rect.top;
+      const cx    = rect.width  / 2;
+      const cy    = rect.height / 2;
+      const rotX  = ((y - cy) / cy) * -8;
+      const rotY  = ((x - cx) / cx) *  8;
+
+      card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.03,1.03,1.03)`;
+
+      // Move shine highlight to follow cursor
+      const pctX = (x / rect.width)  * 100;
+      const pctY = (y / rect.height) * 100;
+      shine.style.background = `radial-gradient(circle at ${pctX}% ${pctY}%, rgba(255,255,255,0.10) 0%, transparent 60%)`;
+      shine.style.opacity = "1";
+    });
+
+    card.addEventListener("mouseleave", () => {
+      card.style.transition = "transform 0.6s cubic-bezier(0.23,1,0.32,1)";
+      card.style.transform  = "perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
+      shine.style.opacity   = "0";
+    });
+  }
+
+  // Apply now to existing cards
+  document.querySelectorAll(".menu-card, .stack-item").forEach(applyTilt);
+
+  // Re-apply after any dynamic renders (admin cards, menu re-renders)
+  const _orig_renderStockUI = window.renderStockUI;
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll(".menu-card:not([data-tilt]), .stack-item:not([data-tilt])").forEach(card => {
+      card.setAttribute("data-tilt", "1");
+      applyTilt(card);
+    });
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+})();
+
 </body>
 </html>
