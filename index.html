@@ -24,12 +24,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .cart-pill{background:#0d0d0b;color:#f5f2ed;border-radius:99px;font-size:11px;font-weight:600;padding:1px 7px;min-width:20px;text-align:center;transition:transform 0.2s}
 .cart-pill.bump{animation:bump 0.3s ease}
 
-/* LOCK BUTTON */
 .lock-btn{width:32px;height:32px;border-radius:8px;background:none;border:1px solid rgba(255,255,255,0.1);color:#5a5a52;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:14px;margin-left:6px}
 .lock-btn:hover{border-color:rgba(196,135,74,0.4);color:var(--accent)}
 .lock-btn.unlocked{border-color:rgba(196,135,74,0.5);color:var(--accent);background:rgba(196,135,74,0.08)}
 
-/* LOGIN MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity 0.25s}
 .modal-overlay.show{opacity:1;pointer-events:all}
 .modal{background:#161612;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:32px;width:340px;max-width:90vw;animation:popIn 0.3s ease}
@@ -44,7 +42,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .modal-btn.ghost{background:none;border:1px solid rgba(255,255,255,0.1);color:#9a9a8e}
 .modal-btn.ghost:hover{border-color:rgba(255,255,255,0.3);color:#f5f2ed}
 
-/* ── ADMIN PAGE ── */
 .admin-wrap{max-width:700px;margin:0 auto;padding:48px 40px 80px}
 .admin-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:36px}
 .admin-title{font-family:"Cormorant Garamond",serif;font-size:42px;font-weight:300;line-height:1}
@@ -77,7 +74,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .stock-badge.mine{background:rgba(126,200,80,0.1);color:#7ec850;border:1px solid rgba(126,200,80,0.25)}
 .stock-badge.avail{background:rgba(126,200,80,0.08);color:#7ec850;border:1px solid rgba(126,200,80,0.2)}
 
-/* CART TIMER */
 .cart-timer{display:none;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;border:1px solid rgba(196,135,74,0.3);margin-bottom:12px;transition:border-color 0.3s ease}
 .cart-timer-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:pulse-dot 1.5s ease infinite}
 .cart-timer-text{font-size:11px;font-weight:500;letter-spacing:0.02em;transition:color 0.3s ease}
@@ -87,15 +83,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .sold-out-label{font-size:13px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#e05252;border:1px solid rgba(224,82,82,0.4);padding:6px 14px;border-radius:6px;background:rgba(13,13,11,0.8)}
 .mini-cake.soldout{opacity:0.4;pointer-events:none}
 
+/* IMAGE DISCLAIMER */
+.img-disclaimer{display:flex;align-items:flex-start;gap:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 14px;margin-top:16px}
+.img-disclaimer-icon{font-size:13px;opacity:0.5;flex-shrink:0;margin-top:1px}
+.img-disclaimer-text{font-size:11px;color:#5a5a52;line-height:1.65;font-style:italic}
+
 @media(max-width:520px){
   .admin-fields{grid-template-columns:1fr 1fr;}.soldout-btn{grid-column:span 2}
   .admin-wrap{padding:32px 20px 60px}
 }
 
-.page{display:none;padding-top:72px}
-.page.active{display:block}
+.page{display:none;padding-top:72px;opacity:0;transition:opacity 0.3s ease}
+.page.active{display:block;opacity:1}
 
-/* HOME */
 .home-hero{min-height:calc(100vh - 72px);display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0 60px;gap:40px;max-width:1200px;margin:0 auto}
 .hero-left{padding:40px 0}
 .hero-eyebrow{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:22px;font-weight:500}
@@ -110,29 +110,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 
 .hero-right{display:flex;flex-direction:column;gap:16px;justify-content:center;padding:40px 0}
 .cake-stack{display:flex;flex-direction:column;gap:14px;width:100%}
-
-/* Staggered card row layout - 3 cards in a column with offset feel */
-.stack-item{cursor:pointer;transition:transform 0.3s ease,box-shadow 0.3s ease;animation:popIn 0.5s ease both;border-radius:20px}
-.stack-item.s-left{align-self:flex-start;width:82%;animation-delay:0.1s;margin-left:0}
+.stack-item{cursor:pointer;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease;animation:popIn 0.5s ease both;border-radius:20px}
+.stack-item.s-left{align-self:flex-start;width:82%;animation-delay:0.1s}
 .stack-item.s-center{align-self:center;width:90%;animation-delay:0.2s}
-.stack-item.s-right{align-self:flex-end;width:82%;animation-delay:0.3s;margin-right:0}
-.stack-item:hover{transform:translateY(-6px) scale(1.02);z-index:10}
+.stack-item.s-right{align-self:flex-end;width:82%;animation-delay:0.3s}
+.stack-item:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 20px 50px rgba(0,0,0,0.8),0 0 30px rgba(196,135,74,0.08)}
 .stack-card{background:#161612;border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.6)}
 .stack-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
 .stack-label{padding:12px 16px;background:#161612;display:flex;align-items:center;justify-content:space-between}
 .stack-name{font-family:"Cormorant Garamond",serif;font-size:17px;font-weight:400;color:#f5f2ed;letter-spacing:0.02em}
 .stack-price{font-size:12px;color:var(--accent);font-weight:500;margin-top:3px}
 
-/* MENU */
 .menu-header{padding:56px 60px 36px;max-width:1200px;margin:0 auto}
 .menu-eyebrow{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;font-weight:500}
 .menu-header h1{font-family:"Cormorant Garamond",serif;font-size:clamp(36px,5vw,64px);font-weight:300;line-height:0.95;margin-bottom:12px}
 .menu-header p{font-size:14px;color:#9a9a8e;font-weight:300}
 .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1200px;margin:0 auto;padding:0 60px 80px}
-.menu-card{background:#161612;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);transition:transform 0.25s,box-shadow 0.25s;animation:fadeSlideUp 0.4s ease both;position:relative}
+.menu-card{background:#161612;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease,border-color 0.3s ease;animation:fadeSlideUp 0.4s ease both;position:relative}
 .menu-card:nth-child(2){animation-delay:0.07s}
 .menu-card:nth-child(3){animation-delay:0.14s}
-.menu-card:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,0.6)}
+.menu-card:hover{transform:translateY(-10px) scale(1.01);box-shadow:0 28px 60px rgba(0,0,0,0.7),0 0 40px rgba(196,135,74,0.06);border-color:rgba(196,135,74,0.15)}
 .menu-card.is-soldout{opacity:0.6}
 .menu-card.is-soldout:hover{transform:none;box-shadow:none}
 .menu-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
@@ -146,7 +143,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .menu-add:hover{background:var(--accent);color:#fff}
 .menu-add:disabled{background:#2a2a24;color:#5a5a52;cursor:not-allowed}
 
-/* ORDER */
 .order-wrap{max-width:980px;margin:0 auto;padding:48px 60px 80px}
 .order-header{margin-bottom:32px}
 .order-header h2{font-family:"Cormorant Garamond",serif;font-size:44px;font-weight:300;margin-bottom:6px}
@@ -208,10 +204,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 footer{border-top:1px solid rgba(255,255,255,0.07);text-align:center;padding:28px 24px;font-size:12px;color:#5a5a52;font-weight:300;margin-top:20px}
 footer strong{color:var(--accent);font-weight:500}
 
-
-/* ═══════════════════════════════════════
-   PREORDER WINDOW SYSTEM
-═══════════════════════════════════════ */
+/* PREORDER WINDOW SYSTEM */
 .preorder-bar{margin-bottom:28px;animation:fadeSlideUp 0.6s ease both;animation-delay:0.1s}
 .preorder-upcoming{background:linear-gradient(135deg,rgba(196,135,74,0.07),rgba(196,135,74,0.02));border:1px solid rgba(196,135,74,0.2);border-radius:16px;padding:18px 22px;position:relative;overflow:hidden}
 .preorder-upcoming::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,135,74,0.5),transparent)}
@@ -239,7 +232,6 @@ footer strong{color:var(--accent);font-weight:500}
 .pc-title{font-size:14px;color:#9a9a8e;margin-bottom:2px}
 .pc-sub{font-size:12px;color:#5a5a52}
 
-/* ORDER PAGE locked overlay */
 .order-form-wrap{position:relative}
 .order-locked{position:absolute;inset:0;background:rgba(13,13,11,0.9);backdrop-filter:blur(8px);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;padding:32px;text-align:center;animation:fadeSlideUp 0.3s ease}
 .order-locked-icon{font-size:36px;margin-bottom:14px}
@@ -250,7 +242,6 @@ footer strong{color:var(--accent);font-weight:500}
 .olcd-num{font-family:"Cormorant Garamond",serif;font-size:22px;color:#f5f2ed;display:block;line-height:1}
 .olcd-label{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#5a5a52;display:block;margin-top:2px}
 
-/* ADMIN preorder */
 .admin-section-title{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#9a9a8e;font-weight:500;margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
 .preorder-admin-card{background:#161612;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:20px 22px;margin-bottom:14px;transition:border-color 0.2s}
 .preorder-admin-card:hover{border-color:rgba(196,135,74,0.2)}
@@ -269,36 +260,12 @@ footer strong{color:var(--accent);font-weight:500}
 .toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#9a9a8e;border-radius:50%;transition:transform 0.25s,background 0.25s;z-index:1}
 .toggle-switch input:checked~.toggle-track{background:rgba(196,135,74,0.2);border-color:rgba(196,135,74,0.4)}
 .toggle-switch input:checked~.toggle-thumb{transform:translateX(20px);background:var(--accent)}
+
+/* DANGER ZONE */
+.danger-card{background:#161612;border:1px solid rgba(224,82,82,0.15);border-radius:16px;padding:20px 22px;margin-bottom:14px;transition:border-color 0.2s}
+.danger-card:hover{border-color:rgba(224,82,82,0.3)}
+
 @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.5)}}
-
-
-
-/* FLOATING PARTICLES */
-.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.particle{position:absolute;border-radius:50%;opacity:0;animation:float-up linear infinite}
-@keyframes float-up{0%{opacity:0;transform:translateY(0) scale(0)}10%{opacity:0.6}90%{opacity:0.1}100%{opacity:0;transform:translateY(-100vh) scale(0.5)}}
-
-/* GLOW CURSOR TRAIL */
-.cursor-glow{position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(196,135,74,0.04) 0%,transparent 70%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);transition:left 0.15s ease,top 0.15s ease}
-
-/* ENHANCED HOVER ANIMATIONS */
-.menu-card{transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease,border-color 0.3s ease}
-.menu-card:hover{transform:translateY(-10px) scale(1.01);box-shadow:0 28px 60px rgba(0,0,0,0.7),0 0 40px rgba(196,135,74,0.06);border-color:rgba(196,135,74,0.15)}
-.stack-item{transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease}
-.stack-item:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 20px 50px rgba(0,0,0,0.8),0 0 30px rgba(196,135,74,0.08)}
-
-/* PAGE TRANSITION */
-.page{opacity:0;transition:opacity 0.3s ease}
-.page.active{opacity:1}
-
-/* SHIMMER LOADING on images */
-.menu-img,.mini-img,.admin-cake-img,.cart-thumb{background:#1e1e1a}
-
-/* GLINT on nav brand */
-.nav-brand::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);animation:brand-glint 4s ease infinite}
-.nav-brand{position:relative;overflow:hidden}
-@keyframes brand-glint{0%,80%,100%{left:-100%}40%{left:120%}}
-
 @keyframes fadeSlideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes popIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
@@ -324,9 +291,6 @@ footer strong{color:var(--accent);font-weight:500}
 </style>
 </head>
 <body>
-
-<div class="particles" id="particles"></div>
-<div class="cursor-glow" id="cursorGlow"></div>
 
 <nav>
   <button class="nav-brand" onclick="goPage('home')">
@@ -445,7 +409,10 @@ footer strong{color:var(--accent);font-weight:500}
       </div>
     </div>
   </div>
-  <!-- STOCK PANEL removed — now its own page -->
+  <div class="img-disclaimer" style="max-width:1200px;margin:0 auto 40px;padding-left:60px;padding-right:60px">
+    <span class="img-disclaimer-icon">📷</span>
+    <span class="img-disclaimer-text">Product images are for reference only. Actual appearance may vary slightly due to lighting conditions and camera composition. The taste and quality remain exactly as described.</span>
+  </div>
 </div>
 
 <!-- ORDER -->
@@ -553,8 +520,8 @@ footer strong{color:var(--accent);font-weight:500}
           </div>
         </div>
       </div>
-    </div><!-- end order-layout -->
-    </div><!-- end order-form-wrap -->
+    </div>
+    </div>
   </div>
 </div>
 
@@ -562,7 +529,7 @@ footer strong{color:var(--accent);font-weight:500}
   <strong>OhmSweetOhm</strong> &nbsp;·&nbsp; Fresh homemade batik cakes &nbsp;·&nbsp; WhatsApp: 013-337 4124
 </footer>
 
-<!-- ADMIN PAGE (hidden, no nav link) -->
+<!-- ADMIN PAGE -->
 <div id="pg-admin" class="page">
   <div class="admin-wrap">
     <div class="admin-header">
@@ -610,10 +577,20 @@ footer strong{color:var(--accent);font-weight:500}
       </div>
     </div>
 
+    <div class="admin-section-title">Danger zone</div>
+    <div class="danger-card">
+      <div class="preorder-toggle-row" style="margin-bottom:0">
+        <div>
+          <div class="preorder-toggle-label">Clear all reservations</div>
+          <div class="preorder-toggle-sub">Releases all carts held by customers right now</div>
+        </div>
+        <button class="soldout-btn" onclick="clearAllReservations()">Clear all</button>
+      </div>
+      <div class="admin-saved" id="reserveCleared" style="margin-top:10px">✓ All reservations cleared</div>
+    </div>
+
     <div class="admin-save-row">
-      <button class="admin-save-btn" onclick="saveStock()">
-        <span id="saveBtnText">Save all changes</span>
-      </button>
+      <button class="admin-save-btn" onclick="saveStock()">Save all changes</button>
       <div class="admin-saved" id="stockSaved">✓ Synced to Firebase</div>
     </div>
   </div>
@@ -634,758 +611,477 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+function dbRef(path)     { return db.ref(path); }
+function dbSet(ref, val) { return ref.set(val); }
+function dbOn(ref, cb)   { ref.on("value", snap => cb(snap)); }
 
-function dbRef(path)        { return db.ref(path); }
-function dbSet(ref, val)    { return ref.set(val); }
-function dbUpdate(ref, val) { return ref.update(val); }
-function dbOn(ref, cb)      { ref.on("value", snap => cb(snap)); }
+const stockRef     = dbRef("stock");
+const preorderRef  = dbRef("preorder");
 
-const stockRef        = dbRef("stock");
-const preorderRef     = dbRef("preorder");
-const allReservRef    = dbRef("reservations");
-
-// ── CAKES ──
 const CAKES = [
-  { id: "classic",  name: "Classic Batik",  price: 15.00, img: "images/classic.png"  },
-  { id: "horlicks", name: "Horlick Batik",  price: 15.00, img: "images/horlicks.png" },
-  { id: "matcha",   name: "Matcha Batik",   price: 15.00, img: "images/matcha.png"   },
+  { id:"classic",  name:"Classic Batik",  price:15.00, img:"images/classic.png"  },
+  { id:"horlicks", name:"Horlick Batik",  price:15.00, img:"images/horlicks.png" },
+  { id:"matcha",   name:"Matcha Batik",   price:15.00, img:"images/matcha.png"   },
 ];
 
-// Helper: format price with cents only if needed
-function fmt(n) { return Number(n).toFixed(2).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1"); }
-function fmtRM(n) { return "RM" + fmt(n); }
+function fmt(n)   { return Number(n).toFixed(2).replace(/\.00$/,"").replace(/(\.\d)0$/,"$1"); }
+function fmtRM(n) { return "RM"+fmt(n); }
 
-// isAdmin is LOCAL to this browser tab only — customers on other devices
-// are completely unaffected. No shared session state in Firebase.
-let stock = {};
-let isAdmin = false;  // ← only true in YOUR tab after you log in
-let cart = {}, delMode = "pickup", selectedKolej = "";
+let stock={}, isAdmin=false, cart={}, delMode="pickup", selectedKolej="";
 
-// ── FIREBASE REAL-TIME LISTENER ──
-// This fires instantly whenever stock changes in Firebase — on ANY device
-dbOn(stockRef, (snapshot) => {
-  const data = snapshot.val();
+// ── STOCK LISTENER ──
+dbOn(stockRef, snap => {
+  const data = snap.val();
   if (data) {
     stock = data;
-    CAKES.forEach(c => {
-      if (stock[c.id]?.price != null) c.price = parseFloat(stock[c.id].price);
-    });
+    CAKES.forEach(c => { if (stock[c.id]?.price != null) c.price = parseFloat(stock[c.id].price); });
   } else {
     const seed = {};
-    CAKES.forEach(c => { seed[c.id] = { qty: 10, soldOut: false, price: c.price }; });
-    dbSet(stockRef, seed);
-    stock = seed;
+    CAKES.forEach(c => { seed[c.id] = { qty:10, soldOut:false, price:c.price }; });
+    dbSet(stockRef, seed); stock = seed;
   }
-  CAKES.forEach(c => { if (!stock[c.id]) stock[c.id] = { qty: 10, soldOut: false, price: c.price }; });
+  CAKES.forEach(c => { if (!stock[c.id]) stock[c.id] = { qty:10, soldOut:false, price:c.price }; });
   renderStockUI();
   if (isAdmin) renderAdminCards();
-  let cartChanged = false;
-  Object.keys(cart).forEach(id => { if (!isAvailable(id)) { delete cart[id]; cartChanged = true; } });
-  if (cartChanged) { renderCart(); updateCount(); }
+  let changed = false;
+  Object.keys(cart).forEach(id => { if (!isAvailable(id)) { delete cart[id]; changed=true; } });
+  if (changed) { renderCart(); updateCount(); }
 });
 
-dbOn(preorderRef, (snapshot) => {
-  const data = snapshot.val();
+// ── PREORDER LISTENER ──
+dbOn(preorderRef, snap => {
+  const data = snap.val();
   renderPreorderBar(data);
   if (isAdmin) populatePreorderAdmin(data);
 });
 
-// ── PARTICLES ──
-(function initParticles() {
-  const container = document.getElementById("particles");
-  if (!container) return;
-  const colors = ["rgba(196,135,74,0.35)", "rgba(245,242,237,0.15)", "rgba(196,135,74,0.2)"];
-  for (let i = 0; i < 18; i++) {
-    const p = document.createElement("div");
-    p.className = "particle";
-    const size = Math.random() * 4 + 2;
-    p.style.cssText = `
-      width:${size}px;height:${size}px;
-      left:${Math.random()*100}%;
-      bottom:${Math.random()*-20}%;
-      background:${colors[Math.floor(Math.random()*colors.length)]};
-      animation-duration:${Math.random()*18+10}s;
-      animation-delay:${Math.random()*10}s;
-    `;
-    container.appendChild(p);
-  }
-})();
-
-// ── CURSOR GLOW ──
-(function initCursor() {
-  const glow = document.getElementById("cursorGlow");
-  if (!glow) return;
-  document.addEventListener("mousemove", e => {
-    glow.style.left = e.clientX + "px";
-    glow.style.top  = e.clientY + "px";
-  });
-})();
-
-// ── SAVE STOCK TO FIREBASE ──
-function saveStockFirebase(updatedStock) {
-  dbSet(stockRef, updatedStock);
-}
-
-// Deduct stock after order — uses atomic update
-function deductStock(cartObj) {
-  const updates = {};
-  Object.keys(cartObj).forEach(id => {
-    const newQty = Math.max(0, (stock[id]?.qty || 0) - cartObj[id]);
-    updates[id + "/qty"] = newQty;
-  });
-  dbRef("stock").update(updates);
-}
-
-function isAvailable(id) {
-  const s = stock[id];
-  return s && !s.soldOut && s.qty > 0;
-}
-
-function renderStockUI() {
-  CAKES.forEach(c => {
-    const s = stock[c.id] || { qty: 0, soldOut: false };
-    const available = isAvailable(c.id);
-    const reserved  = reservedByOthers(c.id);
-    const myCart    = cart[c.id] || 0;
-    const remaining = s.qty - reserved - myCart; // truly free units
-
-    // Price labels
-    const priceStr = fmtRM(c.price);
-    const sp  = document.getElementById("sp-"  + c.id); if (sp)  sp.textContent  = priceStr;
-    const mp  = document.getElementById("mp-"  + c.id); if (mp)  mp.textContent  = priceStr;
-    const mip = document.getElementById("mip-" + c.id); if (mip) mip.textContent = priceStr;
-
-    // Menu card overlay
-    const mc = document.getElementById("mc-" + c.id);
-    if (mc) {
-      mc.classList.toggle("is-soldout", !available);
-      const oldOv = mc.querySelector(".sold-out-overlay");
-      if (oldOv) oldOv.remove();
-      if (!available) {
-        const ov = document.createElement("div");
-        ov.className = "sold-out-overlay";
-        ov.innerHTML = '<span class="sold-out-label">Sold Out</span>';
-        mc.appendChild(ov);
-      }
-    }
-
-    // Stock line — shows available + reserved breakdown
-    function stockLabel(forMenu) {
-      if (s.soldOut)        return '<span class="stock-badge out">Sold out</span>';
-      if (s.qty === 0)      return '<span class="stock-badge out">Out of stock</span>';
-      let parts = [];
-      if (remaining > 0)   parts.push(`<span class="stock-badge ${remaining <= 2 ? "low" : "avail"}">${remaining} left</span>`);
-      else                  parts.push(`<span class="stock-badge out">None left</span>`);
-      if (reserved > 0)     parts.push(`<span class="stock-badge res">${reserved} reserved</span>`);
-      if (myCart > 0 && forMenu) parts.push(`<span class="stock-badge mine">${myCart} in your cart</span>`);
-      return parts.join(" ");
-    }
-
-    const ms = document.getElementById("ms-" + c.id);
-    if (ms) ms.innerHTML = stockLabel(true);
-
-    const ma = document.getElementById("ma-" + c.id);
-    if (ma) ma.disabled = !available || remaining <= 0;
-
-    // Mini list
-    const mini = document.getElementById("mini-" + c.id);
-    const mab  = document.getElementById("mab-" + c.id);
-    const mst  = document.getElementById("mini-stock-" + c.id);
-    if (mini) mini.classList.toggle("soldout", !available && myCart === 0);
-    if (mab)  mab.disabled = !available || remaining <= 0;
-    if (mst)  mst.innerHTML = stockLabel(false);
-
-    // Home badge
-    const hb = document.getElementById("home-badge-" + c.id);
-    if (hb) {
-      if (s.soldOut || s.qty === 0) hb.innerHTML = '<span class="stock-badge out" style="font-size:9px">Sold out</span>';
-      else if (remaining <= 2)      hb.innerHTML = `<span class="stock-badge low" style="font-size:9px">${remaining} left</span>`;
-      else hb.innerHTML = "";
-    }
-  });
-}
-
-// ── ADMIN ──
-function onLockClick() {
-  if (isAdmin) {
-    renderAdminCards();
-    goPage("admin");
-  } else {
-    document.getElementById("loginModal").classList.add("show");
-    setTimeout(() => document.getElementById("loginId").focus(), 100);
-  }
-}
-window.onLockClick = onLockClick;
-
-function closeLogin() {
-  document.getElementById("loginModal").classList.remove("show");
-  document.getElementById("loginErr").classList.remove("show");
-  document.getElementById("loginId").value = "";
-  document.getElementById("loginPass").value = "";
-}
-window.closeLogin = closeLogin;
-
-function doLogin() {
-  const id   = document.getElementById("loginId").value.trim();
-  const pass = document.getElementById("loginPass").value;
-  if (id === "2024804824" && pass === "mis02032005") {
-    isAdmin = true;
-    closeLogin();
-    document.getElementById("lockBtn").classList.add("unlocked");
-    document.getElementById("lockBtn").textContent = "🔓";
-    renderAdminCards();
-    if (preorderData) populatePreorderAdmin(preorderData);
-    goPage("admin");
-  } else {
-    document.getElementById("loginErr").classList.add("show");
-    document.getElementById("loginPass").value = "";
-  }
-}
-window.doLogin = doLogin;
-
-function doLogout() {
-  isAdmin = false;
-  document.getElementById("lockBtn").classList.remove("unlocked");
-  document.getElementById("lockBtn").textContent = "🔒";
-  goPage("home");
-}
-window.doLogout = doLogout;
-
-document.addEventListener("keydown", e => {
-  if (e.key === "Enter"  && document.getElementById("loginModal").classList.contains("show")) doLogin();
-  if (e.key === "Escape" && document.getElementById("loginModal").classList.contains("show")) closeLogin();
-});
-
-function renderAdminCards() {
-  const container = document.getElementById("adminCards");
-  if (!container) return;
-  container.innerHTML = "";
-  CAKES.forEach((c, i) => {
-    const s = stock[c.id] || { qty: 10, soldOut: false };
-    const statusText  = s.soldOut ? "Manually marked sold out" : s.qty === 0 ? "Out of stock" : s.qty <= 3 ? `Only ${s.qty} left` : `${s.qty} in stock`;
-    const statusColor = (s.soldOut || s.qty === 0) ? "#e05252" : s.qty <= 3 ? "var(--accent)" : "#7ec850";
-    const card = document.createElement("div");
-    card.className = "admin-card";
-    card.style.animation = `fadeSlideUp 0.3s ease ${i * 0.07}s both`;
-    card.innerHTML = `
-      <div class="admin-card-top">
-        <img class="admin-cake-img" src="${c.img}" alt="${c.name}">
-        <div>
-          <div class="admin-cake-name">${c.name}</div>
-          <div class="admin-cake-status" style="color:${statusColor}">${statusText}</div>
-        </div>
-      </div>
-      <div class="admin-fields">
-        <div class="admin-field">
-          <label>Stock (units)</label>
-          <input class="admin-input" type="number" min="0" max="999" value="${s.qty}" id="sinput-${c.id}">
-        </div>
-        <div class="admin-field">
-          <label>Price (RM)</label>
-          <input class="admin-input" type="number" min="0.50" max="999" step="0.50" value="${fmt(c.price)}" id="pinput-${c.id}">
-        </div>
-        <button class="soldout-btn ${s.soldOut ? "active" : ""}" id="sotoggle-${c.id}" onclick="toggleSoldOut('${c.id}')">
-          ${s.soldOut ? "✕ Unmark" : "Sold out"}
-        </button>
-      </div>`;
-    container.appendChild(card);
-  });
-}
-
-function toggleSoldOut(id) {
-  stock[id].soldOut = !stock[id].soldOut;
-  const btn = document.getElementById("sotoggle-" + id);
-  if (btn) { btn.classList.toggle("active", stock[id].soldOut); btn.textContent = stock[id].soldOut ? "✕ Unmark" : "Sold out"; }
-}
-window.toggleSoldOut = toggleSoldOut;
-
-function saveStock() {
-  CAKES.forEach(c => {
-    const qInp = document.getElementById("sinput-" + c.id);
-    const pInp = document.getElementById("pinput-" + c.id);
-    if (qInp) stock[c.id].qty = Math.max(0, parseInt(qInp.value) || 0);
-    if (pInp) c.price = Math.max(0.10, parseFloat(pInp.value) || c.price);
-  });
-  const payload = {};
-  CAKES.forEach(c => { payload[c.id] = { qty: stock[c.id].qty, soldOut: stock[c.id].soldOut, price: c.price }; });
-  saveStockFirebase(payload);
-
-  // Save preorder window settings
-  const enabled  = document.getElementById("preorderEnabled")?.checked;
-  const openVal  = document.getElementById("preorderOpenInput")?.value  || "";
-  const closeVal = document.getElementById("preorderCloseInput")?.value || "";
-  const msgVal   = document.getElementById("preorderMsg")?.value || "";
-  const preorderPayload = { enabled: !!enabled, openDate: openVal, closeDate: closeVal, msg: msgVal };
-  dbSet(preorderRef, preorderPayload);
-  renderPreorderBar(preorderPayload);
-  updateAdminPreorderBadge(preorderPayload);
-
-  renderStockUI();
-  renderCart();
-  renderAdminCards();
-  const saved = document.getElementById("stockSaved");
-  if (saved) { saved.classList.add("show"); setTimeout(() => saved.classList.remove("show"), 2500); }
-}
-window.saveStock = saveStock;
-
-// ── PREORDER WINDOW SYSTEM ──
-let preorderData = null;
-let countdownInterval = null;
-
-function getPreorderState(data) {
-  if (!data || !data.enabled) return "none";
-  const now  = Date.now();
-  const open  = data.openDate  ? new Date(data.openDate).getTime()  : 0;
-  const close = data.closeDate ? new Date(data.closeDate).getTime() : Infinity;
-  if (now < open)  return "upcoming";
-  if (now >= open && now < close) return "open";
-  return "closed";
-}
-
-function isOrderingAllowed() {
-  if (!preorderData || !preorderData.enabled) return true; // no window set = always open
-  return getPreorderState(preorderData) === "open";
-}
-
-function renderPreorderBar(data) {
-  preorderData = data;
-  const bar = document.getElementById("preorderBar");
-  if (!bar) return;
-  if (!data || !data.enabled) { bar.style.display = "none"; clearInterval(countdownInterval); return; }
-
-  bar.style.display = "block";
-  const state = getPreorderState(data);
-
-  if (state === "upcoming") {
-    const openDate = new Date(data.openDate);
-    const dateStr  = openDate.toLocaleDateString("en-MY", { weekday:"long", day:"numeric", month:"long" });
-    const timeStr  = openDate.toLocaleTimeString("en-MY", { hour:"2-digit", minute:"2-digit" });
-    bar.innerHTML = `<div class="preorder-upcoming">
-      <div class="pu-eyebrow"><span class="pu-dot"></span>Preorder opening soon</div>
-      <div class="pu-title">Opens ${dateStr} at ${timeStr}</div>
-      <div class="countdown" id="homeCd"></div>
-      <div class="pu-sub">${data.msg || "Get ready — slots are limited."}</div>
-    </div>`;
-    startCountdown("homeCd", data.openDate, () => renderPreorderBar(data));
-  } else if (state === "open") {
-    const closeDate = new Date(data.closeDate);
-    const closeStr  = closeDate.toLocaleDateString("en-MY", { weekday:"short", day:"numeric", month:"short" });
-    const closeTime = closeDate.toLocaleTimeString("en-MY", { hour:"2-digit", minute:"2-digit" });
-    bar.innerHTML = `<div class="preorder-open">
-      <div class="po-eyebrow"><span class="po-live-dot"></span>Preorder is open</div>
-      <div class="po-title">${data.msg || "Order now — limited slots available."}</div>
-      <div class="po-row">
-        <div class="po-closes">Closes <span>${closeStr}, ${closeTime}</span></div>
-        <button class="po-order-btn" onclick="goPage('order')">Order now →</button>
-      </div>
-    </div>`;
-  } else {
-    bar.innerHTML = `<div class="preorder-closed">
-      <div class="pc-icon">🔒</div>
-      <div>
-        <div class="pc-title">Preorder is currently closed</div>
-        <div class="pc-sub">Follow us for updates on the next opening.</div>
-      </div>
-    </div>`;
-  }
-
-  // Update order page lock
-  updateOrderLock(data);
-}
-
-function updateOrderLock(data) {
-  const overlay   = document.getElementById("orderLockedOverlay");
-  const sub       = document.getElementById("orderLockedSub");
-  const cdWrap    = document.getElementById("orderLockedCountdown");
-  if (!overlay) return;
-
-  const allowed = isOrderingAllowed();
-  overlay.style.display = allowed ? "none" : "flex";
-
-  if (!allowed && data) {
-    const state = getPreorderState(data);
-    if (state === "upcoming") {
-      const openDate = new Date(data.openDate);
-      const dateStr  = openDate.toLocaleDateString("en-MY", { weekday:"short", day:"numeric", month:"short" });
-      const timeStr  = openDate.toLocaleTimeString("en-MY", { hour:"2-digit", minute:"2-digit" });
-      sub.textContent = `Ordering opens ${dateStr} at ${timeStr}`;
-      cdWrap.innerHTML = buildCdHtml(data.openDate, "olcd");
-      startCountdown("orderLockedCountdown", data.openDate, () => updateOrderLock(data), "olcd");
-    } else {
-      sub.textContent = "Preorder window has closed. Check back for the next opening.";
-      cdWrap.innerHTML = "";
-    }
-  }
-}
-
-function buildCdHtml(targetDate, cls) {
-  return `<div class="${cls}-unit"><span class="${cls}-num" id="${cls}D">--</span><span class="${cls}-label">Days</span></div>
-          <div class="${cls}-unit"><span class="${cls}-num" id="${cls}H">--</span><span class="${cls}-label">Hours</span></div>
-          <div class="${cls}-unit"><span class="${cls}-num" id="${cls}M">--</span><span class="${cls}-label">Mins</span></div>
-          <div class="${cls}-unit"><span class="${cls}-num" id="${cls}S">--</span><span class="${cls}-label">Secs</span></div>`;
-}
-
-function startCountdown(containerId, targetDateStr, onComplete, cls) {
-  clearInterval(countdownInterval);
-  cls = cls || "cd";
-  const target = new Date(targetDateStr).getTime();
-  function tick() {
-    const diff = target - Date.now();
-    if (diff <= 0) { clearInterval(countdownInterval); if (onComplete) onComplete(); return; }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    const pad = n => String(n).padStart(2,"0");
-    const el = (id) => document.getElementById(id);
-    if (el(cls+"D")) el(cls+"D").textContent = pad(d);
-    if (el(cls+"H")) el(cls+"H").textContent = pad(h);
-    if (el(cls+"M")) el(cls+"M").textContent = pad(m);
-    if (el(cls+"S")) el(cls+"S").textContent = pad(s);
-  }
-  tick();
-  countdownInterval = setInterval(tick, 1000);
-}
-
-// Tick every second to auto-transition states
-setInterval(() => {
-  if (preorderData?.enabled) {
-    renderPreorderBar(preorderData);
-  }
-  // Auto-close if all stock is 0
-  if (preorderData?.enabled && getPreorderState(preorderData) === "open") {
-    const allOut = CAKES.every(c => !isAvailable(c.id));
-    if (allOut) {
-      const now = new Date().toISOString().slice(0,16);
-      preorderData.closeDate = now;
-      dbSet(preorderRef, preorderData);
-    }
-  }
-}, 1000);
-
-function populatePreorderAdmin(data) {
-  const cb    = document.getElementById("preorderEnabled");
-  const wrap  = document.getElementById("preorderDateWrap");
-  const openI = document.getElementById("preorderOpenInput");
-  const clsI  = document.getElementById("preorderCloseInput");
-  const msgI  = document.getElementById("preorderMsg");
-  if (!cb) return;
-  cb.checked = !!(data?.enabled);
-  wrap.style.display = cb.checked ? "block" : "none";
-  if (openI && data?.openDate)  openI.value = data.openDate;
-  if (clsI  && data?.closeDate) clsI.value  = data.closeDate;
-  if (msgI  && data?.msg)       msgI.value   = data.msg;
-  updateAdminPreorderBadge(data);
-}
-
-function updateAdminPreorderBadge(data) {
-  const badge = document.getElementById("adminPreorderBadge");
-  const text  = document.getElementById("adminPreorderBadgeText");
-  if (!badge || !text) return;
-  if (!data || !data.enabled) { badge.className="preorder-status-badge psb-closed"; text.textContent="Disabled"; return; }
-  const state = getPreorderState(data);
-  if (state === "upcoming") { badge.className="preorder-status-badge psb-upcoming"; text.textContent="Upcoming"; }
-  else if (state === "open") { badge.className="preorder-status-badge psb-open"; text.textContent="Live now"; }
-  else { badge.className="preorder-status-badge psb-closed"; text.textContent="Closed"; }
-}
-
-function onPreorderToggle() {
-  const cb   = document.getElementById("preorderEnabled");
-  const wrap = document.getElementById("preorderDateWrap");
-  if (wrap) wrap.style.display = cb.checked ? "block" : "none";
-}
-window.onPreorderToggle = onPreorderToggle;
-
-// ── ROUTING ──
-function goPage(p) {
-  // Block direct access to admin page without login
-  if (p === "admin" && !isAdmin) { p = "home"; }
-  document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
-  document.getElementById("pg-" + p).classList.add("active");
-  document.querySelectorAll(".nav-btn").forEach(x => x.classList.remove("active"));
-  const nb = document.getElementById("nb-" + p);
-  if (nb) nb.classList.add("active");
-  // Don't expose admin in URL hash
-  if (p !== "admin") window.location.hash = p;
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-window.goPage = goPage;
-
-window.addEventListener("load", () => {
-  const hash  = window.location.hash.replace("#", "") || "home";
-  const valid = ["home", "menu", "order"];
-  goPage(valid.includes(hash) ? hash : "home");
-});
-
-window.addEventListener("hashchange", () => {
-  const hash  = window.location.hash.replace("#", "") || "home";
-  const valid = ["home", "menu", "order"];
-  const p = valid.includes(hash) ? hash : "home";
-  document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
-  document.getElementById("pg-" + p).classList.add("active");
-  document.querySelectorAll(".nav-btn").forEach(x => x.classList.remove("active"));
-  const nb = document.getElementById("nb-" + p);
-  if (nb) nb.classList.add("active");
-});
-
-// ── RESERVED STOCK SYSTEM ──
-// reservations[id] = qty held in THIS browser's cart against live stock
-// Firebase path: reservations/<sessionId>/<id> = {qty, expiresAt}
-// On add: write reservation to Firebase immediately → deducted from displayed stock
-// On order: deductStock (permanent) then release reservation
-// On timeout / clear: release reservation from Firebase
-
+// ── RESERVED STOCK ──
 const SESSION_ID = Math.random().toString(36).slice(2);
-const reserveRef = dbRef("reservations/" + SESSION_ID);
-const CART_TIMEOUT_MS = 5 * 60 * 1000;
-let cartExpireTimer = null;
-let cartExpiresAt = null;
+const reserveRef = dbRef("reservations/"+SESSION_ID);
+const CART_TIMEOUT_MS = 5*60*1000;
+let cartExpireTimer=null, cartExpiresAt=null, allReservations={};
 
-// Clear any leftover reservation from a previous session load immediately
 dbSet(reserveRef, null);
-
-// Auto-remove reservation if browser crashes, closes, or loses connection
 reserveRef.onDisconnect().remove();
 
-let allReservations = {};
-dbOn(dbRef("reservations"), (snap) => {
+dbOn(dbRef("reservations"), snap => {
   const now = Date.now();
   allReservations = snap.val() || {};
   Object.keys(allReservations).forEach(sid => {
-    Object.keys(allReservations[sid] || {}).forEach(cid => {
+    Object.keys(allReservations[sid]||{}).forEach(cid => {
       if (allReservations[sid][cid]?.expiresAt < now) delete allReservations[sid][cid];
     });
   });
   renderStockUI();
 });
 
-// How many units are reserved by OTHER sessions (not this one)
 function reservedByOthers(id) {
-  let n = 0;
-  const now = Date.now();
-  Object.entries(allReservations).forEach(([sid, items]) => {
-    if (sid === SESSION_ID) return;
-    const item = items?.[id];
-    if (item && item.expiresAt > now) n += (item.qty || 0);
+  let n=0; const now=Date.now();
+  Object.entries(allReservations).forEach(([sid,items]) => {
+    if (sid===SESSION_ID) return;
+    const item=items?.[id];
+    if (item && item.expiresAt>now) n+=(item.qty||0);
   });
   return n;
 }
-
-// Available for THIS user to add = stock.qty - reservedByOthers - already in MY cart
 function availableToAdd(id) {
-  const s = stock[id];
-  if (!s || s.soldOut) return 0;
-  return Math.max(0, s.qty - reservedByOthers(id) - (cart[id] || 0));
+  const s=stock[id];
+  if (!s||s.soldOut) return 0;
+  return Math.max(0, s.qty - reservedByOthers(id) - (cart[id]||0));
 }
+function isAvailable(id) { const s=stock[id]; return s&&!s.soldOut&&s.qty>0; }
 
-function isAvailable(id) {
-  const s = stock[id];
-  return s && !s.soldOut && s.qty > 0;
-}
-
-// Write THIS session's cart to Firebase as reservations
 function pushReservation() {
-  const expiresAt = Date.now() + CART_TIMEOUT_MS;
-  cartExpiresAt = expiresAt;
-  const payload = {};
-  Object.keys(cart).forEach(id => { payload[id] = { qty: cart[id], expiresAt }; });
+  const expiresAt = Date.now()+CART_TIMEOUT_MS; cartExpiresAt=expiresAt;
+  const payload={};
+  Object.keys(cart).forEach(id => { payload[id]={qty:cart[id],expiresAt}; });
   dbSet(reserveRef, Object.keys(payload).length ? payload : null);
 }
+function releaseReservation() { dbSet(reserveRef,null); cartExpiresAt=null; }
 
-function releaseReservation() {
-  dbSet(reserveRef, null);
-  cartExpiresAt = null;
-}
-
-// ── CART EXPIRY TIMER ──
 function resetCartTimer() {
   if (cartExpireTimer) clearTimeout(cartExpireTimer);
   if (!Object.keys(cart).length) return;
-  cartExpireTimer = setTimeout(() => {
-    clearCart(true); // expired = show toast
-  }, CART_TIMEOUT_MS);
-  cartExpiresAt = Date.now() + CART_TIMEOUT_MS;
+  cartExpireTimer = setTimeout(() => clearCart(true), CART_TIMEOUT_MS);
+  cartExpiresAt = Date.now()+CART_TIMEOUT_MS;
   renderCartTimer();
 }
 
-function clearCart(expired = false) {
-  cart = {};
-  releaseReservation();
-  if (cartExpireTimer) { clearTimeout(cartExpireTimer); cartExpireTimer = null; }
-  cartExpiresAt = null;
-  renderCart();
-  renderStockUI();
-  updateCount();
+function clearCart(expired=false) {
+  cart={}; releaseReservation();
+  if (cartExpireTimer) { clearTimeout(cartExpireTimer); cartExpireTimer=null; }
+  cartExpiresAt=null;
+  renderCart(); renderStockUI(); updateCount();
   if (expired) showToast("Your cart expired and stock was released.");
 }
 window.clearCart = clearCart;
 
-let timerInterval = setInterval(renderCartTimer, 1000);
+setInterval(renderCartTimer, 1000);
 function renderCartTimer() {
-  const el = document.getElementById("cartTimer");
+  const el=document.getElementById("cartTimer");
   if (!el) return;
-  if (!cartExpiresAt || !Object.keys(cart).length) { el.style.display = "none"; return; }
-  const left = cartExpiresAt - Date.now();
-  if (left <= 0) { el.style.display = "none"; return; }
-  const m = Math.floor(left / 60000);
-  const s = Math.floor((left % 60000) / 1000);
-  el.style.display = "flex";
-  el.querySelector("#timerText").textContent = `Cart reserved — expires in ${m}:${String(s).padStart(2,"0")}`;
-  el.style.borderColor = left < 60000 ? "rgba(224,82,82,0.4)" : "rgba(196,135,74,0.3)";
-  el.querySelector("#timerText").style.color = left < 60000 ? "#e05252" : "var(--accent)";
+  if (!cartExpiresAt||!Object.keys(cart).length) { el.style.display="none"; return; }
+  const left=cartExpiresAt-Date.now();
+  if (left<=0) { el.style.display="none"; return; }
+  const m=Math.floor(left/60000), s=Math.floor((left%60000)/1000);
+  el.style.display="flex";
+  document.getElementById("timerText").textContent=`Cart reserved — expires in ${m}:${String(s).padStart(2,"0")}`;
+  el.style.borderColor=left<60000?"rgba(224,82,82,0.4)":"rgba(196,135,74,0.3)";
+  document.getElementById("timerText").style.color=left<60000?"#e05252":"var(--accent)";
 }
 
 function showToast(msg) {
-  let t = document.getElementById("toast");
-  if (!t) { t = document.createElement("div"); t.id = "toast"; t.style.cssText = "position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#161612;border:1px solid rgba(255,255,255,0.1);color:#f5f2ed;font-size:13px;padding:10px 20px;border-radius:99px;z-index:999;opacity:0;transition:opacity 0.3s ease;pointer-events:none"; document.body.appendChild(t); }
-  t.textContent = msg;
-  t.style.opacity = "1";
-  setTimeout(() => { t.style.opacity = "0"; }, 3000);
+  let t=document.getElementById("toast");
+  if (!t) { t=document.createElement("div"); t.id="toast"; t.style.cssText="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#161612;border:1px solid rgba(255,255,255,0.1);color:#f5f2ed;font-size:13px;padding:10px 20px;border-radius:99px;z-index:999;opacity:0;transition:opacity 0.3s ease;pointer-events:none"; document.body.appendChild(t); }
+  t.textContent=msg; t.style.opacity="1";
+  setTimeout(()=>{ t.style.opacity="0"; },3000);
 }
 
-// ── CART FUNCTIONS ──
-function addFromCard(id) { if (!isAvailable(id)) return; addToCart(id); goPage("order"); }
+// ── STOCK UI ──
+function renderStockUI() {
+  CAKES.forEach(c => {
+    const s=stock[c.id]||{qty:0,soldOut:false};
+    const reserved=reservedByOthers(c.id), myCart=cart[c.id]||0;
+    const remaining=s.qty-reserved-myCart;
+    const priceStr=fmtRM(c.price);
+    ["sp-","mp-","mip-"].forEach(pfx => { const el=document.getElementById(pfx+c.id); if(el) el.textContent=priceStr; });
+    const mc=document.getElementById("mc-"+c.id);
+    if (mc) {
+      mc.classList.toggle("is-soldout",!isAvailable(c.id));
+      const ov=mc.querySelector(".sold-out-overlay"); if(ov) ov.remove();
+      if (!isAvailable(c.id)) {
+        const o=document.createElement("div"); o.className="sold-out-overlay";
+        o.innerHTML='<span class="sold-out-label">Sold Out</span>'; mc.appendChild(o);
+      }
+    }
+    function stockLabel(forMenu) {
+      if (s.soldOut) return '<span class="stock-badge out">Sold out</span>';
+      if (s.qty===0) return '<span class="stock-badge out">Out of stock</span>';
+      let p=[];
+      p.push(`<span class="stock-badge ${remaining<=2?"low":"avail"}">${remaining>0?remaining+" left":"None left"}</span>`);
+      if (reserved>0) p.push(`<span class="stock-badge res">${reserved} reserved</span>`);
+      if (myCart>0&&forMenu) p.push(`<span class="stock-badge mine">${myCart} in your cart</span>`);
+      return p.join(" ");
+    }
+    const ms=document.getElementById("ms-"+c.id); if(ms) ms.innerHTML=stockLabel(true);
+    const ma=document.getElementById("ma-"+c.id); if(ma) ma.disabled=!isAvailable(c.id)||remaining<=0;
+    const mini=document.getElementById("mini-"+c.id); if(mini) mini.classList.toggle("soldout",!isAvailable(c.id)&&myCart===0);
+    const mab=document.getElementById("mab-"+c.id); if(mab) mab.disabled=!isAvailable(c.id)||remaining<=0;
+    const mst=document.getElementById("mini-stock-"+c.id); if(mst) mst.innerHTML=stockLabel(false);
+    const hb=document.getElementById("home-badge-"+c.id);
+    if (hb) {
+      if (s.soldOut||s.qty===0) hb.innerHTML='<span class="stock-badge out" style="font-size:9px">Sold out</span>';
+      else if (remaining<=2) hb.innerHTML=`<span class="stock-badge low" style="font-size:9px">${remaining} left</span>`;
+      else hb.innerHTML="";
+    }
+  });
+}
+
+// ── ADMIN ──
+function onLockClick() {
+  if (isAdmin) { renderAdminCards(); goPage("admin"); }
+  else { document.getElementById("loginModal").classList.add("show"); setTimeout(()=>document.getElementById("loginId").focus(),100); }
+}
+window.onLockClick = onLockClick;
+
+function closeLogin() {
+  document.getElementById("loginModal").classList.remove("show");
+  document.getElementById("loginErr").classList.remove("show");
+  document.getElementById("loginId").value=""; document.getElementById("loginPass").value="";
+}
+window.closeLogin = closeLogin;
+
+function doLogin() {
+  const id=document.getElementById("loginId").value.trim(), pass=document.getElementById("loginPass").value;
+  if (id==="2024804824"&&pass==="mis02032005") {
+    isAdmin=true; closeLogin();
+    document.getElementById("lockBtn").classList.add("unlocked");
+    document.getElementById("lockBtn").textContent="🔓";
+    renderAdminCards();
+    if (preorderData) populatePreorderAdmin(preorderData);
+    goPage("admin");
+  } else { document.getElementById("loginErr").classList.add("show"); document.getElementById("loginPass").value=""; }
+}
+window.doLogin = doLogin;
+
+function doLogout() {
+  isAdmin=false;
+  document.getElementById("lockBtn").classList.remove("unlocked");
+  document.getElementById("lockBtn").textContent="🔒";
+  goPage("home");
+}
+window.doLogout = doLogout;
+
+document.addEventListener("keydown", e => {
+  if (e.key==="Enter"&&document.getElementById("loginModal").classList.contains("show")) doLogin();
+  if (e.key==="Escape"&&document.getElementById("loginModal").classList.contains("show")) closeLogin();
+});
+
+function renderAdminCards() {
+  const container=document.getElementById("adminCards"); if(!container) return;
+  container.innerHTML="";
+  CAKES.forEach((c,i) => {
+    const s=stock[c.id]||{qty:10,soldOut:false};
+    const statusText=s.soldOut?"Manually marked sold out":s.qty===0?"Out of stock":s.qty<=3?`Only ${s.qty} left`:`${s.qty} in stock`;
+    const statusColor=(s.soldOut||s.qty===0)?"#e05252":s.qty<=3?"var(--accent)":"#7ec850";
+    const card=document.createElement("div"); card.className="admin-card";
+    card.style.animation=`fadeSlideUp 0.3s ease ${i*0.07}s both`;
+    card.innerHTML=`<div class="admin-card-top"><img class="admin-cake-img" src="${c.img}" alt="${c.name}"><div><div class="admin-cake-name">${c.name}</div><div class="admin-cake-status" style="color:${statusColor}">${statusText}</div></div></div><div class="admin-fields"><div class="admin-field"><label>Stock (units)</label><input class="admin-input" type="number" min="0" max="999" value="${s.qty}" id="sinput-${c.id}"></div><div class="admin-field"><label>Price (RM)</label><input class="admin-input" type="number" min="0.50" max="999" step="0.50" value="${fmt(c.price)}" id="pinput-${c.id}"></div><button class="soldout-btn ${s.soldOut?"active":""}" id="sotoggle-${c.id}" onclick="toggleSoldOut('${c.id}')">${s.soldOut?"✕ Unmark":"Sold out"}</button></div>`;
+    container.appendChild(card);
+  });
+}
+
+function toggleSoldOut(id) {
+  stock[id].soldOut=!stock[id].soldOut;
+  const btn=document.getElementById("sotoggle-"+id);
+  if(btn){btn.classList.toggle("active",stock[id].soldOut);btn.textContent=stock[id].soldOut?"✕ Unmark":"Sold out";}
+}
+window.toggleSoldOut = toggleSoldOut;
+
+function saveStock() {
+  CAKES.forEach(c => {
+    const q=document.getElementById("sinput-"+c.id), p=document.getElementById("pinput-"+c.id);
+    if(q) stock[c.id].qty=Math.max(0,parseInt(q.value)||0);
+    if(p) c.price=Math.max(0.10,parseFloat(p.value)||c.price);
+  });
+  const payload={};
+  CAKES.forEach(c => { payload[c.id]={qty:stock[c.id].qty,soldOut:stock[c.id].soldOut,price:c.price}; });
+  dbSet(stockRef,payload);
+  const enabled=document.getElementById("preorderEnabled")?.checked;
+  const openVal=document.getElementById("preorderOpenInput")?.value||"";
+  const closeVal=document.getElementById("preorderCloseInput")?.value||"";
+  const msgVal=document.getElementById("preorderMsg")?.value||"";
+  const pp={enabled:!!enabled,openDate:openVal,closeDate:closeVal,msg:msgVal};
+  dbSet(preorderRef,pp); renderPreorderBar(pp); updateAdminPreorderBadge(pp);
+  renderStockUI(); renderCart(); renderAdminCards();
+  const saved=document.getElementById("stockSaved");
+  if(saved){saved.classList.add("show");setTimeout(()=>saved.classList.remove("show"),2500);}
+}
+window.saveStock = saveStock;
+
+function clearAllReservations() {
+  dbSet(dbRef("reservations"),null);
+  const msg=document.getElementById("reserveCleared");
+  if(msg){msg.classList.add("show");setTimeout(()=>msg.classList.remove("show"),2500);}
+}
+window.clearAllReservations = clearAllReservations;
+
+// ── PREORDER SYSTEM ──
+let preorderData=null, countdownInterval=null;
+
+function getPreorderState(data) {
+  if (!data||!data.enabled) return "none";
+  const now=Date.now(), open=data.openDate?new Date(data.openDate).getTime():0, close=data.closeDate?new Date(data.closeDate).getTime():Infinity;
+  if (now<open) return "upcoming";
+  if (now>=open&&now<close) return "open";
+  return "closed";
+}
+function isOrderingAllowed() { return !preorderData||!preorderData.enabled||getPreorderState(preorderData)==="open"; }
+
+function renderPreorderBar(data) {
+  preorderData=data;
+  const bar=document.getElementById("preorderBar"); if(!bar) return;
+  if (!data||!data.enabled) { bar.style.display="none"; clearInterval(countdownInterval); return; }
+  bar.style.display="block";
+  const state=getPreorderState(data);
+  if (state==="upcoming") {
+    const od=new Date(data.openDate);
+    bar.innerHTML=`<div class="preorder-upcoming"><div class="pu-eyebrow"><span class="pu-dot"></span>Preorder opening soon</div><div class="pu-title">Opens ${od.toLocaleDateString("en-MY",{weekday:"long",day:"numeric",month:"long"})} at ${od.toLocaleTimeString("en-MY",{hour:"2-digit",minute:"2-digit"})}</div><div class="countdown" id="homeCd"></div><div class="pu-sub">${data.msg||"Get ready — slots are limited."}</div></div>`;
+    startCountdown("homeCd",data.openDate,()=>renderPreorderBar(data));
+  } else if (state==="open") {
+    const cd=new Date(data.closeDate);
+    bar.innerHTML=`<div class="preorder-open"><div class="po-eyebrow"><span class="po-live-dot"></span>Preorder is open</div><div class="po-title">${data.msg||"Order now — limited slots available."}</div><div class="po-row"><div class="po-closes">Closes <span>${cd.toLocaleDateString("en-MY",{weekday:"short",day:"numeric",month:"short"})}, ${cd.toLocaleTimeString("en-MY",{hour:"2-digit",minute:"2-digit"})}</span></div><button class="po-order-btn" onclick="goPage('order')">Order now →</button></div></div>`;
+  } else {
+    bar.innerHTML=`<div class="preorder-closed"><div class="pc-icon">🔒</div><div><div class="pc-title">Preorder is currently closed</div><div class="pc-sub">Follow us for updates on the next opening.</div></div></div>`;
+  }
+  updateOrderLock(data);
+}
+
+function updateOrderLock(data) {
+  const overlay=document.getElementById("orderLockedOverlay"), sub=document.getElementById("orderLockedSub"), cdWrap=document.getElementById("orderLockedCountdown");
+  if (!overlay) return;
+  const allowed=isOrderingAllowed();
+  overlay.style.display=allowed?"none":"flex";
+  if (!allowed&&data&&getPreorderState(data)==="upcoming") {
+    const od=new Date(data.openDate);
+    sub.textContent=`Ordering opens ${od.toLocaleDateString("en-MY",{weekday:"short",day:"numeric",month:"short"})} at ${od.toLocaleTimeString("en-MY",{hour:"2-digit",minute:"2-digit"})}`;
+    cdWrap.innerHTML=`<div class="olcd-unit"><span class="olcd-num" id="olcdD">--</span><span class="olcd-label">Days</span></div><div class="olcd-unit"><span class="olcd-num" id="olcdH">--</span><span class="olcd-label">Hours</span></div><div class="olcd-unit"><span class="olcd-num" id="olcdM">--</span><span class="olcd-label">Mins</span></div><div class="olcd-unit"><span class="olcd-num" id="olcdS">--</span><span class="olcd-label">Secs</span></div>`;
+    startCountdown("olcd",data.openDate,()=>updateOrderLock(data),"olcd");
+  } else if (!allowed) { if(sub) sub.textContent="Preorder window has closed. Check back for the next opening."; if(cdWrap) cdWrap.innerHTML=""; }
+}
+
+function startCountdown(containerId,targetDateStr,onComplete,cls) {
+  clearInterval(countdownInterval); cls=cls||"cd";
+  const target=new Date(targetDateStr).getTime();
+  function tick() {
+    const diff=target-Date.now();
+    if (diff<=0) { clearInterval(countdownInterval); if(onComplete) onComplete(); return; }
+    const pad=n=>String(n).padStart(2,"0");
+    const el=id=>document.getElementById(id);
+    if(el(cls+"D")) el(cls+"D").textContent=pad(Math.floor(diff/86400000));
+    if(el(cls+"H")) el(cls+"H").textContent=pad(Math.floor((diff%86400000)/3600000));
+    if(el(cls+"M")) el(cls+"M").textContent=pad(Math.floor((diff%3600000)/60000));
+    if(el(cls+"S")) el(cls+"S").textContent=pad(Math.floor((diff%60000)/1000));
+  }
+  tick(); countdownInterval=setInterval(tick,1000);
+}
+
+setInterval(()=>{
+  if (preorderData?.enabled) renderPreorderBar(preorderData);
+  if (preorderData?.enabled&&getPreorderState(preorderData)==="open"&&CAKES.every(c=>!isAvailable(c.id))) {
+    preorderData.closeDate=new Date().toISOString().slice(0,16);
+    dbSet(preorderRef,preorderData);
+  }
+},1000);
+
+function populatePreorderAdmin(data) {
+  const cb=document.getElementById("preorderEnabled"), wrap=document.getElementById("preorderDateWrap");
+  if(!cb) return;
+  cb.checked=!!(data?.enabled); wrap.style.display=cb.checked?"block":"none";
+  const oi=document.getElementById("preorderOpenInput"), ci=document.getElementById("preorderCloseInput"), mi=document.getElementById("preorderMsg");
+  if(oi&&data?.openDate) oi.value=data.openDate;
+  if(ci&&data?.closeDate) ci.value=data.closeDate;
+  if(mi&&data?.msg) mi.value=data.msg;
+  updateAdminPreorderBadge(data);
+}
+
+function updateAdminPreorderBadge(data) {
+  const badge=document.getElementById("adminPreorderBadge"), text=document.getElementById("adminPreorderBadgeText");
+  if(!badge||!text) return;
+  if(!data||!data.enabled){badge.className="preorder-status-badge psb-closed";text.textContent="Disabled";return;}
+  const state=getPreorderState(data);
+  if(state==="upcoming"){badge.className="preorder-status-badge psb-upcoming";text.textContent="Upcoming";}
+  else if(state==="open"){badge.className="preorder-status-badge psb-open";text.textContent="Live now";}
+  else{badge.className="preorder-status-badge psb-closed";text.textContent="Closed";}
+}
+
+function onPreorderToggle() {
+  const cb=document.getElementById("preorderEnabled"), wrap=document.getElementById("preorderDateWrap");
+  if(wrap) wrap.style.display=cb.checked?"block":"none";
+}
+window.onPreorderToggle = onPreorderToggle;
+
+// ── ROUTING ──
+function goPage(p) {
+  if (p==="admin"&&!isAdmin) p="home";
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  document.getElementById("pg-"+p).classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));
+  const nb=document.getElementById("nb-"+p); if(nb) nb.classList.add("active");
+  if (p!=="admin") window.location.hash=p;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+window.goPage = goPage;
+
+window.addEventListener("load",()=>{
+  const hash=window.location.hash.replace("#","")||"home";
+  goPage(["home","menu","order"].includes(hash)?hash:"home");
+});
+window.addEventListener("hashchange",()=>{
+  const hash=window.location.hash.replace("#","")||"home", p=["home","menu","order"].includes(hash)?hash:"home";
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  document.getElementById("pg-"+p).classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));
+  const nb=document.getElementById("nb-"+p); if(nb) nb.classList.add("active");
+});
+
+// ── CART ──
+function addFromCard(id) { if(!isAvailable(id)) return; addToCart(id); goPage("order"); }
 window.addFromCard = addFromCard;
 
 function addToCart(id) {
-  if (!isAvailable(id)) return;
-  if (availableToAdd(id) <= 0) { showToast("No more units available — others may have reserved them."); return; }
-  cart[id] = (cart[id] || 0) + 1;
-  pushReservation();
-  resetCartTimer();
-  renderCart();
-  renderStockUI();
-  const pill = document.getElementById("cartCount");
+  if(!isAvailable(id)) return;
+  if(availableToAdd(id)<=0){showToast("No more units available — others may have reserved them.");return;}
+  cart[id]=(cart[id]||0)+1;
+  pushReservation(); resetCartTimer(); renderCart(); renderStockUI();
+  const pill=document.getElementById("cartCount");
   pill.classList.remove("bump"); void pill.offsetWidth; pill.classList.add("bump");
   updateCount();
 }
 window.addToCart = addToCart;
 
 function removeFromCart(id) {
-  if (cart[id] > 1) cart[id]--; else delete cart[id];
-  if (!Object.keys(cart).length) { clearCart(); }
-  else { pushReservation(); resetCartTimer(); }
+  if(cart[id]>1) cart[id]--; else delete cart[id];
+  if(!Object.keys(cart).length) clearCart(); else {pushReservation();resetCartTimer();}
   renderCart(); renderStockUI(); updateCount();
 }
 window.removeFromCart = removeFromCart;
 
-// Clean up reservation on page close
-window.addEventListener("beforeunload", () => { dbSet(reserveRef, null); });
+window.addEventListener("beforeunload",()=>dbSet(reserveRef,null));
 
 function renderCart() {
-  const el = document.getElementById("cartItems");
-  const sb = document.getElementById("cartSumBlock");
-  const ids = Object.keys(cart);
-  if (!ids.length) {
-    el.innerHTML = '<div class="cart-empty">Nothing added yet</div>';
-    sb.style.display = "none";
-    renderCartTimer();
-    return;
-  }
-  sb.style.display = "block";
-  let subtotal = 0, count = 0, html = "";
-  ids.forEach(id => {
-    const c = CAKES.find(x => x.id === id), qty = cart[id];
-    subtotal += c.price * qty; count += qty;
-    html += `<div class="cart-item">
-      <img class="cart-thumb" src="${c.img}" alt="${c.name}">
-      <span class="ci-name">${c.name}</span>
-      <div class="ci-qty">
-        <button class="qb" onclick="removeFromCart('${id}')">−</button>
-        <span style="font-size:13px;min-width:18px;text-align:center;font-weight:500">${qty}</span>
-        <button class="qb" onclick="addToCart('${id}')">+</button>
-      </div>
-      <span class="ci-total">${fmtRM(c.price * qty)}</span>
-    </div>`;
+  const el=document.getElementById("cartItems"), sb=document.getElementById("cartSumBlock"), ids=Object.keys(cart);
+  if (!ids.length) { el.innerHTML='<div class="cart-empty">Nothing added yet</div>'; sb.style.display="none"; renderCartTimer(); return; }
+  sb.style.display="block";
+  let subtotal=0, count=0, html="";
+  ids.forEach(id=>{
+    const c=CAKES.find(x=>x.id===id), qty=cart[id];
+    subtotal+=c.price*qty; count+=qty;
+    html+=`<div class="cart-item"><img class="cart-thumb" src="${c.img}" alt="${c.name}"><span class="ci-name">${c.name}</span><div class="ci-qty"><button class="qb" onclick="removeFromCart('${id}')">−</button><span style="font-size:13px;min-width:18px;text-align:center;font-weight:500">${qty}</span><button class="qb" onclick="addToCart('${id}')">+</button></div><span class="ci-total">${fmtRM(c.price*qty)}</span></div>`;
   });
-  el.innerHTML = html;
-  const deliveryFee = delMode === "delivery" ? 1 : 0;
-  const total = subtotal + deliveryFee;
-  document.getElementById("csItems").textContent = count + " item" + (count > 1 ? "s" : "");
-  const feeRow = document.getElementById("csFeeRow");
-  if (feeRow) feeRow.style.display = deliveryFee ? "flex" : "none";
-  document.getElementById("csTotal").textContent = fmtRM(total);
+  el.innerHTML=html;
+  const fee=delMode==="delivery"?1:0, total=subtotal+fee;
+  document.getElementById("csItems").textContent=count+" item"+(count>1?"s":"");
+  const feeRow=document.getElementById("csFeeRow"); if(feeRow) feeRow.style.display=fee?"flex":"none";
+  document.getElementById("csTotal").textContent=fmtRM(total);
   renderCartTimer();
 }
 
-function updateCount() {
-  document.getElementById("cartCount").textContent = Object.values(cart).reduce((a, b) => a + b, 0);
-}
+function updateCount() { document.getElementById("cartCount").textContent=Object.values(cart).reduce((a,b)=>a+b,0); }
 
 function setKolej(name) {
-  selectedKolej = name;
-  document.querySelectorAll(".ropt-block").forEach(x => x.classList.remove("active"));
-  const map = { "Seri Mulu": "k-mulu", "Seri Gading": "k-gading", "Seri Serapi": "k-serapi" };
-  document.getElementById(map[name]).classList.add("active");
+  selectedKolej=name;
+  document.querySelectorAll(".ropt-block").forEach(x=>x.classList.remove("active"));
+  document.getElementById({Seri_Mulu:"k-mulu","Seri Mulu":"k-mulu","Seri Gading":"k-gading","Seri Serapi":"k-serapi"}[name]).classList.add("active");
   document.getElementById("errKolej").classList.remove("show");
 }
 window.setKolej = setKolej;
 
 function setDel(m) {
-  delMode = m;
-  document.getElementById("rPickup").classList.toggle("active", m === "pickup");
-  document.getElementById("rDelivery").classList.toggle("active", m === "delivery");
-  const addr = document.getElementById("addrSection");
-  if (m === "delivery") { addr.style.display = "block"; addr.style.animation = "fadeSlideIn 0.3s ease"; }
-  else { addr.style.display = "none"; selectedKolej = ""; document.querySelectorAll(".ropt-block").forEach(x => x.classList.remove("active")); }
+  delMode=m;
+  document.getElementById("rPickup").classList.toggle("active",m==="pickup");
+  document.getElementById("rDelivery").classList.toggle("active",m==="delivery");
+  const addr=document.getElementById("addrSection");
+  if(m==="delivery"){addr.style.display="block";addr.style.animation="fadeSlideIn 0.3s ease";}
+  else{addr.style.display="none";selectedKolej="";document.querySelectorAll(".ropt-block").forEach(x=>x.classList.remove("active"));}
   renderCart();
 }
 window.setDel = setDel;
 
-function validPhone(p) { return /^(\+?60|0)[0-9]{8,10}$/.test(p.replace(/[-\s]/g, "")); }
+function validPhone(p){return/^(\+?60|0)[0-9]{8,10}$/.test(p.replace(/[-\s]/g,""));}
 
 function submitOrder() {
-  if (!isOrderingAllowed()) { updateOrderLock(preorderData); return; }
-  let ok = true;
-  const name  = document.getElementById("oName").value.trim();
-  const phone = document.getElementById("oPhone").value.trim();
-  if (!name)            { document.getElementById("errName").classList.add("show");  ok = false; } else document.getElementById("errName").classList.remove("show");
-  if (!validPhone(phone)){ document.getElementById("errPhone").classList.add("show"); ok = false; } else document.getElementById("errPhone").classList.remove("show");
-  if (!Object.keys(cart).length) { document.getElementById("errCart").classList.add("show"); ok = false; } else document.getElementById("errCart").classList.remove("show");
-  if (delMode === "delivery") {
-    if (!selectedKolej) { document.getElementById("errKolej").classList.add("show"); ok = false; } else document.getElementById("errKolej").classList.remove("show");
-    const b = document.getElementById("oBlock").value.trim();
-    const r = document.getElementById("oRoom").value.trim();
-    if (!b || !r) { document.getElementById("errAddr").classList.add("show"); ok = false; } else document.getElementById("errAddr").classList.remove("show");
+  if(!isOrderingAllowed()){updateOrderLock(preorderData);return;}
+  let ok=true;
+  const name=document.getElementById("oName").value.trim(), phone=document.getElementById("oPhone").value.trim();
+  if(!name){document.getElementById("errName").classList.add("show");ok=false;}else document.getElementById("errName").classList.remove("show");
+  if(!validPhone(phone)){document.getElementById("errPhone").classList.add("show");ok=false;}else document.getElementById("errPhone").classList.remove("show");
+  if(!Object.keys(cart).length){document.getElementById("errCart").classList.add("show");ok=false;}else document.getElementById("errCart").classList.remove("show");
+  if(delMode==="delivery"){
+    if(!selectedKolej){document.getElementById("errKolej").classList.add("show");ok=false;}else document.getElementById("errKolej").classList.remove("show");
+    const b=document.getElementById("oBlock").value.trim(), r=document.getElementById("oRoom").value.trim();
+    if(!b||!r){document.getElementById("errAddr").classList.add("show");ok=false;}else document.getElementById("errAddr").classList.remove("show");
   }
-  if (!ok) return;
-
-  // 1. Permanently deduct from Firebase stock
-  deductStock(cart);
-  // 2. Release our reservation (stock already deducted permanently)
+  if(!ok) return;
+  const updates={};
+  Object.keys(cart).forEach(id=>{updates[id+"/qty"]=Math.max(0,(stock[id]?.qty||0)-cart[id]);});
+  dbRef("stock").update(updates);
   releaseReservation();
-  // 3. Clear cart timer
-  if (cartExpireTimer) { clearTimeout(cartExpireTimer); cartExpireTimer = null; }
-
-  let lines = "", subtotal = 0;
-  Object.keys(cart).forEach(id => {
-    const c = CAKES.find(x => x.id === id), qty = cart[id];
-    lines += `  • ${c.name} x${qty} = ${fmtRM(c.price * qty)}\n`;
-    subtotal += c.price * qty;
-  });
-  const deliveryFee = delMode === "delivery" ? 1 : 0;
-  const total = subtotal + deliveryFee;
-  let addr = "";
-  if (delMode === "delivery") {
-    addr = `\n📍 Kolej: ${selectedKolej}\n🚪 Block ${document.getElementById("oBlock").value.trim()}, Room ${document.getElementById("oRoom").value.trim()}`;
-    lines += `  • Delivery fee = RM1\n`;
-  }
-  const msg = `🍰 *NEW CAKE ORDER*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n\n🚚 Delivery: ${delMode === "pickup" ? "Pickup" : "Delivery"}${addr}\n\n🛒 Items:\n${lines}\n💰 Total: ${fmtRM(total)}\n\n💳 Payment: QR Payment\n\n———————————\nThank you! ❤️`;
-  const waUrl = "https://wa.me/60133374124?text=" + encodeURIComponent(msg);
-
-  // 4. Clear cart AFTER building message
-  cart = {};
-  renderCart(); updateCount(); renderStockUI();
-
+  if(cartExpireTimer){clearTimeout(cartExpireTimer);cartExpireTimer=null;}
+  let lines="",subtotal=0;
+  Object.keys(cart).forEach(id=>{const c=CAKES.find(x=>x.id===id),qty=cart[id];lines+=`  • ${c.name} x${qty} = ${fmtRM(c.price*qty)}\n`;subtotal+=c.price*qty;});
+  const fee=delMode==="delivery"?1:0, total=subtotal+fee;
+  let addr="";
+  if(delMode==="delivery"){addr=`\n📍 Kolej: ${selectedKolej}\n🚪 Block ${document.getElementById("oBlock").value.trim()}, Room ${document.getElementById("oRoom").value.trim()}`;lines+=`  • Delivery fee = RM1\n`;}
+  const msg=`🍰 *NEW CAKE ORDER*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n\n🚚 Delivery: ${delMode==="pickup"?"Pickup":"Delivery"}${addr}\n\n🛒 Items:\n${lines}\n💰 Total: ${fmtRM(total)}\n\n💳 Payment: QR Payment\n\n———————————\nThank you! ❤️`;
+  const waUrl="https://wa.me/60133374124?text="+encodeURIComponent(msg);
+  cart={}; renderCart(); updateCount(); renderStockUI();
   document.getElementById("successBar").classList.add("show");
-  document.getElementById("waLink").href = waUrl;
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if (isIOS) { window.location.href = waUrl; }
-  else {
-    const newWin = window.open(waUrl, "_blank");
-    if (!newWin || newWin.closed || typeof newWin.closed === "undefined") document.getElementById("waManual").style.display = "block";
-  }
-  setTimeout(() => { document.getElementById("waManual").style.display = "block"; }, 2000);
+  document.getElementById("waLink").href=waUrl;
+  const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(isIOS){window.location.href=waUrl;}
+  else{const w=window.open(waUrl,"_blank");if(!w||w.closed||typeof w.closed==="undefined")document.getElementById("waManual").style.display="block";}
+  setTimeout(()=>{document.getElementById("waManual").style.display="block";},2000);
 }
 window.submitOrder = submitOrder;
 </script>
