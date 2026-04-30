@@ -385,7 +385,7 @@ footer strong{color:var(--accent);font-weight:500}
       <img class="menu-img" src="images/classic.png" alt="Classic Batik">
       <div class="menu-body">
         <div class="menu-name">Classic Batik</div>
-        <div class="menu-desc">The original. Rich chocolate Marie biscuit layers with smooth butter cream — timeless and indulgent.</div>
+        <div class="menu-desc">The original. Rich chocolate Marie biscuit layers with smooth malt chocolate cream — timeless and indulgent.</div>
         <div class="menu-stock-line" id="ms-classic"></div>
         <div class="menu-footer"><span class="menu-price" id="mp-classic">RM15</span><button class="menu-add" id="ma-classic" onclick="addFromCard('classic')">+</button></div>
       </div>
@@ -986,7 +986,15 @@ window.addEventListener("hashchange",()=>{
 });
 
 // ── CART ──
-function addFromCard(id) { if(!isAvailable(id)) return; addToCart(id); goPage("order"); }
+function addFromCard(id) {
+  if (!isAvailable(id)) return;
+  if (!isOrderingAllowed()) {
+    goPage("order"); // show the locked order page
+    showToast("Preorder is not open yet — come back when it opens.");
+    return;
+  }
+  addToCart(id); goPage("order");
+}
 window.addFromCard = addFromCard;
 
 function addToCart(id) {
