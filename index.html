@@ -126,18 +126,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .menu-header h1{font-family:"Cormorant Garamond",serif;font-size:clamp(36px,5vw,64px);font-weight:300;line-height:0.95;margin-bottom:12px}
 .menu-header p{font-size:14px;color:#9a9a8e;font-weight:300}
 .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1200px;margin:0 auto;padding:0 60px 80px}
-.menu-card{background:#161612;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease,border-color 0.3s ease;animation:fadeSlideUp 0.4s ease both;position:relative}
+.menu-card{background:#161612;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease,border-color 0.3s ease;animation:fadeSlideUp 0.4s ease both;position:relative;display:flex;flex-direction:column}
 .menu-card:nth-child(2){animation-delay:0.07s}
 .menu-card:nth-child(3){animation-delay:0.14s}
 .menu-card:hover{transform:translateY(-10px) scale(1.01);box-shadow:0 28px 60px rgba(0,0,0,0.7),0 0 40px rgba(196,135,74,0.06);border-color:rgba(196,135,74,0.15)}
 .menu-card.is-soldout{opacity:0.6}
 .menu-card.is-soldout:hover{transform:none;box-shadow:none}
-.menu-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
-.menu-body{padding:18px 20px 20px}
+.menu-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;flex-shrink:0}
+.menu-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
 .menu-name{font-family:"Cormorant Garamond",serif;font-size:24px;font-weight:300;margin-bottom:7px;color:#f5f2ed}
-.menu-desc{font-size:12px;color:#9a9a8e;line-height:1.75;margin-bottom:10px;font-weight:300}
+.menu-desc{font-size:12px;color:#9a9a8e;line-height:1.75;margin-bottom:10px;font-weight:300;flex:1}
 .menu-stock-line{font-size:11px;margin-bottom:12px;min-height:18px}
-.menu-footer{display:flex;align-items:center;justify-content:space-between}
+.menu-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
 .menu-price{font-size:15px;font-weight:500;color:var(--accent)}
 .menu-add{width:32px;height:32px;background:#f5f2ed;color:#0d0d0b;border:none;border-radius:8px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s}
 .menu-add:hover{background:var(--accent);color:#fff}
@@ -261,9 +261,79 @@ footer strong{color:var(--accent);font-weight:500}
 .toggle-switch input:checked~.toggle-track{background:rgba(196,135,74,0.2);border-color:rgba(196,135,74,0.4)}
 .toggle-switch input:checked~.toggle-thumb{transform:translateX(20px);background:var(--accent)}
 
-/* DANGER ZONE */
-.danger-card{background:#161612;border:1px solid rgba(224,82,82,0.15);border-radius:16px;padding:20px 22px;margin-bottom:14px;transition:border-color 0.2s}
-.danger-card:hover{border-color:rgba(224,82,82,0.3)}
+/* ── ORDER TRACKING ── */
+.track-wrap{max-width:500px;margin:0 auto;padding:60px 24px 80px;text-align:center}
+.track-title{font-family:"Cormorant Garamond",serif;font-size:40px;font-weight:300;margin-bottom:8px}
+.track-sub{font-size:13px;color:#9a9a8e;margin-bottom:32px}
+.track-input-row{display:flex;gap:8px;margin-bottom:24px}
+.track-result{background:#161612;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:22px;text-align:left;animation:fadeSlideUp 0.3s ease}
+.track-order-id{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#9a9a8e;margin-bottom:8px}
+.track-status-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;margin-bottom:14px}
+.ts-pending{background:rgba(196,135,74,0.1);border:1px solid rgba(196,135,74,0.3);color:var(--accent)}
+.ts-confirmed{background:rgba(90,120,255,0.1);border:1px solid rgba(90,120,255,0.3);color:#7090ff}
+.ts-preparing{background:rgba(196,135,74,0.12);border:1px solid rgba(196,135,74,0.4);color:var(--accent)}
+.ts-delivery{background:rgba(126,200,80,0.1);border:1px solid rgba(126,200,80,0.3);color:#7ec850}
+.ts-delivered{background:rgba(126,200,80,0.15);border:1px solid rgba(126,200,80,0.4);color:#7ec850}
+.ts-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse-dot 1.5s ease infinite}
+.track-items{margin-top:10px;border-top:1px solid rgba(255,255,255,0.06);padding-top:12px}
+.track-item-row{display:flex;justify-content:space-between;font-size:13px;color:#9a9a8e;padding:3px 0}
+.track-total{display:flex;justify-content:space-between;font-size:14px;font-weight:500;color:#f5f2ed;padding-top:8px;margin-top:6px;border-top:1px solid rgba(255,255,255,0.06)}
+.track-delivery-info{margin-top:12px;font-size:12px;color:#9a9a8e;line-height:1.7}
+.track-not-found{background:rgba(224,82,82,0.06);border:1px solid rgba(224,82,82,0.2);border-radius:14px;padding:20px;text-align:center;font-size:13px;color:#e05252;margin-top:12px}
+
+/* ── KITCHEN / ORDER MGMT ── */
+.kitchen-wrap{max-width:900px;margin:0 auto;padding:48px 40px 80px}
+.kitchen-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px}
+.kitchen-title{font-family:"Cormorant Garamond",serif;font-size:42px;font-weight:300;line-height:1}
+.kitchen-tabs{display:flex;gap:6px;margin-bottom:24px;border-bottom:1px solid rgba(255,255,255,0.07);padding-bottom:0}
+.ktab{padding:10px 18px;background:none;border:none;font-family:"DM Sans",sans-serif;font-size:13px;color:#9a9a8e;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.2s,border-color 0.2s}
+.ktab.active{color:#f5f2ed;border-bottom-color:var(--accent)}
+.ktab:hover{color:#f5f2ed}
+.kitchen-tab-content{display:none}
+.kitchen-tab-content.active{display:block}
+.order-card{background:#161612;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px 20px;margin-bottom:12px;animation:fadeSlideUp 0.3s ease both;transition:border-color 0.2s}
+.order-card:hover{border-color:rgba(255,255,255,0.12)}
+.oc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.oc-id{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#9a9a8e}
+.oc-time{font-size:11px;color:#5a5a52}
+.oc-customer{font-size:14px;font-weight:500;color:#f5f2ed;margin-bottom:2px}
+.oc-phone{font-size:12px;color:#9a9a8e}
+.oc-items{margin:10px 0;padding:10px 0;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06)}
+.oc-item-row{display:flex;justify-content:space-between;font-size:12px;color:#9a9a8e;padding:2px 0}
+.oc-total{font-size:13px;font-weight:500;color:var(--accent);margin-top:8px}
+.oc-delivery{font-size:12px;color:#9a9a8e;margin-top:4px}
+.oc-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.oc-btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s;border:none}
+.oc-btn-confirm{background:#7090ff;color:#fff}
+.oc-btn-confirm:hover{background:#5070ee}
+.oc-btn-deliver{background:#7ec850;color:#0d0d0b}
+.oc-btn-deliver:hover{background:#97d96a}
+.oc-btn-ghost{background:rgba(255,255,255,0.05);color:#9a9a8e;border:1px solid rgba(255,255,255,0.1)}
+.oc-btn-ghost:hover{color:#f5f2ed;border-color:rgba(255,255,255,0.3)}
+.oc-btn-danger{background:rgba(224,82,82,0.1);color:#e05252;border:1px solid rgba(224,82,82,0.2)}
+.oc-btn-danger:hover{background:rgba(224,82,82,0.2)}
+.kitchen-empty{text-align:center;padding:40px 20px;font-family:"Cormorant Garamond",serif;font-size:18px;color:#5a5a52;font-style:italic}
+.shift-summary-card{background:#161612;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px 20px;margin-bottom:10px}
+.ss-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ss-date{font-size:12px;color:#9a9a8e}
+.ss-total{font-size:16px;font-weight:500;color:var(--accent)}
+.ss-items{font-size:12px;color:#9a9a8e;line-height:1.8}
+.broadcast-btn{width:100%;padding:12px;background:rgba(126,200,80,0.1);color:#7ec850;border:1px solid rgba(126,200,80,0.3);border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s;margin-top:12px}
+.broadcast-btn:hover{background:rgba(126,200,80,0.2)}
+.kitchen-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.kstat{background:#161612;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px 16px;text-align:center}
+.kstat-num{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:300;color:#f5f2ed;line-height:1}
+.kstat-label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#9a9a8e;margin-top:4px}
+
+@media(max-width:620px){
+  .kitchen-stats{grid-template-columns:repeat(2,1fr)}
+  .kitchen-wrap{padding:32px 16px 60px}
+}
+
+/* ORDER ID BADGE in success */
+.order-id-badge{background:rgba(196,135,74,0.1);border:1px solid rgba(196,135,74,0.3);border-radius:10px;padding:12px 16px;margin-top:10px;text-align:center}
+.order-id-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#9a9a8e;margin-bottom:4px}
+.order-id-value{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:var(--accent);letter-spacing:0.1em}
 
 @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.5)}}
 @keyframes fadeSlideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
@@ -300,6 +370,7 @@ footer strong{color:var(--accent);font-weight:500}
     <button class="nav-btn active" id="nb-home" onclick="goPage('home')">Home</button>
     <button class="nav-btn" id="nb-menu" onclick="goPage('menu')">Menu</button>
     <button class="nav-btn" id="nb-order" onclick="goPage('order')">Order</button>
+    <button class="nav-btn" id="nb-track" onclick="goPage('track')">Track</button>
     <button class="nav-cart" onclick="goPage('order')">Cart <span class="cart-pill" id="cartCount">0</span></button>
     <button class="lock-btn" id="lockBtn" onclick="onLockClick()" title="Admin">🔒</button>
   </div>
@@ -513,6 +584,11 @@ footer strong{color:var(--accent);font-weight:500}
           <div class="err" id="errCart" style="text-align:center;margin-bottom:10px">Please add at least one item.</div>
           <button class="send-btn" onclick="submitOrder()">Send order via WhatsApp →</button>
           <div class="success-bar" id="successBar">✓ Opening WhatsApp…</div>
+          <div class="order-id-badge" id="orderIdBadge" style="display:none">
+            <div class="order-id-label">Your order ID</div>
+            <div class="order-id-value" id="orderIdDisplay">—</div>
+            <div style="font-size:11px;color:#9a9a8e;margin-top:4px">Save this to track your order</div>
+          </div>
           <div id="waManual" style="display:none;margin-top:14px;padding:14px;background:#0d0d0b;border-radius:10px;border:1px solid rgba(255,255,255,0.08)">
             <p style="font-size:12px;color:#9a9a8e;line-height:1.8;margin-bottom:10px">WhatsApp didn't open automatically?<br>Tap the link below or allow pop-ups in your browser.</p>
             <a id="waLink" href="#" target="_blank" style="display:block;text-align:center;padding:10px;background:rgba(196,135,74,0.12);border:1px solid rgba(196,135,74,0.3);border-radius:8px;color:var(--accent);font-size:13px;font-weight:500;text-decoration:none;letter-spacing:0.02em">Open WhatsApp →</a>
@@ -529,6 +605,57 @@ footer strong{color:var(--accent);font-weight:500}
   <strong>OhmSweetOhm</strong> &nbsp;·&nbsp; Fresh homemade batik cakes &nbsp;·&nbsp; WhatsApp: 013-337 4124
 </footer>
 
+<!-- TRACK ORDER -->
+<div id="pg-track" class="page">
+  <div class="track-wrap">
+    <h2 class="track-title">Track your order</h2>
+    <p class="track-sub">Enter your order ID to see the latest status</p>
+    <div class="track-input-row">
+      <input class="finput" id="trackInput" type="text" placeholder="e.g. OSO-A1B2C3" style="flex:1;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')doTrack()">
+      <button class="btn-light" onclick="doTrack()" style="white-space:nowrap;padding:10px 20px;font-size:13px">Track →</button>
+    </div>
+    <div id="trackResult"></div>
+  </div>
+</div>
+
+<!-- KITCHEN -->
+<div id="pg-kitchen" class="page">
+  <div class="kitchen-wrap">
+    <div class="kitchen-header">
+      <div>
+        <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;font-weight:500">Kitchen</div>
+        <h2 class="kitchen-title">Order Management</h2>
+        <p style="font-size:13px;color:#9a9a8e;margin-top:6px;font-weight:300">Real-time orders from all customers</p>
+      </div>
+      <button class="admin-logout-btn" onclick="doKitchenLogout()">Log out</button>
+    </div>
+
+    <div class="kitchen-stats" id="kitchenStats"></div>
+
+    <div class="kitchen-tabs">
+      <button class="ktab active" onclick="switchKTab('pending',this)">Pending</button>
+      <button class="ktab" onclick="switchKTab('confirmed',this)">Confirmed</button>
+      <button class="ktab" onclick="switchKTab('preparing',this)">Preparing</button>
+      <button class="ktab" onclick="switchKTab('delivery',this)">Out for delivery</button>
+      <button class="ktab" onclick="switchKTab('delivered',this)">Delivered</button>
+      <button class="ktab" onclick="switchKTab('summary',this)">Shift summary</button>
+    </div>
+
+    <div id="ktab-pending" class="kitchen-tab-content active"></div>
+    <div id="ktab-confirmed" class="kitchen-tab-content"></div>
+    <div id="ktab-preparing" class="kitchen-tab-content"></div>
+    <div id="ktab-delivery" class="kitchen-tab-content"></div>
+    <div id="ktab-delivered" class="kitchen-tab-content"></div>
+    <div id="ktab-summary" class="kitchen-tab-content">
+      <div id="summaryContent"></div>
+    </div>
+
+    <div id="broadcastSection" style="display:none">
+      <button class="broadcast-btn" onclick="broadcastDelivery()">🚀 Mark all Preparing → Out for delivery</button>
+    </div>
+  </div>
+</div>
+
 <!-- ADMIN PAGE -->
 <div id="pg-admin" class="page">
   <div class="admin-wrap">
@@ -538,7 +665,10 @@ footer strong{color:var(--accent);font-weight:500}
         <h2 class="admin-title">Stock &amp; Pricing</h2>
         <p style="font-size:13px;color:#9a9a8e;margin-top:6px;font-weight:300">Changes sync instantly to all customers</p>
       </div>
-      <button class="admin-logout-btn" onclick="doLogout()">Log out</button>
+      <div style="display:flex;gap:8px;flex-direction:column;align-items:flex-end">
+        <button class="admin-logout-btn" onclick="doLogout()">Log out</button>
+        <button class="admin-logout-btn" style="border-color:rgba(126,200,80,0.3);color:#7ec850" onclick="goPage('kitchen')">Kitchen →</button>
+      </div>
     </div>
 
     <div class="admin-grid" id="adminCards"></div>
@@ -579,6 +709,18 @@ footer strong{color:var(--accent);font-weight:500}
 
     <div class="admin-section-title">Danger zone</div>
     <div class="danger-card">
+      <div class="preorder-toggle-row" style="margin-bottom:0">
+        <div>
+          <div class="preorder-toggle-label">Clear all reservations</div>
+          <div class="preorder-toggle-sub">Releases all carts held by customers right now</div>
+        </div>
+        <button class="soldout-btn" onclick="clearAllReservations()">Clear all</button>
+      </div>
+      <div class="admin-saved" id="reserveCleared" style="margin-top:10px">✓ All reservations cleared</div>
+    </div>
+
+    <div class="admin-section-title">Danger zone</div>
+    <div class="preorder-admin-card" style="border-color:rgba(224,82,82,0.15)">
       <div class="preorder-toggle-row" style="margin-bottom:0">
         <div>
           <div class="preorder-toggle-label">Clear all reservations</div>
@@ -975,12 +1117,15 @@ window.goPage = goPage;
 
 window.addEventListener("load",()=>{
   const hash=window.location.hash.replace("#","")||"home";
-  goPage(["home","menu","order"].includes(hash)?hash:"home");
+  const valid=["home","menu","order","track"];
+  window.goPage(valid.includes(hash)?hash:"home");
 });
 window.addEventListener("hashchange",()=>{
-  const hash=window.location.hash.replace("#","")||"home", p=["home","menu","order"].includes(hash)?hash:"home";
+  const hash=window.location.hash.replace("#","")||"home";
+  const valid=["home","menu","order","track"];
+  const p=valid.includes(hash)?hash:"home";
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-  document.getElementById("pg-"+p).classList.add("active");
+  const pg=document.getElementById("pg-"+p); if(pg) pg.classList.add("active");
   document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));
   const nb=document.getElementById("nb-"+p); if(nb) nb.classList.add("active");
 });
@@ -1058,6 +1203,22 @@ window.setDel = setDel;
 
 function validPhone(p){return/^(\+?60|0)[0-9]{8,10}$/.test(p.replace(/[-\s]/g,""));}
 
+// ── ORDER ID GENERATION ──
+function genOrderId() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let id = "OSO-";
+  for (let i=0;i<6;i++) id += chars[Math.floor(Math.random()*chars.length)];
+  return id;
+}
+
+const ordersRef = dbRef("orders");
+let isKitchen = false, allOrders = {}, currentKTab = "pending";
+
+dbOn(ordersRef, snap => {
+  allOrders = snap.val() || {};
+  if (isKitchen || isAdmin) renderKitchen();
+});
+
 function submitOrder() {
   if(!isOrderingAllowed()){updateOrderLock(preorderData);return;}
   let ok=true;
@@ -1071,20 +1232,47 @@ function submitOrder() {
     if(!b||!r){document.getElementById("errAddr").classList.add("show");ok=false;}else document.getElementById("errAddr").classList.remove("show");
   }
   if(!ok) return;
+
+  // Deduct stock & release reservation
   const updates={};
   Object.keys(cart).forEach(id=>{updates[id+"/qty"]=Math.max(0,(stock[id]?.qty||0)-cart[id]);});
   dbRef("stock").update(updates);
   releaseReservation();
   if(cartExpireTimer){clearTimeout(cartExpireTimer);cartExpireTimer=null;}
-  let lines="",subtotal=0;
-  Object.keys(cart).forEach(id=>{const c=CAKES.find(x=>x.id===id),qty=cart[id];lines+=`  • ${c.name} x${qty} = ${fmtRM(c.price*qty)}\n`;subtotal+=c.price*qty;});
+
+  // Build order data
+  let lines="", subtotal=0;
+  const cartSnapshot={};
+  Object.keys(cart).forEach(id=>{
+    const c=CAKES.find(x=>x.id===id),qty=cart[id];
+    lines+=`  • ${c.name} x${qty} = ${fmtRM(c.price*qty)}\n`;
+    subtotal+=c.price*qty;
+    cartSnapshot[id]={name:c.name,qty,price:c.price};
+  });
   const fee=delMode==="delivery"?1:0, total=subtotal+fee;
-  let addr="";
-  if(delMode==="delivery"){addr=`\n📍 Kolej: ${selectedKolej}\n🚪 Block ${document.getElementById("oBlock").value.trim()}, Room ${document.getElementById("oRoom").value.trim()}`;lines+=`  • Delivery fee = RM1\n`;}
-  const msg=`🍰 *NEW CAKE ORDER*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n\n🚚 Delivery: ${delMode==="pickup"?"Pickup":"Delivery"}${addr}\n\n🛒 Items:\n${lines}\n💰 Total: ${fmtRM(total)}\n\n💳 Payment: QR Payment\n\n———————————\nThank you! ❤️`;
+  let addrObj={}, addrText="";
+  if(delMode==="delivery"){
+    addrObj={kolej:selectedKolej,block:document.getElementById("oBlock").value.trim(),room:document.getElementById("oRoom").value.trim()};
+    addrText=`\n📍 Kolej: ${addrObj.kolej}\n🚪 Block ${addrObj.block}, Room ${addrObj.room}`;
+    lines+=`  • Delivery fee = RM1\n`;
+  }
+
+  // Save order to Firebase
+  const orderId=genOrderId();
+  dbSet(dbRef("orders/"+orderId),{
+    id:orderId,name,phone,delivery:delMode,address:addrObj,
+    items:cartSnapshot,total,status:"pending",
+    createdAt:Date.now(),updatedAt:Date.now()
+  });
+
+  const msg=`🍰 *NEW CAKE ORDER*\n\n🔖 Order ID: *${orderId}*\n\n👤 Name: ${name}\n📞 Phone: ${phone}\n\n🚚 Delivery: ${delMode==="pickup"?"Pickup":"Delivery"}${addrText}\n\n🛒 Items:\n${lines}\n💰 Total: ${fmtRM(total)}\n\n💳 Payment: QR Payment\n\nTrack your order on our website using ID: *${orderId}*\n\n———————————\nThank you! ❤️`;
   const waUrl="https://wa.me/60133374124?text="+encodeURIComponent(msg);
+
+  // Clear cart & show order ID badge
   cart={}; renderCart(); updateCount(); renderStockUI();
   document.getElementById("successBar").classList.add("show");
+  const badge=document.getElementById("orderIdBadge"), disp=document.getElementById("orderIdDisplay");
+  if(badge&&disp){disp.textContent=orderId;badge.style.display="block";}
   document.getElementById("waLink").href=waUrl;
   const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
   if(isIOS){window.location.href=waUrl;}
@@ -1092,6 +1280,178 @@ function submitOrder() {
   setTimeout(()=>{document.getElementById("waManual").style.display="block";},2000);
 }
 window.submitOrder = submitOrder;
+
+// ── ROUTING override for track + kitchen ──
+const _baseGoPage = goPage;
+window.goPage = function(p) {
+  if (p==="kitchen"&&!isKitchen&&!isAdmin) p="home";
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  const pg=document.getElementById("pg-"+p); if(!pg) return;
+  pg.classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));
+  const nb=document.getElementById("nb-"+p); if(nb) nb.classList.add("active");
+  if(!["admin","kitchen"].includes(p)) window.location.hash=p;
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+// ── KITCHEN LOGIN (same password, any ID) ──
+window.doLogin = function() {
+  const id=document.getElementById("loginId").value.trim(), pass=document.getElementById("loginPass").value;
+  if(id==="2024804824"&&pass==="mis02032005"){
+    isAdmin=true;isKitchen=true;closeLogin();
+    document.getElementById("lockBtn").classList.add("unlocked");
+    document.getElementById("lockBtn").textContent="🔓";
+    renderAdminCards();
+    if(preorderData) populatePreorderAdmin(preorderData);
+    goPage("admin");
+  } else if(pass==="mis02032005"){
+    isKitchen=true;closeLogin();
+    document.getElementById("lockBtn").classList.add("unlocked");
+    document.getElementById("lockBtn").textContent="🔓";
+    renderKitchen();
+    goPage("kitchen");
+  } else {
+    document.getElementById("loginErr").classList.add("show");
+    document.getElementById("loginPass").value="";
+  }
+};
+
+window.doKitchenLogout = function() {
+  isKitchen=false;isAdmin=false;
+  document.getElementById("lockBtn").classList.remove("unlocked");
+  document.getElementById("lockBtn").textContent="🔒";
+  goPage("home");
+};
+
+// ── ORDER TRACKING ──
+window.doTrack = function() {
+  const val=document.getElementById("trackInput").value.trim().toUpperCase();
+  const result=document.getElementById("trackResult");
+  if(!val) return;
+  const order=allOrders[val];
+  if(!order){result.innerHTML=`<div class="track-not-found">Order <strong>${val}</strong> not found. Please check your ID and try again.</div>`;return;}
+  const sm={
+    pending:{label:"Awaiting confirmation",cls:"ts-pending",icon:"⏳"},
+    confirmed:{label:"Order confirmed",cls:"ts-confirmed",icon:"✅"},
+    preparing:{label:"Preparing your order",cls:"ts-preparing",icon:"👩‍🍳"},
+    delivery:{label:"Out for delivery",cls:"ts-delivery",icon:"🚴"},
+    delivered:{label:"Delivered!",cls:"ts-delivered",icon:"🎉"}
+  };
+  const s=sm[order.status]||sm.pending;
+  let itemsHtml=Object.values(order.items||{}).map(i=>`<div class="track-item-row"><span>${i.name} × ${i.qty}</span><span>${fmtRM(i.price*i.qty)}</span></div>`).join("");
+  if(order.delivery==="delivery") itemsHtml+=`<div class="track-item-row"><span>Delivery fee</span><span>RM1</span></div>`;
+  const addrHtml=order.delivery==="delivery"&&order.address?.kolej?`<div class="track-delivery-info">📍 ${order.address.kolej}, Block ${order.address.block}, Room ${order.address.room}</div>`:"";
+  const date=new Date(order.createdAt).toLocaleDateString("en-MY",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
+  result.innerHTML=`<div class="track-result">
+    <div class="track-order-id">${order.id} · ${date}</div>
+    <div class="track-status-badge ${s.cls}"><span class="ts-dot"></span>${s.icon} ${s.label}</div>
+    <div style="font-size:14px;font-weight:500;color:#f5f2ed">${order.name}</div>
+    <div style="font-size:12px;color:#9a9a8e">${order.delivery==="pickup"?"Pickup":"Delivery"}</div>
+    ${addrHtml}
+    <div class="track-items">${itemsHtml}</div>
+    <div class="track-total"><span>Total</span><span>${fmtRM(order.total)}</span></div>
+  </div>`;
+};
+
+// ── KITCHEN RENDER ──
+function renderKitchen() {
+  const groups={pending:[],confirmed:[],preparing:[],delivery:[],delivered:[]};
+  Object.values(allOrders).forEach(o=>{ if(groups[o.status]) groups[o.status].push(o); });
+  Object.keys(groups).forEach(k=>groups[k].sort((a,b)=>b.createdAt-a.createdAt));
+
+  // Stats
+  const statsEl=document.getElementById("kitchenStats");
+  if(statsEl){
+    const revenue=groups.delivered.reduce((s,o)=>s+o.total,0);
+    statsEl.innerHTML=`
+      <div class="kstat"><div class="kstat-num">${groups.pending.length}</div><div class="kstat-label">Pending</div></div>
+      <div class="kstat"><div class="kstat-num">${groups.confirmed.length+groups.preparing.length}</div><div class="kstat-label">In progress</div></div>
+      <div class="kstat"><div class="kstat-num">${groups.delivery.length}</div><div class="kstat-label">Delivering</div></div>
+      <div class="kstat"><div class="kstat-num">${fmtRM(revenue)}</div><div class="kstat-label">Revenue</div></div>`;
+  }
+
+  ["pending","confirmed","preparing","delivery","delivered"].forEach(status=>{
+    const c=document.getElementById("ktab-"+status); if(!c) return;
+    const orders=groups[status];
+    if(!orders.length){c.innerHTML=`<div class="kitchen-empty">No ${status} orders</div>`;return;}
+    c.innerHTML="";
+    orders.forEach(o=>c.appendChild(buildOrderCard(o)));
+  });
+
+  const bs=document.getElementById("broadcastSection");
+  if(bs) bs.style.display=groups.preparing.length?"block":"none";
+  renderShiftSummary(groups.delivered);
+}
+
+function buildOrderCard(order) {
+  const card=document.createElement("div"); card.className="order-card";
+  const time=new Date(order.createdAt).toLocaleTimeString("en-MY",{hour:"2-digit",minute:"2-digit"});
+  const date=new Date(order.createdAt).toLocaleDateString("en-MY",{day:"numeric",month:"short"});
+  const itemsHtml=Object.values(order.items||{}).map(i=>`<div class="oc-item-row"><span>${i.name} × ${i.qty}</span><span>${fmtRM(i.price*i.qty)}</span></div>`).join("");
+  const deliveryHtml=order.delivery==="delivery"&&order.address?.kolej
+    ?`<div class="oc-delivery">📍 ${order.address.kolej}, Blk ${order.address.block}, Rm ${order.address.room}</div>`
+    :`<div class="oc-delivery">📦 Pickup</div>`;
+  const btns={
+    pending:`<button class="oc-btn oc-btn-confirm" onclick="updateOrderStatus('${order.id}','confirmed')">Confirm order</button>`,
+    confirmed:`<button class="oc-btn oc-btn-confirm" onclick="updateOrderStatus('${order.id}','preparing')">Start preparing</button>`,
+    preparing:`<button class="oc-btn oc-btn-deliver" onclick="updateOrderStatus('${order.id}','delivery')">Out for delivery</button>`,
+    delivery:`<button class="oc-btn oc-btn-deliver" onclick="updateOrderStatus('${order.id}','delivered')">Mark delivered ✓</button>`,
+    delivered:""
+  };
+  card.innerHTML=`
+    <div class="oc-top">
+      <div><div class="oc-id">${order.id}</div><div class="oc-customer">${order.name}</div><div class="oc-phone">${order.phone}</div></div>
+      <div class="oc-time">${date} ${time}</div>
+    </div>
+    <div class="oc-items">${itemsHtml}</div>
+    ${deliveryHtml}
+    <div class="oc-total">Total: ${fmtRM(order.total)}</div>
+    ${btns[order.status]?`<div class="oc-actions">${btns[order.status]}</div>`:""}`;
+  return card;
+}
+
+window.updateOrderStatus = function(id,status) {
+  dbRef("orders/"+id+"/status").set(status);
+  dbRef("orders/"+id+"/updatedAt").set(Date.now());
+};
+
+window.broadcastDelivery = function() {
+  Object.values(allOrders).forEach(o=>{
+    if(o.status==="preparing"){
+      dbRef("orders/"+o.id+"/status").set("delivery");
+      dbRef("orders/"+o.id+"/updatedAt").set(Date.now());
+    }
+  });
+};
+
+function renderShiftSummary(delivered) {
+  const c=document.getElementById("summaryContent"); if(!c) return;
+  if(!delivered.length){c.innerHTML=`<div class="kitchen-empty">No deliveries completed yet this session</div>`;return;}
+  const rev=delivered.reduce((s,o)=>s+o.total,0);
+  const counts={};
+  delivered.forEach(o=>Object.values(o.items||{}).forEach(i=>{counts[i.name]=(counts[i.name]||0)+i.qty;}));
+  const summary=Object.entries(counts).map(([n,q])=>`${n}: ${q} unit${q>1?"s":""}`).join(" · ");
+  c.innerHTML=`<div class="shift-summary-card">
+    <div class="ss-header">
+      <div><div style="font-size:13px;font-weight:500;color:#f5f2ed;margin-bottom:2px">Session summary</div><div class="ss-date">${delivered.length} order${delivered.length>1?"s":""} delivered</div></div>
+      <div class="ss-total">${fmtRM(rev)}</div>
+    </div>
+    <div class="ss-items">${summary||"—"}</div>
+  </div>
+  <div id="deliveredList"></div>`;
+  const list=document.getElementById("deliveredList");
+  delivered.forEach(o=>list.appendChild(buildOrderCard(o)));
+}
+
+window.switchKTab = function(tab,btn) {
+  currentKTab=tab;
+  document.querySelectorAll(".ktab").forEach(x=>x.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  document.querySelectorAll(".kitchen-tab-content").forEach(x=>x.classList.remove("active"));
+  const tc=document.getElementById("ktab-"+tab); if(tc) tc.classList.add("active");
+  const bs=document.getElementById("broadcastSection");
+  if(bs) bs.style.display=(tab==="preparing"&&Object.values(allOrders).some(o=>o.status==="preparing"))?"block":"none";
+};
 </script>
 </body>
 </html>
