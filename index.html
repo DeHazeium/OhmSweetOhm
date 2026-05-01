@@ -693,7 +693,11 @@ footer strong{color:var(--accent);font-weight:500}
     <div id="ktab-preparing" class="kitchen-tab-content"></div>
     <div id="ktab-delivery" class="kitchen-tab-content"></div>
     <div id="ktab-delivered" class="kitchen-tab-content">
-      <button class="close-shift-btn" onclick="closeShift()">⬇ Close shift & save to history</button>
+      <div id="closeShiftWrap" style="margin-bottom:16px">
+        <button class="close-shift-btn" onclick="closeShift()">⬇ Close shift &amp; save to history</button>
+        <p style="font-size:11px;color:#5a5a52;text-align:center;margin-top:8px;line-height:1.6">Closes this shift, saves revenue to history,<br>and clears delivered orders from the queue</p>
+      </div>
+      <div id="ktab-delivered-orders"></div>
     </div>
     <div id="ktab-summary" class="kitchen-tab-content">
       <div id="summaryContent"></div>
@@ -1430,13 +1434,21 @@ function renderKitchen() {
       <div class="kstat"><div class="kstat-num">${fmtRM(revenue)}</div><div class="kstat-label">Revenue</div></div>`;
   }
 
-  ["pending","confirmed","preparing","delivery","delivered"].forEach(status=>{
+  ["pending","confirmed","preparing","delivery"].forEach(status=>{
     const c=document.getElementById("ktab-"+status); if(!c) return;
     const orders=groups[status];
     if(!orders.length){c.innerHTML=`<div class="kitchen-empty">No ${status} orders</div>`;return;}
     c.innerHTML="";
     orders.forEach(o=>c.appendChild(buildOrderCard(o)));
   });
+
+  // Delivered — render into sub-div (keep close shift button)
+  const deliveredContainer=document.getElementById("ktab-delivered-orders");
+  if(deliveredContainer){
+    const orders=groups.delivered;
+    if(!orders.length){deliveredContainer.innerHTML=`<div class="kitchen-empty">No delivered orders this shift</div>`;}
+    else{deliveredContainer.innerHTML="";orders.forEach(o=>deliveredContainer.appendChild(buildOrderCard(o)));}
+  }
 
   const bs=document.getElementById("broadcastSection");
   if(bs) bs.style.display=groups.preparing.length?"block":"none";
