@@ -636,7 +636,7 @@ footer strong{color:var(--accent);font-weight:500}
       <button class="ktab active" onclick="switchKTab('pending',this)">Pending</button>
       <button class="ktab" onclick="switchKTab('confirmed',this)">Confirmed</button>
       <button class="ktab" onclick="switchKTab('preparing',this)">Preparing</button>
-      <button class="ktab" onclick="switchKTab('delivery',this)">Out for delivery</button>
+      <button class="ktab" onclick="switchKTab('delivery',this)">Ready / Delivering</button>
       <button class="ktab" onclick="switchKTab('delivered',this)">Delivered</button>
       <button class="ktab" onclick="switchKTab('summary',this)">Shift summary</button>
     </div>
@@ -769,7 +769,7 @@ const CAKES = [
 function fmt(n)   { return Number(n).toFixed(2).replace(/\.00$/,"").replace(/(\.\d)0$/,"$1"); }
 function fmtRM(n) { return "RM"+fmt(n); }
 
-let stock={}, isAdmin=false, cart={}, delMode="pickup", selectedKolej="";
+let stock={}, isAdmin=false, isKitchen=false, allOrders={}, cart={}, delMode="pickup", selectedKolej="";
 
 // ── STOCK LISTENER ──
 dbOn(stockRef, snap => {
@@ -1106,11 +1106,15 @@ window.onPreorderToggle = onPreorderToggle;
 // ── ROUTING ──
 function goPage(p) {
   if (p==="admin"&&!isAdmin) p="home";
+  if (p==="kitchen"&&!isKitchen&&!isAdmin) p="home";
+  const pg=document.getElementById("pg-"+p);
+  if (!pg) return;
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-  document.getElementById("pg-"+p).classList.add("active");
+  pg.classList.add("active");
   document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));
   const nb=document.getElementById("nb-"+p); if(nb) nb.classList.add("active");
-  if (p!=="admin") window.location.hash=p;
+  if (!["admin","kitchen"].includes(p)) window.location.hash=p;
+  if (p==="kitchen") renderKitchen();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 window.goPage = goPage;
@@ -1212,11 +1216,11 @@ function genOrderId() {
 }
 
 const ordersRef = dbRef("orders");
-let isKitchen = false, allOrders = {}, currentKTab = "pending";
+let currentKTab = "pending";
 
 dbOn(ordersRef, snap => {
   allOrders = snap.val() || {};
-  if (isKitchen || isAdmin) renderKitchen();
+  if (document.getElementById("pg-kitchen")?.classList.contains("active")) renderKitchen();
 });
 
 function submitOrder() {
@@ -1281,19 +1285,6 @@ function submitOrder() {
 }
 window.submitOrder = submitOrder;
 
-// ── ROUTING override for track + kitchen ──
-const _baseGoPage = goPage;
-window.goPage = function(p) {
-  if (p==="kitchen"&&!isKitchen&&!isAdmin) p="home";
-  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-  const pg=document.getElementById("pg-"+p); if(!pg) return;
-  pg.classList.add("active");
-  document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));
-  const nb=document.getElementById("nb-"+p); if(nb) nb.classList.add("active");
-  if(!["admin","kitchen"].includes(p)) window.location.hash=p;
-  window.scrollTo({top:0,behavior:"smooth"});
-};
-
 // ── KITCHEN LOGIN (same password, any ID) ──
 window.doLogin = function() {
   const id=document.getElementById("loginId").value.trim(), pass=document.getElementById("loginPass").value;
@@ -1330,12 +1321,21 @@ window.doTrack = function() {
   if(!val) return;
   const order=allOrders[val];
   if(!order){result.innerHTML=`<div class="track-not-found">Order <strong>${val}</strong> not found. Please check your ID and try again.</div>`;return;}
+  const isDelivery = order.delivery === "delivery";
   const sm={
     pending:{label:"Awaiting confirmation",cls:"ts-pending",icon:"⏳"},
     confirmed:{label:"Order confirmed",cls:"ts-confirmed",icon:"✅"},
     preparing:{label:"Preparing your order",cls:"ts-preparing",icon:"👩‍🍳"},
-    delivery:{label:"Out for delivery",cls:"ts-delivery",icon:"🚴"},
-    delivered:{label:"Delivered!",cls:"ts-delivered",icon:"🎉"}
+    delivery:{
+      label: isDelivery ? "Out for delivery" : "Ready for pickup",
+      cls:"ts-delivery",
+      icon: isDelivery ? "🚴" : "📦"
+    },
+    delivered:{
+      label: isDelivery ? "Delivered!" : "Collected!",
+      cls:"ts-delivered",
+      icon:"🎉"
+    }
   };
   const s=sm[order.status]||sm.pending;
   let itemsHtml=Object.values(order.items||{}).map(i=>`<div class="track-item-row"><span>${i.name} × ${i.qty}</span><span>${fmtRM(i.price*i.qty)}</span></div>`).join("");
@@ -1391,11 +1391,16 @@ function buildOrderCard(order) {
   const deliveryHtml=order.delivery==="delivery"&&order.address?.kolej
     ?`<div class="oc-delivery">📍 ${order.address.kolej}, Blk ${order.address.block}, Rm ${order.address.room}</div>`
     :`<div class="oc-delivery">📦 Pickup</div>`;
+  const isDelivery = order.delivery === "delivery";
   const btns={
     pending:`<button class="oc-btn oc-btn-confirm" onclick="updateOrderStatus('${order.id}','confirmed')">Confirm order</button>`,
     confirmed:`<button class="oc-btn oc-btn-confirm" onclick="updateOrderStatus('${order.id}','preparing')">Start preparing</button>`,
-    preparing:`<button class="oc-btn oc-btn-deliver" onclick="updateOrderStatus('${order.id}','delivery')">Out for delivery</button>`,
-    delivery:`<button class="oc-btn oc-btn-deliver" onclick="updateOrderStatus('${order.id}','delivered')">Mark delivered ✓</button>`,
+    preparing:isDelivery
+      ?`<button class="oc-btn oc-btn-deliver" onclick="updateOrderStatus('${order.id}','delivery')">Out for delivery</button>`
+      :`<button class="oc-btn oc-btn-deliver" onclick="updateOrderStatus('${order.id}','delivery')">Ready for pickup</button>`,
+    delivery:isDelivery
+      ?`<button class="oc-btn oc-btn-deliver" onclick="updateOrderStatus('${order.id}','delivered')">Mark delivered ✓</button>`
+      :`<button class="oc-btn oc-btn-deliver" onclick="updateOrderStatus('${order.id}','delivered')">Collected ✓</button>`,
     delivered:""
   };
   card.innerHTML=`
