@@ -693,14 +693,12 @@ footer strong{color:var(--accent);font-weight:500}
     <div id="ktab-preparing" class="kitchen-tab-content"></div>
     <div id="ktab-delivery" class="kitchen-tab-content"></div>
     <div id="ktab-delivered" class="kitchen-tab-content">
-      <div id="closeShiftWrap" style="margin-bottom:16px">
-        <button class="close-shift-btn" onclick="closeShift()">⬇ Close shift &amp; save to history</button>
-        <p style="font-size:11px;color:#5a5a52;text-align:center;margin-top:8px;line-height:1.6">Closes this shift, saves revenue to history,<br>and clears delivered orders from the queue</p>
-      </div>
       <div id="ktab-delivered-orders"></div>
     </div>
     <div id="ktab-summary" class="kitchen-tab-content">
       <div id="summaryContent"></div>
+      <button class="close-shift-btn" id="closeShiftBtn" onclick="closeShift()" style="display:none">⬇ Close shift &amp; save to history</button>
+      <p id="closeShiftHint" style="font-size:11px;color:#5a5a52;text-align:center;margin-top:8px;line-height:1.6;display:none">Saves revenue to history and clears delivered orders from the queue</p>
     </div>
     <div id="ktab-history" class="kitchen-tab-content">
       <div id="shiftHistoryContent"></div>
@@ -1540,44 +1538,108 @@ dbOn(shiftHistoryRef, snap => {
 });
 
 function renderShiftHistory() {
-  const c = document.getElementById("shiftHistoryContent"); if(!c) return;
-  const shifts = Object.values(shiftHistory).sort((a,b)=>b.closedAt-a.closedAt);
-  if (!shifts.length) { c.innerHTML=`<div class="kitchen-empty">No shift history yet</div>`; return; }
-
-  const totalEver = shifts.reduce((s,sh)=>s+sh.revenue,0);
-  c.innerHTML = `<div class="shift-summary-card" style="margin-bottom:16px">
+  const c=document.getElementById("shiftHistoryContent"); if(!c) return;
+  const shifts=Object.values(shiftHistory).sort((a,b)=>b.closedAt-a.closedAt);
+  if(!shifts.length){c.innerHTML=`<div class="kitchen-empty">No shift history yet</div>`;return;}
+  const totalEver=shifts.reduce((s,sh)=>s+sh.revenue,0);
+  const totalOrders=shifts.reduce((s,sh)=>s+sh.orderCount,0);
+  let html=`<div class="shift-summary-card" style="margin-bottom:20px">
     <div class="ss-header">
-      <div><div style="font-size:13px;font-weight:500;color:#f5f2ed">All-time revenue</div><div class="ss-date">${shifts.length} shift${shifts.length>1?"s":""} · ${shifts.reduce((s,sh)=>s+sh.orderCount,0)} orders total</div></div>
+      <div><div style="font-size:13px;font-weight:500;color:#f5f2ed;margin-bottom:3px">All-time revenue</div>
+      <div class="ss-date">${shifts.length} shift${shifts.length>1?"s":""}  ·  ${totalOrders} orders total</div></div>
       <div class="ss-total">${fmtRM(totalEver)}</div>
     </div>
-  </div>` + shifts.map(sh=>{
-    const date = new Date(sh.closedAt).toLocaleDateString("en-MY",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});
-    const items = Object.entries(sh.itemCounts||{}).map(([n,q])=>`${n}: ${q}`).join(" · ");
-    return `<div class="shift-history-card">
-      <div class="sh-header"><div class="sh-date">${date}</div><div class="sh-revenue">${fmtRM(sh.revenue)}</div></div>
-      <div class="sh-meta">${sh.orderCount} order${sh.orderCount>1?"s":""}</div>
-      <div class="sh-items">${items||"—"}</div>
+  </div>`;
+  shifts.forEach(sh=>{
+    const date=new Date(sh.closedAt).toLocaleDateString("en-MY",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+    const time=new Date(sh.closedAt).toLocaleTimeString("en-MY",{hour:"2-digit",minute:"2-digit"});
+    const itemSummary=Object.entries(sh.itemCounts||{}).map(([n,q])=>`${n} × ${q}`).join("  ·  ");
+    const shiftOrders=Object.values(sh.orders||{}).sort((a,b)=>a.createdAt-b.createdAt);
+    let ordersHtml="";
+    shiftOrders.forEach(o=>{
+      const oTime=new Date(o.createdAt).toLocaleTimeString("en-MY",{hour:"2-digit",minute:"2-digit"});
+      const itemsList=Object.values(o.items||{}).map(i=>`${i.name} × ${i.qty} (${fmtRM(i.price*i.qty)})`).join(", ");
+      const addrText=o.delivery==="delivery"&&o.address?.kolej
+        ?`📍 ${o.address.kolej}, Blk ${o.address.block} Rm ${o.address.room}`
+        :`📦 Pickup`;
+      ordersHtml+=`<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+          <span style="font-size:10px;letter-spacing:0.1em;color:#9a9a8e;text-transform:uppercase">${o.id}</span>
+          <span style="font-size:12px;font-weight:500;color:var(--accent)">${fmtRM(o.total)}</span>
+        </div>
+        <div style="font-size:13px;font-weight:500;color:#f5f2ed">${o.name} <span style="font-size:11px;color:#5a5a52;font-weight:400">${oTime}</span></div>
+        <div style="font-size:11px;color:#9a9a8e;margin-top:2px">${o.phone}</div>
+        <div style="font-size:11px;color:#9a9a8e;margin-top:3px">${itemsList}</div>
+        <div style="font-size:11px;color:#5a5a52;margin-top:2px">${addrText}</div>
+      </div>`;
+    });
+    html+=`<div class="shift-history-card">
+      <div class="sh-header">
+        <div><div class="sh-date">${date}</div><div style="font-size:11px;color:#9a9a8e;margin-top:2px">${time}  ·  ${sh.orderCount} order${sh.orderCount>1?"s":""}</div></div>
+        <div class="sh-revenue">${fmtRM(sh.revenue)}</div>
+      </div>
+      <div class="sh-items" style="margin-bottom:12px">${itemSummary||"—"}</div>
+      <details>
+        <summary style="font-size:12px;color:#9a9a8e;margin-bottom:10px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;user-select:none">
+          <span style="font-size:10px;transition:transform 0.2s">▸</span> Show all ${sh.orderCount} order detail${sh.orderCount>1?"s":""}
+        </summary>
+        <div style="margin-top:4px">${ordersHtml||"<div style='font-size:12px;color:#5a5a52;padding:8px 0'>No details saved</div>"}</div>
+      </details>
+      <button onclick="promptDeleteShift('${sh.id}')" style="margin-top:14px;width:100%;padding:8px;background:none;border:1px solid rgba(224,82,82,0.15);border-radius:8px;font-size:11px;color:#5a5a52;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.borderColor='rgba(224,82,82,0.5)';this.style.color='#e05252'" onmouseout="this.style.borderColor='rgba(224,82,82,0.15)';this.style.color='#5a5a52'">🗑 Delete this shift record</button>
     </div>`;
-  }).join("");
+  });
+  c.innerHTML=html;
 }
+
+window.promptDeleteShift = function(shiftId) {
+  const id=prompt("Enter your admin ID:");
+  if(!id) return;
+  const pass=prompt("Enter your admin password:");
+  if(id==="2024804824"&&pass==="mis02032005"){
+    dbSet(dbRef("shiftHistory/"+shiftId),null);
+    showToast("Shift record deleted.");
+  } else {
+    showToast("Incorrect credentials — shift not deleted.");
+  }
+};
 
 function renderShiftSummary(delivered) {
   const c=document.getElementById("summaryContent"); if(!c) return;
-  if(!delivered.length){c.innerHTML=`<div class="kitchen-empty">No deliveries completed yet this shift</div>`;return;}
+  const btn=document.getElementById("closeShiftBtn"), hint=document.getElementById("closeShiftHint");
+  if(!delivered.length){
+    c.innerHTML=`<div class="kitchen-empty">No delivered orders yet this shift</div>`;
+    if(btn) btn.style.display="none"; if(hint) hint.style.display="none"; return;
+  }
   const rev=delivered.reduce((s,o)=>s+o.total,0);
   const counts={};
   delivered.forEach(o=>Object.values(o.items||{}).forEach(i=>{counts[i.name]=(counts[i.name]||0)+i.qty;}));
-  const summary=Object.entries(counts).map(([n,q])=>`${n}: ${q} unit${q>1?"s":""}`).join(" · ");
+  const summary=Object.entries(counts).map(([n,q])=>`${n} × ${q}`).join("  ·  ");
+  let ordersHtml="";
+  delivered.sort((a,b)=>b.createdAt-a.createdAt).forEach(o=>{
+    const oTime=new Date(o.createdAt).toLocaleTimeString("en-MY",{hour:"2-digit",minute:"2-digit"});
+    const itemsList=Object.values(o.items||{}).map(i=>`${i.name} × ${i.qty}`).join(", ");
+    const addrText=o.delivery==="delivery"&&o.address?.kolej?`${o.address.kolej}, Blk ${o.address.block} Rm ${o.address.room}`:"Pickup";
+    ordersHtml+=`<div style="padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+        <span style="font-size:10px;letter-spacing:0.1em;color:#9a9a8e;text-transform:uppercase">${o.id}</span>
+        <span style="font-size:12px;font-weight:500;color:var(--accent)">${fmtRM(o.total)}</span>
+      </div>
+      <div style="font-size:13px;font-weight:500;color:#f5f2ed">${o.name} <span style="font-size:11px;color:#5a5a52;font-weight:400">${oTime}</span></div>
+      <div style="font-size:11px;color:#9a9a8e;margin-top:2px">${itemsList}</div>
+      <div style="font-size:11px;color:#5a5a52;margin-top:1px">${addrText}</div>
+    </div>`;
+  });
   c.innerHTML=`<div class="shift-summary-card">
     <div class="ss-header">
-      <div><div style="font-size:13px;font-weight:500;color:#f5f2ed;margin-bottom:2px">Current shift</div><div class="ss-date">${delivered.length} order${delivered.length>1?"s":""} delivered</div></div>
+      <div><div style="font-size:13px;font-weight:500;color:#f5f2ed;margin-bottom:3px">Current shift</div>
+      <div class="ss-date">${delivered.length} order${delivered.length>1?"s":""} delivered</div></div>
       <div class="ss-total">${fmtRM(rev)}</div>
     </div>
-    <div class="ss-items">${summary||"—"}</div>
-  </div>
-  <div id="deliveredList"></div>`;
-  const list=document.getElementById("deliveredList");
-  delivered.forEach(o=>list.appendChild(buildOrderCard(o)));
+    <div class="ss-items" style="margin-bottom:12px">${summary||"—"}</div>
+    ${ordersHtml}
+  </div>`;
+  if(btn){btn.style.display="block";btn.textContent=`⬇ Close shift  ·  ${fmtRM(rev)}  ·  ${delivered.length} order${delivered.length>1?"s":""}`;}
+  if(hint) hint.style.display="block";
 }
 
 window.switchKTab = function(tab,btn) {
