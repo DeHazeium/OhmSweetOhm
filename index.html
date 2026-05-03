@@ -179,7 +179,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .ropt-block:hover::after{width:100%}
 .ropt-block:hover{border-color:rgba(196,135,74,0.3);color:#f5f2ed}
 .ropt-block.active{border:1.5px solid var(--accent);color:var(--accent);background:rgba(196,135,74,0.08);font-weight:500}
-.addr-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.pickup-info-box{background:rgba(126,200,80,0.06);border:1px solid rgba(126,200,80,0.2);border-radius:12px;padding:14px 16px;animation:fadeSlideIn 0.3s ease}
+.pickup-info-icon{font-size:18px;margin-bottom:6px}
+.pickup-info-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#7ec850;font-weight:600;margin-bottom:4px}
+.pickup-info-location{font-size:14px;font-weight:500;color:#f5f2ed;margin-bottom:3px}
+.pickup-info-sub{font-size:12px;color:#9a9a8e;line-height:1.6}
 .err{font-size:11px;color:#e05252;margin-top:4px;display:none}
 .err.show{display:block}
 .qr-box{background:#0d0d0b;border-radius:10px;padding:16px;text-align:center;margin-top:6px;border:1px dashed rgba(196,135,74,0.35)}
@@ -597,11 +601,24 @@ footer strong{color:var(--accent);font-weight:500}
               </div>
               <div class="err" id="errKolej">Please select your kolej.</div>
             </div>
-            <div class="addr-grid">
-              <div><label class="flabel">Block</label><input class="finput" id="oBlock" placeholder="A"></div>
-              <div><label class="flabel">Room</label><input class="finput" id="oRoom" placeholder="205"></div>
+            <div class="fgroup">
+              <label class="flabel">Block</label>
+              <div class="radio-row">
+                <div class="ropt" id="blk-A" onclick="setBlock('A')">Block A</div>
+                <div class="ropt" id="blk-B" onclick="setBlock('B')">Block B</div>
+              </div>
+              <div class="err" id="errBlock">Please select your block.</div>
             </div>
-            <div class="err" id="errAddr">Please fill in block and room.</div>
+            <div class="fgroup">
+              <label class="flabel">Room no.</label>
+              <input class="finput" id="oRoom" placeholder="e.g. 205">
+            </div>
+            <div class="err" id="errAddr">Please fill in room number.</div>
+          </div>
+
+          <!-- PICKUP LOCATION INFO -->
+          <div id="pickupInfo" style="display:none;margin-top:10px">
+            <div class="pickup-info-box" id="pickupInfoBox"></div>
           </div>
           <div class="fgroup" style="margin-top:14px">
             <label class="flabel">Payment</label>
@@ -1249,24 +1266,86 @@ function updateCount() {
   if(bnPill){bnPill.style.display=n>0?"block":"none";bnPill.textContent=n;}
 }
 
+window.setBlock = setBlock;
+
 function setKolej(name) {
-  selectedKolej=name;
+  selectedKolej=name; selectedBlock="";
   document.querySelectorAll(".ropt-block").forEach(x=>x.classList.remove("active"));
-  document.getElementById({Seri_Mulu:"k-mulu","Seri Mulu":"k-mulu","Seri Gading":"k-gading","Seri Serapi":"k-serapi"}[name]).classList.add("active");
+  const map={"Seri Mulu":"k-mulu","Seri Gading":"k-gading","Seri Serapi":"k-serapi"};
+  const el=document.getElementById(map[name]); if(el) el.classList.add("active");
   document.getElementById("errKolej").classList.remove("show");
+  // Reset block buttons
+  document.getElementById("blk-A").classList.remove("active");
+  document.getElementById("blk-B").classList.remove("active");
 }
 window.setKolej = setKolej;
+
+let selectedBlock = "";
+
+const PICKUP_LOCATIONS = {
+  "Seri Mulu":   { location: "Seri Mulu, Block 6, Ground Floor", sub: "Look for the OhmSweetOhm table at the ground floor entrance." },
+  "Seri Gading": { location: "Seri Gading, Block 1, Ground Floor", sub: "Look for the OhmSweetOhm table at the ground floor entrance." },
+  "Seri Serapi": { location: "Seri Mulu, Block 6, Ground Floor", sub: "Seri Serapi residents collect from Seri Mulu — look for the OhmSweetOhm table." },
+};
 
 function setDel(m) {
   delMode=m;
   document.getElementById("rPickup").classList.toggle("active",m==="pickup");
   document.getElementById("rDelivery").classList.toggle("active",m==="delivery");
   const addr=document.getElementById("addrSection");
-  if(m==="delivery"){addr.style.display="block";addr.style.animation="fadeSlideIn 0.3s ease";}
-  else{addr.style.display="none";selectedKolej="";document.querySelectorAll(".ropt-block").forEach(x=>x.classList.remove("active"));}
+  const pickup=document.getElementById("pickupInfo");
+  if(m==="delivery"){
+    addr.style.display="block"; addr.style.animation="fadeSlideIn 0.3s ease";
+    if(pickup) pickup.style.display="none";
+  } else {
+    addr.style.display="none";
+    selectedKolej=""; selectedBlock="";
+    document.querySelectorAll(".ropt-block").forEach(x=>x.classList.remove("active"));
+    // Show pickup kolej selector
+    if(pickup) { pickup.style.display="block"; renderPickupInfo(); }
+  }
   renderCart();
 }
 window.setDel = setDel;
+
+function renderPickupInfo() {
+  const box=document.getElementById("pickupInfoBox");
+  const wrap=document.getElementById("pickupInfo");
+  if(!box||!wrap) return;
+  if(!selectedKolej){
+    // Show kolej selector for pickup
+    box.innerHTML=`<div class="pickup-info-label">Your kolej</div>
+      <div class="radio-col" style="margin-top:8px">
+        <div class="ropt-block" id="pk-mulu" onclick="setPickupKolej('Seri Mulu')">Seri Mulu</div>
+        <div class="ropt-block" id="pk-gading" onclick="setPickupKolej('Seri Gading')">Seri Gading</div>
+        <div class="ropt-block" id="pk-serapi" onclick="setPickupKolej('Seri Serapi')">Seri Serapi</div>
+      </div>
+      <div class="err" id="errPickupKolej" style="margin-top:6px">Please select your kolej.</div>`;
+    return;
+  }
+  const info=PICKUP_LOCATIONS[selectedKolej];
+  box.innerHTML=`<div class="pickup-info-icon">📍</div>
+    <div class="pickup-info-label">Your pickup point</div>
+    <div class="pickup-info-location">${info.location}</div>
+    <div class="pickup-info-sub">${info.sub}</div>
+    <button onclick="selectedKolej='';renderPickupInfo()" style="margin-top:10px;background:none;border:none;font-size:11px;color:#9a9a8e;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:underline;padding:0">Change kolej</button>`;
+}
+
+window.setPickupKolej = function(name) {
+  selectedKolej=name;
+  document.querySelectorAll("#pk-mulu,#pk-gading,#pk-serapi").forEach(x=>x.classList.remove("active"));
+  const map={"Seri Mulu":"pk-mulu","Seri Gading":"pk-gading","Seri Serapi":"pk-serapi"};
+  const el=document.getElementById(map[name]); if(el) el.classList.add("active");
+  const err=document.getElementById("errPickupKolej"); if(err) err.classList.remove("show");
+  setTimeout(renderPickupInfo, 200);
+};
+
+function setBlock(b) {
+  selectedBlock=b;
+  document.getElementById("blk-A").classList.toggle("active",b==="A");
+  document.getElementById("blk-B").classList.toggle("active",b==="B");
+  document.getElementById("errBlock").classList.remove("show");
+}
 
 function validPhone(p){return/^(\+?60|0)[0-9]{8,10}$/.test(p.replace(/[-\s]/g,""));}
 
@@ -1295,8 +1374,15 @@ function submitOrder() {
   if(!Object.keys(cart).length){document.getElementById("errCart").classList.add("show");ok=false;}else document.getElementById("errCart").classList.remove("show");
   if(delMode==="delivery"){
     if(!selectedKolej){document.getElementById("errKolej").classList.add("show");ok=false;}else document.getElementById("errKolej").classList.remove("show");
-    const b=document.getElementById("oBlock").value.trim(), r=document.getElementById("oRoom").value.trim();
-    if(!b||!r){document.getElementById("errAddr").classList.add("show");ok=false;}else document.getElementById("errAddr").classList.remove("show");
+    if(!selectedBlock){document.getElementById("errBlock").classList.add("show");ok=false;}else document.getElementById("errBlock").classList.remove("show");
+    const r=document.getElementById("oRoom").value.trim();
+    if(!r){document.getElementById("errAddr").classList.add("show");ok=false;}else document.getElementById("errAddr").classList.remove("show");
+  } else {
+    // Pickup — need kolej selected
+    if(!selectedKolej){
+      const err=document.getElementById("errPickupKolej"); if(err) err.classList.add("show");
+      ok=false;
+    }
   }
   if(!ok) return;
 
@@ -1321,9 +1407,14 @@ function submitOrder() {
   const fee=delMode==="delivery"?1:0, total=subtotal+fee;
   let addrObj={}, addrText="";
   if(delMode==="delivery"){
-    addrObj={kolej:selectedKolej,block:document.getElementById("oBlock").value.trim(),room:document.getElementById("oRoom").value.trim()};
-    addrText=`\n📍 Kolej: ${addrObj.kolej}\n🚪 Block ${addrObj.block}, Room ${addrObj.room}`;
+    const room=document.getElementById("oRoom").value.trim();
+    addrObj={kolej:selectedKolej,block:selectedBlock,room};
+    addrText=`\n📍 Kolej: ${selectedKolej}\n🚪 Block ${selectedBlock}, Room ${room}`;
     lines+=`  • Delivery fee = RM1\n`;
+  } else {
+    const info=PICKUP_LOCATIONS[selectedKolej]||{location:selectedKolej};
+    addrObj={kolej:selectedKolej,pickupPoint:info.location};
+    addrText=`\n📍 Pickup: ${info.location}`;
   }
 
   // Save order to Firebase (non-blocking — WhatsApp opens regardless)
@@ -1471,7 +1562,7 @@ function buildOrderCard(order) {
   const itemsHtml=Object.values(order.items||{}).map(i=>`<div class="oc-item-row"><span>${i.name} × ${i.qty}</span><span>${fmtRM(i.price*i.qty)}</span></div>`).join("");
   const deliveryHtml=order.delivery==="delivery"&&order.address?.kolej
     ?`<div class="oc-delivery">📍 ${order.address.kolej}, Blk ${order.address.block}, Rm ${order.address.room}</div>`
-    :`<div class="oc-delivery">📦 Pickup</div>`;
+    :`<div class="oc-delivery">📦 Pickup — ${order.address?.pickupPoint||order.address?.kolej||"Pickup"}</div>`;
   const isDelivery = order.delivery === "delivery";
   const btns={
     pending:`<button class="oc-btn oc-btn-confirm" onclick="updateOrderStatus('${order.id}','confirmed')">Confirm order</button>`,
