@@ -109,18 +109,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:fl
 .btn-ghost{padding:13px 28px;background:transparent;color:#f5f2ed;border:1px solid rgba(255,255,255,0.15);border-radius:7px;font-size:13px;font-family:"DM Sans",sans-serif;cursor:pointer;letter-spacing:0.03em;transition:all 0.2s}
 .btn-ghost:hover{border-color:rgba(255,255,255,0.5)}
 
-.hero-right{display:flex;flex-direction:column;gap:16px;justify-content:center;padding:40px 0}
-.cake-stack{display:flex;flex-direction:column;gap:14px;width:100%}
-.stack-item{cursor:pointer;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s ease;animation:popIn 0.5s ease both;border-radius:20px}
-.stack-item.s-left{align-self:flex-start;width:82%;animation-delay:0.1s}
-.stack-item.s-center{align-self:center;width:90%;animation-delay:0.2s}
-.stack-item.s-right{align-self:flex-end;width:82%;animation-delay:0.3s}
-.stack-item:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 20px 50px rgba(0,0,0,0.8),0 0 30px rgba(196,135,74,0.08)}
-.stack-card{background:#161612;border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.6)}
-.stack-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
-.stack-label{padding:12px 16px;background:#161612;display:flex;align-items:center;justify-content:space-between}
-.stack-name{font-family:"Cormorant Garamond",serif;font-size:17px;font-weight:400;color:#f5f2ed;letter-spacing:0.02em}
-.stack-price{font-size:12px;color:var(--accent);font-weight:500;margin-top:3px}
+.hero-right{display:flex;align-items:center;justify-content:center;padding:40px 0}
+.hero-img-wrap{position:relative;width:100%}
+.hero-img-wrap::before{content:"";position:absolute;inset:-20px;background:radial-gradient(ellipse at center,rgba(196,135,74,0.08) 0%,transparent 70%);pointer-events:none;z-index:0}
+.hero-plating{width:100%;max-width:520px;display:block;margin:0 auto;border-radius:24px;box-shadow:0 24px 80px rgba(0,0,0,0.6),0 0 60px rgba(196,135,74,0.06);animation:popIn 0.7s cubic-bezier(0.34,1.56,0.64,1) both;position:relative;z-index:1;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.4s ease}
+.hero-plating:hover{transform:scale(1.02) translateY(-6px);box-shadow:0 32px 100px rgba(0,0,0,0.7),0 0 80px rgba(196,135,74,0.10)}
 
 .menu-header{padding:56px 60px 36px;max-width:1200px;margin:0 auto}
 .menu-eyebrow{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;font-weight:500}
@@ -349,10 +342,9 @@ footer strong{color:var(--accent);font-weight:500}
 
 @media(max-width:750px){
   nav{padding:14px 18px}
-  .home-hero{grid-template-columns:1fr;padding:28px 20px;gap:16px;min-height:auto}
+  .home-hero{grid-template-columns:1fr;padding:28px 20px;gap:24px;min-height:auto}
   .hero-right{padding:0 0 20px}
-  .stack-item.s-left,.stack-item.s-right{width:78%}
-  .stack-item.s-center{width:86%}
+  .hero-plating{max-width:100%;border-radius:16px}
   .menu-grid,.menu-header,.order-wrap{padding-left:20px;padding-right:20px}
   .menu-grid{grid-template-columns:1fr 1fr}
   .order-layout{grid-template-columns:1fr}
@@ -462,34 +454,8 @@ footer strong{color:var(--accent);font-weight:500}
       </div>
     </div>
     <div class="hero-right">
-      <div class="cake-stack">
-        <div class="stack-item s-left" onclick="addFromCard('classic')">
-          <div class="stack-card">
-            <img src="images/classic.png" alt="Classic Batik">
-            <div class="stack-label">
-              <div><div class="stack-name">Classic Batik</div><div class="stack-price" id="sp-classic">RM15</div></div>
-              <span id="home-badge-classic"></span>
-            </div>
-          </div>
-        </div>
-        <div class="stack-item s-center" onclick="addFromCard('horlicks')">
-          <div class="stack-card">
-            <img src="images/horlicks.png" alt="Horlick Batik">
-            <div class="stack-label">
-              <div><div class="stack-name">Horlick Batik</div><div class="stack-price" id="sp-horlicks">RM15</div></div>
-              <span id="home-badge-horlicks"></span>
-            </div>
-          </div>
-        </div>
-        <div class="stack-item s-right" onclick="addFromCard('matcha')">
-          <div class="stack-card">
-            <img src="images/matcha.png" alt="Matcha Batik">
-            <div class="stack-label">
-              <div><div class="stack-name">Matcha Batik</div><div class="stack-price" id="sp-matcha">RM15</div></div>
-              <span id="home-badge-matcha"></span>
-            </div>
-          </div>
-        </div>
+      <div class="hero-img-wrap">
+        <img src="images/plating.png" alt="OhmSweetOhm Batik Cakes" class="hero-plating">
       </div>
     </div>
   </div>
