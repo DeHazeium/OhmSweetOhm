@@ -992,7 +992,8 @@ window.closeLogin = closeLogin;
 
 function doLogin() {
   const id=document.getElementById("loginId").value.trim(), pass=document.getElementById("loginPass").value;
-  if (id==="2024804824"&&pass==="mis02032005") {
+  const isMainAdmin=(id==="2024804824"&&pass==="mis02032005")||(id==="osm123"&&pass==="12345");
+  if (isMainAdmin) {
     isAdmin=true; closeLogin();
     document.getElementById("lockBtn").classList.add("unlocked");
     document.getElementById("lockBtn").textContent="🔓";
@@ -1437,14 +1438,15 @@ window.submitOrder = submitOrder;
 // ── KITCHEN LOGIN (same password, any ID) ──
 window.doLogin = function() {
   const id=document.getElementById("loginId").value.trim(), pass=document.getElementById("loginPass").value;
-  if(id==="2024804824"&&pass==="mis02032005"){
+  const isMainAdmin=(id==="2024804824"&&pass==="mis02032005")||(id==="osm123"&&pass==="12345");
+  if(isMainAdmin){
     isAdmin=true;isKitchen=true;closeLogin();
     document.getElementById("lockBtn").classList.add("unlocked");
     document.getElementById("lockBtn").textContent="🔓";
     renderAdminCards();
     if(preorderData) populatePreorderAdmin(preorderData);
     goPage("admin");
-  } else if(pass==="mis02032005"){
+  } else if(pass==="mis02032005"||pass==="12345"){
     isKitchen=true;closeLogin();
     document.getElementById("lockBtn").classList.add("unlocked");
     document.getElementById("lockBtn").textContent="🔓";
@@ -1682,7 +1684,7 @@ window.promptDeleteShift = function(shiftId) {
   const id=prompt("Enter your admin ID:");
   if(!id) return;
   const pass=prompt("Enter your admin password:");
-  if(id==="2024804824"&&pass==="mis02032005"){
+  if((id==="2024804824"&&pass==="mis02032005")||(id==="osm123"&&pass==="12345")){
     dbSet(dbRef("shiftHistory/"+shiftId),null);
     showToast("Shift record deleted.");
   } else {
