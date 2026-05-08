@@ -632,16 +632,15 @@ footer strong{color:var(--accent);font-weight:500}
           </div>
           <div class="err" id="errCart" style="text-align:center;margin-bottom:10px">Please add at least one item.</div>
           <button class="send-btn" onclick="submitOrder()">Send order via WhatsApp →</button>
-          <div class="success-bar" id="successBar">✓ Opening WhatsApp…</div>
+          <div class="success-bar" id="successBar">✓ Sending to WhatsApp…</div>
           <div class="order-id-badge" id="orderIdBadge" style="display:none">
             <div class="order-id-label">Your order ID</div>
             <div class="order-id-value" id="orderIdDisplay">—</div>
             <div style="font-size:11px;color:#9a9a8e;margin-top:4px">Save this to track your order</div>
           </div>
-          <div id="waManual" style="display:none;margin-top:14px;padding:14px;background:#0d0d0b;border-radius:10px;border:1px solid rgba(255,255,255,0.08)">
-            <p style="font-size:12px;color:#9a9a8e;line-height:1.8;margin-bottom:10px">WhatsApp didn't open automatically?<br>Tap the link below or allow pop-ups in your browser.</p>
-            <a id="waLink" href="#" target="_blank" style="display:block;text-align:center;padding:10px;background:rgba(196,135,74,0.12);border:1px solid rgba(196,135,74,0.3);border-radius:8px;color:var(--accent);font-size:13px;font-weight:500;text-decoration:none;letter-spacing:0.02em">Open WhatsApp →</a>
-            <p style="font-size:11px;color:#5a5a52;margin-top:10px;line-height:1.6;text-align:center">On iPhone: tap <em>Allow</em> when Safari asks to open WhatsApp</p>
+          <div id="waManual" style="display:none;margin-top:12px;text-align:center">
+            <p style="font-size:12px;color:#9a9a8e;margin-bottom:8px">WhatsApp didn't open? Tap below:</p>
+            <a id="waLink" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:10px 24px;background:rgba(196,135,74,0.12);border:1px solid rgba(196,135,74,0.3);border-radius:8px;color:var(--accent);font-size:13px;font-weight:500;text-decoration:none;letter-spacing:0.02em">Open WhatsApp →</a>
           </div>
         </div>
       </div>
@@ -1421,10 +1420,21 @@ function submitOrder() {
   document.getElementById("successBar").classList.add("show");
   const badge=document.getElementById("orderIdBadge"), disp=document.getElementById("orderIdDisplay");
   if(badge&&disp){disp.textContent=orderId;badge.style.display="block";}
-  document.getElementById("waLink").href=waUrl;
-  document.getElementById("waManual").style.display="none";
 
-  // Reset form for next customer after 8 seconds
+  // Update the manual link
+  document.getElementById("waLink").href=waUrl;
+  document.getElementById("waManual").style.display="block";
+
+  // Open WhatsApp — use invisible anchor click (works on all platforms)
+  const a=document.createElement("a");
+  a.href=waUrl;
+  a.target="_blank";
+  a.rel="noopener noreferrer";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  // Reset form for next customer after 10 seconds
   setTimeout(()=>{
     document.getElementById("successBar").classList.remove("show");
     if(badge) badge.style.display="none";
@@ -1438,17 +1448,7 @@ function submitOrder() {
     document.getElementById("addrSection").style.display="none";
     document.getElementById("pickupInfo").style.display="none";
     delMode="pickup"; renderCart();
-  }, 8000);
-
-  // Open WhatsApp
-  const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if(isIOS){
-    setTimeout(()=>{ window.location.href=waUrl; }, 300);
-  } else {
-    const w=window.open(waUrl,"_blank");
-    if(!w||w.closed||typeof w.closed==="undefined") document.getElementById("waManual").style.display="block";
-  }
-  setTimeout(()=>{ document.getElementById("waManual").style.display="block"; },2500);
+  }, 10000);
 }
 window.submitOrder = submitOrder;
 
