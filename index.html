@@ -1422,6 +1422,23 @@ function submitOrder() {
   const badge=document.getElementById("orderIdBadge"), disp=document.getElementById("orderIdDisplay");
   if(badge&&disp){disp.textContent=orderId;badge.style.display="block";}
   document.getElementById("waLink").href=waUrl;
+  document.getElementById("waManual").style.display="none";
+
+  // Reset form for next customer after 8 seconds
+  setTimeout(()=>{
+    document.getElementById("successBar").classList.remove("show");
+    if(badge) badge.style.display="none";
+    document.getElementById("waManual").style.display="none";
+    document.getElementById("oName").value="";
+    document.getElementById("oPhone").value="";
+    document.getElementById("oRoom").value="";
+    selectedKolej=""; selectedBlock="";
+    document.querySelectorAll(".ropt-block,.ropt").forEach(x=>x.classList.remove("active"));
+    document.getElementById("rPickup").classList.add("active");
+    document.getElementById("addrSection").style.display="none";
+    document.getElementById("pickupInfo").style.display="none";
+    delMode="pickup"; renderCart();
+  }, 8000);
 
   // Open WhatsApp
   const isIOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
