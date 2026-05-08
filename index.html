@@ -1183,6 +1183,9 @@ window.addEventListener("load",()=>{
   const hash=window.location.hash.replace("#","")||"home";
   const valid=["home","menu","order","track"];
   window.goPage(valid.includes(hash)?hash:"home");
+  // Show pickup info by default since pickup is default mode
+  const pickupInfo=document.getElementById("pickupInfo");
+  if(pickupInfo){ pickupInfo.style.display="block"; renderPickupInfo(); }
 });
 window.addEventListener("hashchange",()=>{
   const hash=window.location.hash.replace("#","")||"home";
@@ -1286,8 +1289,7 @@ function setDel(m) {
     addr.style.display="none";
     selectedKolej=""; selectedBlock="";
     document.querySelectorAll(".ropt-block").forEach(x=>x.classList.remove("active"));
-    // Show pickup kolej selector
-    if(pickup) { pickup.style.display="block"; renderPickupInfo(); }
+    if(pickup){ pickup.style.display="block"; renderPickupInfo(); }
   }
   renderCart();
 }
@@ -1365,7 +1367,11 @@ function submitOrder() {
   } else {
     // Pickup — need kolej selected
     if(!selectedKolej){
-      const err=document.getElementById("errPickupKolej"); if(err) err.classList.add("show");
+      const err=document.getElementById("errPickupKolej");
+      if(err) err.classList.add("show");
+      // Make sure pickup info is visible
+      const pi=document.getElementById("pickupInfo");
+      if(pi){ pi.style.display="block"; renderPickupInfo(); }
       ok=false;
     }
   }
@@ -1446,7 +1452,8 @@ function submitOrder() {
     document.querySelectorAll(".ropt-block,.ropt").forEach(x=>x.classList.remove("active"));
     document.getElementById("rPickup").classList.add("active");
     document.getElementById("addrSection").style.display="none";
-    document.getElementById("pickupInfo").style.display="none";
+    const pi=document.getElementById("pickupInfo");
+    if(pi){ pi.style.display="block"; renderPickupInfo(); }
     delMode="pickup"; renderCart();
   }, 10000);
 }
