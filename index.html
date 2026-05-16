@@ -453,6 +453,24 @@ footer strong{color:var(--accent);font-weight:500}
   </div>
 </div>
 
+<!-- COMBO 2 MODAL -->
+<div class="modal-overlay" id="combo2Modal">
+  <div class="modal">
+    <h3>Select 2 flavours</h3>
+    <p>Pick exactly 2 flavours for your Combo 2.</p>
+    <div class="radio-col" id="combo2Options" style="margin-bottom:16px">
+      <div class="ropt-block" data-flavor="Classic" onclick="toggleCombo2Flavor('Classic', this)">Classic Batik</div>
+      <div class="ropt-block" data-flavor="Horlick" onclick="toggleCombo2Flavor('Horlick', this)">Horlick Batik</div>
+      <div class="ropt-block" data-flavor="Matcha" onclick="toggleCombo2Flavor('Matcha', this)">Matcha Batik</div>
+    </div>
+    <div class="modal-err" id="combo2Err">Please select exactly 2 flavours.</div>
+    <div class="modal-actions">
+      <button class="modal-btn ghost" onclick="closeCombo2Modal()">Cancel</button>
+      <button class="modal-btn primary" onclick="confirmCombo2()">Add to Cart</button>
+    </div>
+  </div>
+</div>
+
 <!-- HOME -->
 <div id="pg-home" class="page active">
   <div class="home-hero">
@@ -523,6 +541,20 @@ footer strong{color:var(--accent);font-weight:500}
         <div class="menu-footer"><span class="menu-price" id="mp-matcha">RM15</span><button class="menu-add" id="ma-matcha" onclick="addFromCard('matcha')">+</button></div>
       </div>
     </div>
+    
+    <div class="menu-card menu-card-combo" id="mc-combo2">
+      <div class="combo-badge" style="background:#5a5a52;color:#f5f2ed">Pick 2</div>
+      <img class="menu-img" src="images/combo2.png" alt="Combo 2">
+      <div class="menu-body">
+        <div class="menu-name">Combo 2</div>
+        <div class="menu-desc-combo">
+          Select any 2 flavours of your choice. Perfect for a quick snack!
+        </div>
+        <div class="menu-stock-line" id="ms-combo2"></div>
+        <div class="menu-footer"><span class="menu-price" id="mp-combo2">RM8</span><button class="menu-add" id="ma-combo2" onclick="addFromCard('combo2')">+</button></div>
+      </div>
+    </div>
+    
     <div class="menu-card menu-card-combo" id="mc-combo">
       <div class="combo-badge">Best Value</div>
       <img class="menu-img" src="images/combo.png" alt="Combo Set" style="aspect-ratio:4/3">
@@ -568,18 +600,30 @@ footer strong{color:var(--accent);font-weight:500}
           <div class="mini-cake" id="mini-classic">
             <img class="mini-img" src="images/classic.png" alt="Classic Batik">
             <div class="mini-info"><div class="mini-name">Classic Batik</div><div class="mini-price" id="mip-classic">RM15</div><div class="mini-stock" id="mini-stock-classic"></div></div>
-            <button class="mini-add-btn" id="mab-classic" onclick="addToCart('classic')">+</button>
+            <button class="mini-add-btn" id="mab-classic" onclick="addToCartHandler('classic')">+</button>
           </div>
           <div class="mini-cake" id="mini-horlicks">
             <img class="mini-img" src="images/horlicks.png" alt="Horlick Batik">
             <div class="mini-info"><div class="mini-name">Horlick Batik</div><div class="mini-price" id="mip-horlicks">RM15</div><div class="mini-stock" id="mini-stock-horlicks"></div></div>
-            <button class="mini-add-btn" id="mab-horlicks" onclick="addToCart('horlicks')">+</button>
+            <button class="mini-add-btn" id="mab-horlicks" onclick="addToCartHandler('horlicks')">+</button>
           </div>
           <div class="mini-cake" id="mini-matcha">
             <img class="mini-img" src="images/matcha.png" alt="Matcha Batik">
             <div class="mini-info"><div class="mini-name">Matcha Batik</div><div class="mini-price" id="mip-matcha">RM15</div><div class="mini-stock" id="mini-stock-matcha"></div></div>
-            <button class="mini-add-btn" id="mab-matcha" onclick="addToCart('matcha')">+</button>
+            <button class="mini-add-btn" id="mab-matcha" onclick="addToCartHandler('matcha')">+</button>
           </div>
+          
+          <div class="mini-cake" id="mini-combo2">
+            <img class="mini-img" src="images/combo2.png" alt="Combo 2">
+            <div class="mini-info">
+              <div class="mini-name">Combo 2</div>
+              <div class="mini-price" id="mip-combo2">RM8</div>
+              <div class="mini-stock" id="mini-stock-combo2"></div>
+              <div style="font-size:10px;color:#5a5a52;margin-top:2px;line-height:1.4">Select 2 flavours</div>
+            </div>
+            <button class="mini-add-btn" id="mab-combo2" onclick="addToCartHandler('combo2')">+</button>
+          </div>
+
           <div class="mini-cake" id="mini-combo">
             <img class="mini-img" src="images/combo.png" alt="Combo">
             <div class="mini-info">
@@ -588,7 +632,7 @@ footer strong{color:var(--accent);font-weight:500}
               <div class="mini-stock" id="mini-stock-combo"></div>
               <div style="font-size:10px;color:#5a5a52;margin-top:2px;line-height:1.4">All 3 flavours · Save more</div>
             </div>
-            <button class="mini-add-btn" id="mab-combo" onclick="addToCart('combo')">+</button>
+            <button class="mini-add-btn" id="mab-combo" onclick="addToCartHandler('combo')">+</button>
           </div>
         </div>
         <div class="panel">
@@ -811,18 +855,6 @@ footer strong{color:var(--accent);font-weight:500}
       <div class="admin-saved" id="reserveCleared" style="margin-top:10px">✓ All reservations cleared</div>
     </div>
 
-    <div class="admin-section-title">Danger zone</div>
-    <div class="preorder-admin-card" style="border-color:rgba(224,82,82,0.15)">
-      <div class="preorder-toggle-row" style="margin-bottom:0">
-        <div>
-          <div class="preorder-toggle-label">Clear all reservations</div>
-          <div class="preorder-toggle-sub">Releases all carts held by customers right now</div>
-        </div>
-        <button class="soldout-btn" onclick="clearAllReservations()">Clear all</button>
-      </div>
-      <div class="admin-saved" id="reserveCleared" style="margin-top:10px">✓ All reservations cleared</div>
-    </div>
-
     <div class="admin-save-row">
       <button class="admin-save-btn" onclick="saveStock()">Save all changes</button>
       <div class="admin-saved" id="stockSaved">✓ Synced to Firebase</div>
@@ -856,13 +888,14 @@ const CAKES = [
   { id:"classic",  name:"Classic Batik",  price:15.00, img:"images/classic.png"  },
   { id:"horlicks", name:"Horlick Batik",  price:15.00, img:"images/horlicks.png" },
   { id:"matcha",   name:"Matcha Batik",   price:15.00, img:"images/matcha.png"   },
+  { id:"combo2",   name:"Combo 2",        price:8.00,  img:"images/combo2.png"   },
   { id:"combo",    name:"Combo Set",      price:40.00, img:"images/combo.png"    },
 ];
 
 function fmt(n)   { return Number(n).toFixed(2).replace(/\.00$/,"").replace(/(\.\d)0$/,"$1"); }
 function fmtRM(n) { return "RM"+fmt(n); }
 
-let stock={}, isAdmin=false, isKitchen=false, allOrders={}, cart={}, delMode="", selectedKolej="", selectedBlock="";
+let stock={}, isAdmin=false, isKitchen=false, allOrders={}, cart={}, delMode="", selectedKolej="";
 
 // ── STOCK LISTENER ──
 dbOn(stockRef, snap => {
@@ -910,21 +943,38 @@ dbOn(dbRef("reservations"), snap => {
   renderStockUI();
 });
 
-function reservedByOthers(id) {
+function reservedByOthers(baseId) {
   let n=0; const now=Date.now();
   Object.entries(allReservations).forEach(([sid,items]) => {
     if (sid===SESSION_ID) return;
-    const item=items?.[id];
-    if (item && item.expiresAt>now) n+=(item.qty||0);
+    if (items) {
+      Object.keys(items).forEach(cid => {
+        const cBase = cid.startsWith("combo2_") ? "combo2" : cid;
+        if (cBase === baseId && items[cid].expiresAt > now) {
+          n += (items[cid].qty || 0);
+        }
+      });
+    }
   });
   return n;
 }
-function availableToAdd(id) {
-  const s=stock[id];
-  if (!s||s.soldOut) return 0;
-  return Math.max(0, s.qty - reservedByOthers(id) - (cart[id]||0));
+
+function getCartQty(baseId) {
+  return Object.keys(cart).filter(k => k === baseId || k.startsWith(baseId+"_")).reduce((a,b)=>a+cart[b],0);
 }
-function isAvailable(id) { const s=stock[id]; return s&&!s.soldOut&&s.qty>0; }
+
+function availableToAdd(id) {
+  const baseId = id.startsWith("combo2_") ? "combo2" : id;
+  const s = stock[baseId];
+  if (!s||s.soldOut) return 0;
+  return Math.max(0, s.qty - reservedByOthers(baseId) - getCartQty(baseId));
+}
+
+function isAvailable(id) { 
+  const baseId = id.startsWith("combo2_") ? "combo2" : id;
+  const s = stock[baseId]; 
+  return s && !s.soldOut && s.qty > 0; 
+}
 
 function pushReservation() {
   const expiresAt = Date.now()+CART_TIMEOUT_MS; cartExpiresAt=expiresAt;
@@ -972,11 +1022,61 @@ function showToast(msg) {
   setTimeout(()=>{ t.style.opacity="0"; },3000);
 }
 
+// ── COMBO 2 MODAL LOGIC ──
+let combo2Flavors = [];
+function openCombo2Modal() {
+  combo2Flavors = [];
+  document.querySelectorAll('#combo2Options .ropt-block').forEach(el => el.classList.remove('active'));
+  document.getElementById('combo2Err').classList.remove('show');
+  document.getElementById('combo2Modal').classList.add('show');
+}
+window.openCombo2Modal = openCombo2Modal;
+
+function closeCombo2Modal() {
+  document.getElementById('combo2Modal').classList.remove('show');
+}
+window.closeCombo2Modal = closeCombo2Modal;
+
+function toggleCombo2Flavor(flavor, el) {
+  if (combo2Flavors.includes(flavor)) {
+    combo2Flavors = combo2Flavors.filter(f => f !== flavor);
+    el.classList.remove('active');
+  } else {
+    if (combo2Flavors.length < 2) {
+      combo2Flavors.push(flavor);
+      el.classList.add('active');
+    } else {
+      const removed = combo2Flavors.shift();
+      document.querySelector(`#combo2Options .ropt-block[data-flavor="${removed}"]`).classList.remove('active');
+      combo2Flavors.push(flavor);
+      el.classList.add('active');
+    }
+  }
+  document.getElementById('combo2Err').classList.remove('show');
+}
+window.toggleCombo2Flavor = toggleCombo2Flavor;
+
+function confirmCombo2() {
+  if (combo2Flavors.length !== 2) {
+    document.getElementById('combo2Err').classList.add('show');
+    return;
+  }
+  const variantId = "combo2_" + combo2Flavors.join("_");
+  closeCombo2Modal();
+  addToCart(variantId);
+  if (window.location.hash.includes('menu') || document.getElementById('pg-menu').classList.contains('active')) {
+     goPage('order');
+  }
+}
+window.confirmCombo2 = confirmCombo2;
+
+
 // ── STOCK UI ──
 function renderStockUI() {
   CAKES.forEach(c => {
     const s=stock[c.id]||{qty:0,soldOut:false};
-    const reserved=reservedByOthers(c.id), myCart=cart[c.id]||0;
+    const reserved=reservedByOthers(c.id);
+    const myCart=getCartQty(c.id);
     const remaining=s.qty-reserved-myCart;
     const priceStr=fmtRM(c.price);
     ["sp-","mp-","mip-"].forEach(pfx => { const el=document.getElementById(pfx+c.id); if(el) el.textContent=priceStr; });
@@ -1235,13 +1335,25 @@ window.addEventListener("hashchange",()=>{
 function addFromCard(id) {
   if (!isAvailable(id)) return;
   if (!isOrderingAllowed()) {
-    goPage("order"); // show the locked order page
+    goPage("order");
     showToast("Preorder is not open yet — come back when it opens.");
     return;
   }
+  if (id === 'combo2') { openCombo2Modal(); return; }
   addToCart(id); goPage("order");
 }
 window.addFromCard = addFromCard;
+
+function addToCartHandler(id) {
+  if (!isAvailable(id)) return;
+  if (!isOrderingAllowed()) {
+    showToast("Preorder is not open yet.");
+    return;
+  }
+  if (id === 'combo2') { openCombo2Modal(); return; }
+  addToCart(id);
+}
+window.addToCartHandler = addToCartHandler;
 
 function addToCart(id) {
   if(!isAvailable(id)) return;
@@ -1269,7 +1381,12 @@ function renderCart() {
   sb.style.display="block";
   let subtotal=0, count=0, html="";
   ids.forEach(id=>{
-    const c=CAKES.find(x=>x.id===id), qty=cart[id];
+    let c = CAKES.find(x=>x.id===id);
+    if (!c && id.startsWith('combo2_')) {
+      const flavors = id.split('_').slice(1).join(' & ');
+      c = { id: id, name: `Combo 2 (${flavors})`, price: 8.00, img: "images/combo2.png" };
+    }
+    const qty=cart[id];
     subtotal+=c.price*qty; count+=qty;
     html+=`<div class="cart-item"><img class="cart-thumb" src="${c.img}" alt="${c.name}"><span class="ci-name">${c.name}</span><div class="ci-qty"><button class="qb" onclick="removeFromCart('${id}')">−</button><span style="font-size:13px;min-width:18px;text-align:center;font-weight:500">${qty}</span><button class="qb" onclick="addToCart('${id}')">+</button></div><span class="ci-total">${fmtRM(c.price*qty)}</span></div>`;
   });
@@ -1421,8 +1538,15 @@ function submitOrder() {
 
   // Deduct stock & release reservation (non-blocking)
   try {
+    let deducts = {};
+    Object.keys(cart).forEach(id=>{
+      const baseId = id.startsWith("combo2_") ? "combo2" : id;
+      deducts[baseId] = (deducts[baseId]||0) + cart[id];
+    });
     const updates={};
-    Object.keys(cart).forEach(id=>{updates[id+"/qty"]=Math.max(0,(stock[id]?.qty||0)-cart[id]);});
+    Object.keys(deducts).forEach(baseId=>{
+      updates[baseId+"/qty"]=Math.max(0,(stock[baseId]?.qty||0)-deducts[baseId]);
+    });
     dbRef("stock").update(updates);
     releaseReservation();
   } catch(e) { console.warn("Stock update failed:",e); }
@@ -1432,7 +1556,12 @@ function submitOrder() {
   let lines="", subtotal=0;
   const cartSnapshot={};
   Object.keys(cart).forEach(id=>{
-    const c=CAKES.find(x=>x.id===id),qty=cart[id];
+    let c = CAKES.find(x=>x.id===id);
+    if (!c && id.startsWith('combo2_')) {
+      const flavors = id.split('_').slice(1).join(' & ');
+      c = { id: id, name: `Combo 2 (${flavors})`, price: 8.00, img: "images/combo2.png" };
+    }
+    const qty=cart[id];
     lines+=`  • ${c.name} x${qty} = ${fmtRM(c.price*qty)}\n`;
     subtotal+=c.price*qty;
     cartSnapshot[id]={name:c.name,qty,price:c.price};
