@@ -210,7 +210,7 @@ footer strong{color:var(--accent);font-weight:500}
 /* PREORDER WINDOW SYSTEM */
 .preorder-bar{margin-bottom:28px;animation:fadeSlideUp 0.6s ease both;animation-delay:0.1s}
 .preorder-upcoming{background:linear-gradient(135deg,rgba(196,135,74,0.07),rgba(196,135,74,0.02));border:1px solid rgba(196,135,74,0.2);border-radius:16px;padding:18px 22px;position:relative;overflow:hidden}
-.preorder-upcoming::before{content:"absolute";top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,135,74,0.5),transparent)}
+.preorder-upcoming::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(196,135,74,0.5),transparent)}
 .pu-eyebrow{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .pu-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulse-dot 2s ease infinite;flex-shrink:0}
 .pu-title{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:300;color:#f5f2ed;margin-bottom:12px;line-height:1.1}
@@ -383,14 +383,6 @@ footer strong{color:var(--accent);font-weight:500}
 .sh-revenue{font-size:16px;font-weight:500;color:var(--accent)}
 .sh-meta{font-size:11px;color:#9a9a8e;line-height:1.7}
 .sh-items{font-size:11px;color:#5a5a52;margin-top:4px}
-/* COMBO CARD */
-.menu-card-combo{border-color:rgba(196,135,74,0.2);position:relative}
-.menu-card-combo:hover{border-color:rgba(196,135,74,0.4)}
-.combo-badge{position:absolute;top:12px;left:12px;background:var(--accent);color:#0d0d0b;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;letter-spacing:0.06em;text-transform:uppercase;z-index:2}
-.menu-desc-combo{font-size:12px;color:#9a9a8e;line-height:1.75;margin-bottom:10px;font-weight:300;flex:1}
-.combo-includes{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
-.combo-tag{background:rgba(196,135,74,0.1);border:1px solid rgba(196,135,74,0.25);color:var(--accent);font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;letter-spacing:0.04em}
-
 .close-shift-btn{width:100%;padding:13px;background:rgba(224,82,82,0.08);color:#e05252;border:1px solid rgba(224,82,82,0.25);border-radius:12px;font-size:13px;font-weight:500;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all 0.2s;margin-top:16px}
 .close-shift-btn:hover{background:rgba(224,82,82,0.15);border-color:rgba(224,82,82,0.4)}
 </style>
@@ -523,23 +515,6 @@ footer strong{color:var(--accent);font-weight:500}
         <div class="menu-footer"><span class="menu-price" id="mp-matcha">RM15</span><button class="menu-add" id="ma-matcha" onclick="addFromCard('matcha')">+</button></div>
       </div>
     </div>
-    <div class="menu-card menu-card-combo" id="mc-combo">
-      <div class="combo-badge">Best Value</div>
-      <img class="menu-img" src="images/combo.png" alt="Combo Set" style="aspect-ratio:4/3">
-      <div class="menu-body">
-        <div class="menu-name">Combo Set</div>
-        <div class="menu-desc-combo">
-          <div class="combo-includes">
-            <span class="combo-tag">Classic</span>
-            <span class="combo-tag">Horlick</span>
-            <span class="combo-tag">Matcha</span>
-          </div>
-          Get all three flavours in one set — perfect for sharing or tasting everything we offer.
-        </div>
-        <div class="menu-stock-line" id="ms-combo"></div>
-        <div class="menu-footer"><span class="menu-price" id="mp-combo">RM40</span><button class="menu-add" id="ma-combo" onclick="addFromCard('combo')">+</button></div>
-      </div>
-    </div>
   </div>
   <div class="img-disclaimer" style="max-width:1200px;margin:0 auto 40px;padding-left:60px;padding-right:60px">
     <span class="img-disclaimer-icon">📷</span>
@@ -580,16 +555,6 @@ footer strong{color:var(--accent);font-weight:500}
             <div class="mini-info"><div class="mini-name">Matcha Batik</div><div class="mini-price" id="mip-matcha">RM15</div><div class="mini-stock" id="mini-stock-matcha"></div></div>
             <button class="mini-add-btn" id="mab-matcha" onclick="addToCart('matcha')">+</button>
           </div>
-          <div class="mini-cake" id="mini-combo">
-            <img class="mini-img" src="images/combo.png" alt="Combo">
-            <div class="mini-info">
-              <div class="mini-name">Combo Set</div>
-              <div class="mini-price" id="mip-combo">RM40</div>
-              <div class="mini-stock" id="mini-stock-combo"></div>
-              <div style="font-size:10px;color:#5a5a52;margin-top:2px;line-height:1.4">All 3 flavours · Save more</div>
-            </div>
-            <button class="mini-add-btn" id="mab-combo" onclick="addToCart('combo')">+</button>
-          </div>
         </div>
         <div class="panel">
           <div class="panel-title">Your details</div>
@@ -606,10 +571,9 @@ footer strong{color:var(--accent);font-weight:500}
           <div class="fgroup">
             <label class="flabel">Delivery method *</label>
             <div class="radio-row">
-              <div class="ropt" id="rPickup" onclick="setDel('pickup')">📦 Pickup</div>
-              <div class="ropt" id="rDelivery" onclick="setDel('delivery')">🛵 Delivery</div>
+              <div class="ropt active" id="rPickup" onclick="setDel('pickup')">Pickup</div>
+              <div class="ropt" id="rDelivery" onclick="setDel('delivery')">Delivery</div>
             </div>
-            <div class="err show" id="errDel" style="display:block!important">Please select a delivery method.</div>
           </div>
           <div id="addrSection" style="display:none">
             <div class="delivery-fee-badge">+ RM1 delivery fee applied</div>
@@ -856,13 +820,12 @@ const CAKES = [
   { id:"classic",  name:"Classic Batik",  price:15.00, img:"images/classic.png"  },
   { id:"horlicks", name:"Horlick Batik",  price:15.00, img:"images/horlicks.png" },
   { id:"matcha",   name:"Matcha Batik",   price:15.00, img:"images/matcha.png"   },
-  { id:"combo",    name:"Combo Set",      price:40.00, img:"images/combo.png"    },
 ];
 
 function fmt(n)   { return Number(n).toFixed(2).replace(/\.00$/,"").replace(/(\.\d)0$/,"$1"); }
 function fmtRM(n) { return "RM"+fmt(n); }
 
-let stock={}, isAdmin=false, isKitchen=false, allOrders={}, cart={}, delMode="", selectedKolej="", selectedBlock="";
+let stock={}, isAdmin=false, isKitchen=false, allOrders={}, cart={}, delMode="pickup", selectedKolej="";
 
 // ── STOCK LISTENER ──
 dbOn(stockRef, snap => {
@@ -1220,6 +1183,9 @@ window.addEventListener("load",()=>{
   const hash=window.location.hash.replace("#","")||"home";
   const valid=["home","menu","order","track"];
   window.goPage(valid.includes(hash)?hash:"home");
+  // Show pickup info by default since pickup is default mode
+  const pickupInfo=document.getElementById("pickupInfo");
+  if(pickupInfo){ pickupInfo.style.display="block"; renderPickupInfo(); }
 });
 window.addEventListener("hashchange",()=>{
   const hash=window.location.hash.replace("#","")||"home";
@@ -1312,8 +1278,6 @@ const PICKUP_LOCATIONS = {
 
 function setDel(m) {
   delMode=m;
-  const errDel=document.getElementById("errDel");
-  if(errDel) errDel.style.display="none";
   document.getElementById("rPickup").classList.toggle("active",m==="pickup");
   document.getElementById("rDelivery").classList.toggle("active",m==="delivery");
   const addr=document.getElementById("addrSection");
@@ -1321,8 +1285,6 @@ function setDel(m) {
   if(m==="delivery"){
     addr.style.display="block"; addr.style.animation="fadeSlideIn 0.3s ease";
     if(pickup) pickup.style.display="none";
-    selectedKolej=""; selectedBlock="";
-    document.querySelectorAll(".ropt-block").forEach(x=>x.classList.remove("active"));
   } else {
     addr.style.display="none";
     selectedKolej=""; selectedBlock="";
@@ -1397,12 +1359,6 @@ function submitOrder() {
   if(!name){document.getElementById("errName").classList.add("show");ok=false;}else document.getElementById("errName").classList.remove("show");
   if(!validPhone(phone)){document.getElementById("errPhone").classList.add("show");ok=false;}else document.getElementById("errPhone").classList.remove("show");
   if(!Object.keys(cart).length){document.getElementById("errCart").classList.add("show");ok=false;}else document.getElementById("errCart").classList.remove("show");
-  // Check delivery method selected
-  if(!delMode){
-    const errDel=document.getElementById("errDel");
-    if(errDel){errDel.style.display="block";errDel.textContent="Please select a delivery method.";}
-    ok=false;
-  }
   if(delMode==="delivery"){
     if(!selectedKolej){document.getElementById("errKolej").classList.add("show");ok=false;}else document.getElementById("errKolej").classList.remove("show");
     if(!selectedBlock){document.getElementById("errBlock").classList.add("show");ok=false;}else document.getElementById("errBlock").classList.remove("show");
@@ -1494,14 +1450,11 @@ function submitOrder() {
     document.getElementById("oRoom").value="";
     selectedKolej=""; selectedBlock="";
     document.querySelectorAll(".ropt-block,.ropt").forEach(x=>x.classList.remove("active"));
-    document.getElementById("rPickup").classList.remove("active");
-    document.getElementById("rDelivery").classList.remove("active");
-    const errDel=document.getElementById("errDel");
-    if(errDel){errDel.style.display="block";errDel.textContent="Please select a delivery method.";}
+    document.getElementById("rPickup").classList.add("active");
     document.getElementById("addrSection").style.display="none";
     const pi=document.getElementById("pickupInfo");
-    if(pi){ pi.style.display="none"; }
-    delMode=""; selectedKolej=""; selectedBlock=""; renderCart();
+    if(pi){ pi.style.display="block"; renderPickupInfo(); }
+    delMode="pickup"; renderCart();
   }, 10000);
 }
 window.submitOrder = submitOrder;
